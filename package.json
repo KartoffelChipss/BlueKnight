@@ -1,0 +1,33 @@
+{
+  "name": "kartoffellauncher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "dist:mac": "electron-builder --mac"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Jan Straßburger",
+    "email": "contact@strassburger.org",
+    "url": "https://strassburger.org/"
+  },
+  "homepage": "https://github.com/kartoffelchipss/instantradio#readme",
+  "license": "GNU General Public License v3.0",
+  "devDependencies": {
+    "electron": "^22.0.0",
+    "electron-builder": "^24.4.0"
+  },
+  "dependencies": {
+    "check-internet-connected": "^2.0.6",
+    "cross-fetch": "^3.1.5",
+    "electron-store": "^8.1.0",
+    "fs": "^0.0.1-security",
+    "minecraft-launcher-core": "^3.17.3",
+    "msmc": "^4.1.0",
+    "tomate-loaders": "github:doublekekse/tomate-loaders"
+  }
+}

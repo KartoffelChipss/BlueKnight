@@ -1,0 +1,4 @@
+**/node_modules
+**/minecraft
+**/.minecraft
+**/dist
