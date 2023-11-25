@@ -3,15 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kartoffel Launcher</title>
+    <title>BlueKnight Launcher</title>
+
+    <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-    <h1>Kartoffel Launcher</h1>
+    <div class="dragbar">
+        <div class="title">
+            <img src="./img/logo.svg">
+            <h3>BlueKnight Launcher</h3>
+        </div>
+        <div class="btns">
+            <button type="button" onclick="window.api.invoke('minimize')"><svg width="64px" height="64px" viewBox="0 0 24 24"
+                    fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M6.00001 11.25L18 11.25L18 12.75L6.00001 12.75L6.00001 11.25Z" fill="#fefefe"></path>
+                    </g>
+                </svg></button>
+            <button type="button" onclick="window.api.invoke('togglemaxwindow')"><svg width="64px" height="64px" viewBox="0 0 24 24"
+                    fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18 6H6V18H18V6ZM4.5 4.5V19.5H19.5V4.5H4.5Z"
+                            fill="#fefefe"></path>
+                    </g>
+                </svg></button>
+            <button type="button" onclick="window.api.invoke('closeWindow')" class="close"><svg width="64px" height="64px"
+                    viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </g>
+                </svg></button>
+        </div>
+    </div>
 
-    <button type="button" onclick="window.api.invoke('launchMC')">Launch</button>
+    <main class="main __shown">
+        <div class="topRow">
+            <div class="title">
+                <img src="./img/logo.svg" class="logo">
+                <h1>BlueKnight Launcher</h1>
+            </div>
+        
+            <div class="user">
+                <span id="username">Kein Benutzername</span>
+                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            </div>
+        </div>
 
-    <img id="userface">
+        <div class="mainBox">
+            
+        </div>
+
+        <div class="bottomBox">
+            <button type="button" class="profileselect icon icon-smol">
+                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
+                Fabric 1.20.2
+            </button>
+            <button type="button" class="playBtn" onclick="window.api.invoke('launchMC')">Spielen</button>
+            <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                Einstellungen
+            </button>
+        </div>
+    </main>
+
+    <main class="settings">
+        <div class="topRow">
+            <div class="title">
+                <button type="button" onclick="changeSection('main')">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
+                </button>
+                <h1>Einstellungen</h1>
+            </div>
+        
+            <div class="user">
+                <span id="username">Kein Benutzername</span>
+                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            </div>
+        </div>
+    </main>
+
+    <main class="profiles">
+        <div class="topRow">
+            <div class="title">
+                <img src="./img/logo.svg" class="logo">
+                <h1>Profile</h1>
+            </div>
+        
+            <div class="user">
+                <span id="username">Kein Benutzername</span>
+                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            </div>
+        </div>
+    </main>
 
     <script src="./js/init.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,158 @@
+@import url("./fonts/montserrat.css");
+:root {
+  --primary-1: #386fa4;
+  --primary-2: #59A5D8;
+  --grey-1: #1A1B1E;
+  --grey-2: #2B2D31;
+  --grey-25: #27282b;
+  --grey-3: #43444B;
+  --success: #14A44D;
+  --success-2: #1c6e3d;
+  --warning: #E4A11B;
+  --warning-2: #a1761f;
+  --danger: #DC4C64;
+  --danger-2: #9e3c4d;
+  --text-color: #fefefe;
+  --dragheight: 35px;
+}
+
+body {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Montserrat, sans-serif;
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+body.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+body.login .loginbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body.login h1 {
+  margin: 0;
+  margin-bottom: 20px;
+}
+body.login p {
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+button:focus-visible, input:focus-visible {
+  outline: var(--primary-1) solid 3px;
+}
+
+button {
+  background-color: var(--grey-2);
+  color: var(--text-color);
+  font-size: 18px;
+  border: none;
+  padding: 10px 13px;
+  border-radius: 7px;
+  transition: filter 0.2s ease-in-out;
+}
+button:hover {
+  cursor: pointer;
+  filter: brightness(0.85);
+}
+button:disabled {
+  filter: brightness(0.85);
+}
+button.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+button.icon svg {
+  height: 25px;
+  width: 25px;
+  margin-right: 7px;
+}
+button.icon.icon-smol svg {
+  height: 20px;
+  width: 20px;
+}
+
+.dragbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--dragheight);
+  background-color: var(--grey-1);
+  z-index: 3;
+  -webkit-app-region: drag;
+}
+.dragbar .title {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 10px;
+}
+.dragbar .title h3 {
+  color: var(--white-1);
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+  transform: translate(0, -1px);
+}
+.dragbar .title img {
+  height: 18px;
+  margin-right: 7px;
+  margin-bottom: 1px;
+}
+.dragbar .btns {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.dragbar .btns button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -moz-min-content;
+  width: min-content;
+  padding: 10px;
+  transition: background-color 5ms ease-in-out;
+  -webkit-app-region: no-drag;
+}
+.dragbar .btns button svg {
+  height: 15px;
+  width: 15px;
+}
+.dragbar .btns button svg path {
+  stroke: var(--white-1);
+}
+.dragbar .btns button:hover {
+  cursor: pointer;
+  background-color: var(--grey-25);
+}
+.dragbar .btns button.close:hover {
+  background-color: var(--danger);
+}
+.dragbar .btns button.close:focus-visible {
+  background-color: var(--danger);
+  border: none;
+  outline: none;
+}
+.dragbar .btns button:focus-visible {
+  background-color: var(--grey-25);
+  border: none;
+  outline: none;
+}/*# sourceMappingURL=assets.css.map */

@@ -9,11 +9,13 @@ const version = require("./package.json").version;
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
 const { Auth } = require("msmc");
+const authManager = new Auth("select_account");
 const { vanilla, fabric, liner } = require('tomate-loaders');
 
 const store = new Store();
 
 let top = {};
+let token;
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -30,7 +32,7 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         if (process.platform === 'win32') {
-            app.setAppUserModelId("Kartoffel Launcher");
+            app.setAppUserModelId("BlueKnight Launcher");
         }
 
         ipcMain.handle('minimize', (event, arg) => {
@@ -48,8 +50,25 @@ if (!gotTheLock) {
             app.quit();
         });
 
+        ipcMain.handle("initLogin", async (event, args) => {
+            const xboxManager = await authManager.launch("electron", {
+                title: "Microsoft Authentication",
+                icon: __dirname + '/public/img/logo.ico',
+                backgroundColor: "#1A1B1E",
+            });
+            token = await xboxManager.getMinecraft();
+            let savabletoken = xboxManager.save();
+            store.set("token", savabletoken);
+            console.log(`Logged in as ${token.profile.name}`);
+
+            top.mainWindow.loadFile("public/main.html").then(() => {
+                top.mainWindow.send("sendProfile", token.profile);
+                top.mainWindow.webContents.send("sendVersion", version);
+            })
+        });
+
         ipcMain.handle('launchMC', (event, arg) => {
-            launchMinecraft(token, "profile2");
+            launchMinecraft("profile2");
         })
 
         const screenHeight = screen.getPrimaryDisplay().workAreaSize.height;
@@ -59,18 +78,18 @@ if (!gotTheLock) {
         let windowHeight = screenHeight * .75;
 
         top.mainWindow = new BrowserWindow({
-            title: "Kartoffel Launcher",
-            width: windowWidth,
-            height: windowHeight,
-            minWidth: screenWidth * .35,
-            minHeight: screenHeight * .35,
+            title: "BlueKnight Launcher",
+            width: 1200,
+            height: 800,
+            minWidth: 400,
+            minHeight: 300,
             center: true,
             frame: false,
             show: false,
             backgroundColor: "#1A1B1E",
             resizable: true,
             autoHideMenuBar: false,
-            //icon: __dirname + '/public/img/logo.ico',
+            icon: __dirname + '/public/img/logo.ico',
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),
                 nodeIntegration: false,
@@ -78,23 +97,18 @@ if (!gotTheLock) {
             }
         });
 
-        top.mainWindow.loadFile("public/main.html").then(() => {
+        top.mainWindow.loadFile("public/login.html").then(() => {
             top.mainWindow.webContents.send("sendVersion", version);
         })
-
-        const authManager = new Auth("select_account");
-        const xboxManager = await authManager.launch("electron");
-        const token = await xboxManager.getMinecraft();
-        console.log(`Logged in as ${token.profile.name}`);
-
-        top.mainWindow.send("sendProfile", token.profile);
 
         top.mainWindow.show();
     });
 }
 
-let launchMinecraft = async (token, profileName) => {
-    let rootPath = `${app.getPath("appData") ?? "."}${path.sep}.kartoffellauncher${path.sep}${profileName}`;
+let launchMinecraft = async (profileName) => {
+    if (!token) return;
+
+    let rootPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`;
 
     console.log(rootPath)
 
@@ -117,7 +131,11 @@ let launchMinecraft = async (token, profileName) => {
 
 launcher.on('debug', (e) => console.log(e));
 launcher.on('data', liner(console.log));
-launcher.on("progress", (e) => console.log(e));//{ type: 'assets', task: 3606, total: 3616 }
+launcher.on("progress", (e) => {
+    if (e.type === "assets") {
+        top.mainWindow.webContents.send("sendDownloadProgress", e);
+    }
+});//{ type: 'assets', task: 3606, total: 3616 }
 launcher.on('close', (e) => {
     console.log("Launcher closed!")
 })

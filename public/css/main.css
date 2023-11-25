@@ -1,0 +1,86 @@
+@import url("./assets.css");
+main {
+  display: none;
+  flex-direction: column;
+  padding-top: var(--dragheight);
+  height: calc(100% - var(--dragheight));
+}
+main.__shown {
+  display: flex;
+}
+main .topRow {
+  --padding: 15px;
+  padding: var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main .topRow .title {
+  display: flex;
+  align-items: center;
+}
+main .topRow .title img {
+  height: 45px;
+  width: 45px;
+  margin-right: 10px;
+}
+main .topRow .title button {
+  background-color: transparent;
+  padding: 0;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main .topRow .title button svg {
+  width: 40px;
+  height: 40px;
+}
+main .topRow .title h1 {
+  margin: 0;
+}
+main .topRow .user {
+  display: flex;
+  align-items: center;
+  background-color: var(--grey-2);
+  padding: 10px 12px;
+  border-radius: 7px;
+}
+main .topRow .user img {
+  height: 35px;
+  width: 35px;
+  margin-left: 10px;
+}
+main .topRow .user span {
+  font-size: 18px;
+  font-weight: 600;
+}
+main .mainBox {
+  flex-grow: 1;
+  background-image: url("../img/bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 7px;
+  -webkit-mask: linear-gradient(0deg, transparent, white 20%, white 70%, transparent);
+  mask: linear-gradient(0deg, white 80%, transparent);
+}
+main .bottomBox {
+  --padding: 15px;
+  padding: var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  transform: translateY(-15px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+main .bottomBox .playBtn {
+  padding: 10px 80px;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 2px;
+  background-color: var(--primary-1);
+  transform: translateY(-30px);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}/*# sourceMappingURL=main.css.map */
