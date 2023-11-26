@@ -17,6 +17,7 @@
     --danger-2: #9e3c4d;
 
     --text-color: #fefefe;
+    --text-color-2: #9e9e9e;
 
     --dragheight: 35px;
 }
@@ -82,7 +83,10 @@ button {
     }
 
     &:disabled {
-        filter: brightness(.85);
+        filter: brightness(0.6);
+        &:hover {
+            cursor: default;
+        }
     }
 
     &.icon {

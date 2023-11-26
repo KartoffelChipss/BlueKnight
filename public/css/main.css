@@ -34,8 +34,8 @@ main .topRow .title button {
   justify-content: center;
 }
 main .topRow .title button svg {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 main .topRow .title h1 {
   margin: 0;
@@ -83,4 +83,146 @@ main .bottomBox .playBtn {
   background-color: var(--primary-1);
   transform: translateY(-30px);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+main .settingsBox {
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px;
+}
+main .settingsBox .checkBoxInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 30px;
+  /* Hide default HTML checkbox */
+  /* The slider */
+  /* Rounded sliders */
+}
+main .settingsBox .checkBoxInput div.desc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 62px;
+  overflow: hidden;
+}
+main .settingsBox .checkBoxInput div.desc .label {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+main .settingsBox .checkBoxInput div.desc .desc {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color-2);
+  margin-top: 10px;
+}
+main .settingsBox .checkBoxInput .switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 34px;
+  scale: 0.9;
+  min-width: 56px;
+}
+main .settingsBox .checkBoxInput .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+main .settingsBox .checkBoxInput .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+main .settingsBox .checkBoxInput .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+main .settingsBox .checkBoxInput .switch,
+main .settingsBox .checkBoxInput .slider,
+main .settingsBox .checkBoxInput .slider::before {
+  scale: 0.9;
+}
+main .settingsBox .checkBoxInput input:checked + .slider {
+  background-color: var(--primary-2);
+}
+main .settingsBox .checkBoxInput input:focus + .slider {
+  box-shadow: 0 0 1px var(--primary-2);
+}
+main .settingsBox .checkBoxInput input:checked + .slider:before {
+  transform: translateX(26px);
+}
+main .settingsBox .checkBoxInput .slider.round {
+  border-radius: 34px;
+}
+main .settingsBox .checkBoxInput .slider.round:before {
+  border-radius: 50%;
+}
+main .settingsBox .checkBoxInput.range {
+  flex-direction: column;
+  align-items: flex-start;
+}
+main .settingsBox .checkBoxInput .range-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+main .settingsBox .checkBoxInput .range-container {
+  margin-top: 15px;
+  flex-grow: 1;
+}
+main .settingsBox .checkBoxInput .range-container input {
+  accent-color: var(--primary-2);
+  width: 100%;
+}
+main .settingsBox .checkBoxInput .range-container .range-marks {
+  display: flex;
+  justify-content: space-between;
+}
+main .settingsBox .checkBoxInput .range-container .range-marks span {
+  font-weight: 600;
+}
+main .settingsBox .checkBoxInput .mem-box {
+  background-color: var(--grey-2);
+  border: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  margin-left: 30px;
+  display: flex;
+  align-items: center;
+}
+main .settingsBox .checkBoxInput .mem-box input {
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  border-radius: 0px;
+  width: 50px;
+  margin-right: 5px;
+  text-align: right;
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+}
+main .settingsBox .checkBoxInput .mem-box input::-webkit-outer-spin-button, main .settingsBox .checkBoxInput .mem-box input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+main .settingsBox .checkBoxInput .mem-box span {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
 }/*# sourceMappingURL=main.css.map */

@@ -2,6 +2,12 @@ let mainMain = document.querySelector("main.main");
 let settingsMain = document.querySelector("main.settings");
 let profilesMain = document.querySelector("main.profiles");
 
+const playBtn = document.getElementById("playBtn");
+
+window.bridge.openSection((event, section) => {
+    changeSection(section);
+})
+
 function changeSection(section) {
     if (section === "main") {
         mainMain.classList.add("__shown");
@@ -25,17 +31,39 @@ function changeSection(section) {
     }
 }
 
+function launchMC() {
+    console.log(playBtn)
+    playBtn.setAttribute("disabled", true);
+    playBtn.innerHTML = `Laden...`;
+    window.api.invoke('launchMC');
+}
+
+window.bridge.sendMCstarted((event, data) => {
+    playBtn.removeAttribute("disabled");
+    playBtn.innerHTML = `Spielen`
+});
+
 window.bridge.sendDownloadProgress((event, progressevent) => {
-    const playBtn = document.getElementById("playBtn");
+    //console.log(progressevent)
 
     if (progressevent.task >= progressevent.total) {
-        playBtn.setAttribute("disabled", true);
-        playBtn.innerHTML = `Spielen`
+        playBtn.innerHTML = `Laden...`;
         return;
     }
 
-    let percentage = Math.floor(progressevent.task / progressevent.total);
+    let percentage = Math.floor((progressevent.task * 100) / progressevent.total);
+
+    //console.log((progressevent.task * 100) / progressevent.total)
 
     playBtn.setAttribute("disabled", true);
     playBtn.innerHTML = `Laden... (${percentage}%)`;
 });
+
+console.log(navigator.deviceMemory)
+
+function setSetting(setting, value) {
+    window.api.invoke("setSetting", {
+        setting,
+        value,
+    });
+}

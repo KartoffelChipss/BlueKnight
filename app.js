@@ -5,6 +5,7 @@ const { ipcMain } = require('electron/main');
 const Store = require('electron-store');
 const fs = require("fs");
 const version = require("./package.json").version;
+const os = require("os");
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
@@ -50,6 +51,15 @@ if (!gotTheLock) {
             app.quit();
         });
 
+        ipcMain.handle("setMaxMem", (event, value) => {
+            store.set("maxMemMB", value);
+        });
+
+        ipcMain.handle("setSetting", (event, arg) => {
+            if (arg.setting === undefined || arg.value === undefined) return;
+            store.set(arg.setting, arg.value);
+        });
+
         ipcMain.handle("initLogin", async (event, args) => {
             const xboxManager = await authManager.launch("electron", {
                 title: "Microsoft Authentication",
@@ -64,12 +74,20 @@ if (!gotTheLock) {
             top.mainWindow.loadFile("public/main.html").then(() => {
                 top.mainWindow.send("sendProfile", token.profile);
                 top.mainWindow.webContents.send("sendVersion", version);
+                top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
+                top.mainWindow.webContents.send("sendSettings", {
+                    maxMemMB: store.get("maxMemMB") || Math.floor((os.totalmem() / 1000000) / 2),
+                    minimizeOnStart: store.get("minimizeOnStart"),
+                    showDiscordRP: store.get("showDiscordRP"),
+                });
             })
         });
 
         ipcMain.handle('launchMC', (event, arg) => {
-            launchMinecraft("profile2");
+            launchMinecraft("profile4");
         })
+
+        initTray();
 
         const screenHeight = screen.getPrimaryDisplay().workAreaSize.height;
         const screenWidth = screen.getPrimaryDisplay().workAreaSize.width;
@@ -121,8 +139,8 @@ let launchMinecraft = async (profileName) => {
         ...launchConfig,
         authorization: token.mclc(),
         memory: {
-            max: "6G",
-            min: "4G"
+            max: (store.get("maxMemMB") || "6000") + "M",
+            min: "2G"
         }
     }
 
@@ -130,12 +148,95 @@ let launchMinecraft = async (profileName) => {
 };
 
 launcher.on('debug', (e) => console.log(e));
-launcher.on('data', liner(console.log));
-launcher.on("progress", (e) => {
-    if (e.type === "assets") {
-        top.mainWindow.webContents.send("sendDownloadProgress", e);
+launcher.on('data', liner(line => {
+    if (line.match(/\[Render thread\/INFO\]: Setting user:/g)) {
+        top.mainWindow.webContents.send("sendMCstarted");
+        if (store.get("minimizeOnStart")) top.mainWindow.hide();
     }
-});//{ type: 'assets', task: 3606, total: 3616 }
+    console.log(line);
+}));
+
+launcher.on("progress", (e) => {
+    console.log(e)
+    top.mainWindow.webContents.send("sendDownloadProgress", e);
+});
+
 launcher.on('close', (e) => {
-    console.log("Launcher closed!")
+    console.log("Launcher closed!");
+    top.mainWindow.show();
 })
+
+function initTray() {
+    let iconColor = "black";
+    if (nativeTheme.shouldUseDarkColors) {
+        iconColor = "white";
+    }
+
+    top.tray = null;
+
+    let preferredIconType = "ico";
+
+    if (process.platform === 'darwin' || process.platform === "linux") {
+        preferredIconType = "png";
+    }
+
+    top.tray = new Tray(path.join(__dirname + `/public/img/logo.${preferredIconType}`));
+
+    let menu = [
+        {
+            label: "Hilfe",
+            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/help.${preferredIconType}`).resize({ width: 16 }),
+            click: (item, window, event) => {
+                shell.openExternal("//strassburger.org/discord");
+            }
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Startseite",
+            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/home.${preferredIconType}`).resize({ width: 16 }),
+            click: (item, window, event) => {
+                top.mainWindow.show();
+                top.mainWindow.webContents.send("openSection", "main");
+            },
+        },
+        {
+            label: "Einstellungen",
+            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/settings.${preferredIconType}`).resize({ width: 16 }),
+            click: (item, window, event) => {
+                top.mainWindow.show();
+                top.mainWindow.webContents.send("openSection", "settings");
+            }
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Beenden",
+            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/off.${preferredIconType}`).resize({ width: 16 }),
+            role: "quit"
+        },
+    ]
+
+    const builtmenu = Menu.buildFromTemplate(menu);
+    top.tray.setContextMenu(builtmenu);
+
+    top.tray.setToolTip("Instantradio");
+
+    // !!! UNCOMMENT FOR PRODUCTION !!! //
+
+    //Menu.setApplicationMenu(builtmenu);
+
+    // !!! UNCOMMENT FOR PRODUCTION !!! //
+    
+    // YOU FUCKING PRICK WHY DO YOU ALWAYS FORGET TO UNCOMMENT THIS SHIT!
+
+    top.tray.on('click', function (e) {
+        if (top.mainWindow.isVisible()) {
+            top.mainWindow.hide();
+        } else {
+            top.mainWindow.show();
+        }
+    });
+}

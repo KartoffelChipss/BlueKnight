@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
 
     <link rel="stylesheet" href="./css/main.css">
 </head>
+
 <body>
     <div class="dragbar">
         <div class="title">
@@ -14,8 +16,8 @@
             <h3>BlueKnight Launcher</h3>
         </div>
         <div class="btns">
-            <button type="button" onclick="window.api.invoke('minimize')"><svg width="64px" height="64px" viewBox="0 0 24 24"
-                    fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+            <button type="button" onclick="window.api.invoke('minimize')"><svg width="64px" height="64px"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
@@ -23,8 +25,8 @@
                             d="M6.00001 11.25L18 11.25L18 12.75L6.00001 12.75L6.00001 11.25Z" fill="#fefefe"></path>
                     </g>
                 </svg></button>
-            <button type="button" onclick="window.api.invoke('togglemaxwindow')"><svg width="64px" height="64px" viewBox="0 0 24 24"
-                    fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+            <button type="button" onclick="window.api.invoke('togglemaxwindow')"><svg width="64px" height="64px"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
@@ -32,8 +34,9 @@
                             fill="#fefefe"></path>
                     </g>
                 </svg></button>
-            <button type="button" onclick="window.api.invoke('closeWindow')" class="close"><svg width="64px" height="64px"
-                    viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+            <button type="button" onclick="window.api.invoke('closeWindow')" class="close"><svg width="64px"
+                    height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
@@ -52,15 +55,15 @@
                 <img src="./img/logo.svg" class="logo">
                 <h1>BlueKnight Launcher</h1>
             </div>
-        
+
             <div class="user">
-                <span id="username">Kein Benutzername</span>
-                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                <span class="username">Kein Benutzername</span>
+                <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
 
         <div class="mainBox">
-            
+
         </div>
 
         <div class="bottomBox">
@@ -68,7 +71,9 @@
                 <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
                 Fabric 1.20.2
             </button>
-            <button type="button" class="playBtn" onclick="window.api.invoke('launchMC')">Spielen</button>
+            <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()">
+                Spielen
+            </button>
             <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                 Einstellungen
@@ -84,10 +89,59 @@
                 </button>
                 <h1>Einstellungen</h1>
             </div>
-        
+
             <div class="user">
-                <span id="username">Kein Benutzername</span>
-                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                <span class="username">Kein Benutzername</span>
+                <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            </div>
+        </div>
+
+        <div class="settingsBox">
+            <div class="checkBoxInput">
+                <div class="desc">
+                    <span class="label">Launcher minimieren</span>
+                    <span class="desc">Minimiert den Launcher nachdem Minecraft gestartet wurde</span>
+                </div>
+                <label class="switch" style="scale: 0.85;">
+                    <input type="checkbox" value="checked" id="minimizeOnStartCheckbox" oninput="setSetting('minimizeOnStart', this.checked)">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settingsBox">
+            <div class="checkBoxInput">
+                <div class="desc">
+                    <span class="label">Discord Rich Presence deaktivieren</span>
+                    <span class="desc">Deaktiviert den "Spielt Blueknight Launcher" Status für Discord</span>
+                </div>
+                <label class="switch" style="scale: 0.85;">
+                    <input type="checkbox" value="checked" id="showDiscordRPCheckbox" oninput="setSetting('showDiscordRP', this.checked)">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settingsBox">
+            <div class="checkBoxInput range">
+                <div class="desc">
+                    <span class="label">Zugewiesener Arbeitsspeicher</span>
+                    <span class="desc">Wie viel Arbeitsspeicher (RAM) soll Minecraft benutzen dürfen?</span>
+                </div>
+                <div class="range-box">
+                    <div class="range-container">
+                        <input id="memslider" oninput="setMaxMem(this.value)" class="range-input" type="range" min="2000" max="8000"/>
+    
+                        <div class="range-marks" id="memMarks">
+                            <span>2GB</span>
+                            <span>8GB</span>
+                        </div>
+                    </div>
+                    <div class="mem-box">
+                        <input type="number" id="meminput" oninput="setMaxMem(this.value)">
+                        <span>MB</span>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -98,10 +152,10 @@
                 <img src="./img/logo.svg" class="logo">
                 <h1>Profile</h1>
             </div>
-        
+
             <div class="user">
-                <span id="username">Kein Benutzername</span>
-                <img id="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                <span class="username">Kein Benutzername</span>
+                <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
     </main>
@@ -109,4 +163,5 @@
     <script src="./js/init.js"></script>
     <script src="./js/main.js"></script>
 </body>
+
 </html>

@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
 contextBridge.exposeInMainWorld(
     "api", {
         invoke: (channel, data) => {
-            let validChannels = ["minimize", "togglemaxwindow", "closeWindow", "launchMC", "initLogin"];
+            let validChannels = ["minimize", "togglemaxwindow", "closeWindow", "launchMC", "initLogin", "setMaxMem", "setSetting"];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);
             }
@@ -36,6 +36,18 @@ contextBridge.exposeInMainWorld(
         },
         sendDownloadProgress: (message) => {
             ipcRenderer.on("sendDownloadProgress", message);
-        }
+        },
+        sendMCstarted: (message) => {
+            ipcRenderer.on("sendMCstarted", message);
+        },
+        sendMaxmemory: (message) => {
+            ipcRenderer.on("sendMaxmemory", message);
+        },
+        sendSettings: (message) => {
+            ipcRenderer.on("sendSettings", message);
+        },
+        openSection: (message) => {
+            ipcRenderer.on("openSection", message);
+        },
     }
 );
