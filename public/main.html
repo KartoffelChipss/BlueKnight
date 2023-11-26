@@ -16,7 +16,8 @@
             <h3>BlueKnight Launcher</h3>
         </div>
         <div class="btns">
-            <button type="button" onclick="window.api.invoke('minimize')"><svg width="64px" height="64px"
+            <button type="button" onclick="window.api.invoke('minimize')">
+                <svg width="64px" height="64px"
                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -24,8 +25,10 @@
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M6.00001 11.25L18 11.25L18 12.75L6.00001 12.75L6.00001 11.25Z" fill="#fefefe"></path>
                     </g>
-                </svg></button>
-            <button type="button" onclick="window.api.invoke('togglemaxwindow')"><svg width="64px" height="64px"
+                </svg>
+            </button>
+            <button type="button" onclick="window.api.invoke('togglemaxwindow')">
+                <svg width="64px" height="64px"
                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -33,8 +36,10 @@
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M18 6H6V18H18V6ZM4.5 4.5V19.5H19.5V4.5H4.5Z"
                             fill="#fefefe"></path>
                     </g>
-                </svg></button>
-            <button type="button" onclick="window.api.invoke('closeWindow')" class="close"><svg width="64px"
+                </svg>
+            </button>
+            <button type="button" onclick="window.api.invoke('closeWindow')" class="close">
+                <svg width="64px"
                     height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
                     stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -45,7 +50,8 @@
                         <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round"
                             stroke-linejoin="round"></path>
                     </g>
-                </svg></button>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -67,17 +73,25 @@
         </div>
 
         <div class="bottomBox">
-            <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" class="profileselect icon icon-smol">
-                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
-                None
-            </button>
-            <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()">
-                Spielen
-            </button>
-            <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                Einstellungen
-            </button>
+            <div class="top">
+                <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()">
+                    Spielen
+                </button>
+            </div>
+            <div class="bottom">
+                <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" class="profileselect icon icon-smol">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    None
+                </button>
+                <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    Einstellungen
+                </button>
+                <button type="button" id="modsButton" onclick="changeSection('mods')" class="icon icon-smol">
+                    <svg fill="#fefefe" height="200px" width="200px" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path class="cls-1" d="M9,14H6V8H9ZM8.875,2H6.7226A1.99139,1.99139,0,0,1,5,3,2.486,2.486,0,0,1,3,2H2V6H3A1.79727,1.79727,0,0,1,4.5,5C5.55147,5,5.99725,6.98981,6,7H9c.333-1.53876,1-2.43573,1.741-2.43573,1.481,0,3.259,2.05109,3.259,2.05109S13,2,8.875,2Z"></path> </g></svg>
+                    Mods
+                </button>
+            </div>
         </div>
     </main>
 
@@ -173,6 +187,36 @@
                 <th></th>
             </tr>
         </table>
+    </main>
+
+    <main class="mods">
+        <div class="topRow">
+            <div class="title">
+                <button type="button" onclick="changeSection('main')">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
+                </button>
+                <h1>Mods durchsuchen</h1>
+            </div>
+
+            <div class="user">
+                <span class="username">Kein Benutzername</span>
+                <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            </div>
+        </div>
+
+        <input type="text" placeholder="Suchen">
+
+        <div class="modlist">
+            <div>
+                <img src="https://cdn.modrinth.com/data/P7dR8mSH/icon.png">
+                <div class="desc">
+                    <h3>Fabric API</h3>
+                    <p>Lightweight and modular API providing common hooks and intercompatibility measures utilized by mods using the Fabric toolchain.</p>
+                </div>
+                <div class="buttons">
+                </div>
+            </div>
+        </div>
     </main>
 
     <div class="modal" id="newProfileModal">

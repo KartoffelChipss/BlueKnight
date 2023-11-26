@@ -23,7 +23,7 @@ window.bridge.sendSettings((event, settings) => {
 window.bridge.sendProfiles((event, data) => {
     if (data.selectedProfile) {
         document.getElementById("profileSelectBtn").innerHTML = `
-            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             ${data.selectedProfile.name}`;
     }
     if (data.profiles) {
@@ -35,6 +35,12 @@ window.bridge.sendProfiles((event, data) => {
             <th></th>
         </tr>`;
         data.profiles.forEach((profile, index) => {
+            let modsBtn = `<button type="button" onclick="addModsToProfile('${profile.name}')" title="Mods verwalten">
+                <svg fill="#fefefe" height="200px" width="200px" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path class="cls-1" d="M9,14H6V8H9ZM8.875,2H6.7226A1.99139,1.99139,0,0,1,5,3,2.486,2.486,0,0,1,3,2H2V6H3A1.79727,1.79727,0,0,1,4.5,5C5.55147,5,5.99725,6.98981,6,7H9c.333-1.53876,1-2.43573,1.741-2.43573,1.481,0,3.259,2.05109,3.259,2.05109S13,2,8.875,2Z"></path> </g></svg>
+            </button>`;
+
+            if (profile.loader === "vanilla") modsBtn = "";
+
             profileTable.querySelector("tbody").innerHTML += `
             <tr>
                 <td>${profile.name}</td>
@@ -47,9 +53,7 @@ window.bridge.sendProfiles((event, data) => {
                     <button type="button" onclick="openProfileFolder('${profile.name}')" title="Speicherort öffnen">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2H8.43845C9.81505 2 11.015 2.93689 11.3489 4.27239L11.7808 6H13.5H20C21.6569 6 23 7.34315 23 9V19C23 20.6569 21.6569 22 20 22H4C2.34315 22 1 20.6569 1 19V10V9V5ZM3 9V10V19C3 19.5523 3.44772 20 4 20H20C20.5523 20 21 19.5523 21 19V9C21 8.44772 20.5523 8 20 8H13.5H11.7808H4C3.44772 8 3 8.44772 3 9ZM9.71922 6H4C3.64936 6 3.31278 6.06015 3 6.17071V5C3 4.44772 3.44772 4 4 4H8.43845C8.89732 4 9.2973 4.3123 9.40859 4.75746L9.71922 6Z" fill="#fefefe"></path> </g></svg>
                     </button>
-                    <button type="button" onclick="addModsToProfile('${profile.name}')" title="Profil bearbeiten">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.8 12.963L2 18l4.8-.63L18.11 6.58a2.612 2.612 0 00-3.601-3.785L3.8 12.963z"></path> </g></svg>
-                    </button>
+                    ${modsBtn}
                 </td>
             </tr>`
         });

@@ -92,8 +92,26 @@ main {
         transform: translateY(-15px);
 
         display: flex;
-        justify-content: space-around;
-        align-items: center;
+        flex-direction: column;
+
+        .top {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(-15px);
+        }
+
+        .bottom {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        button {
+            min-width: 180px;
+        }
 
         .playBtn {
             padding: 10px 80px;
@@ -291,7 +309,6 @@ main {
         padding-top: var(--dragheight);
         width: calc(100% - var(--padding) * 2);
 
-        display: flex;
         flex-direction: column;
 
         .topRow {

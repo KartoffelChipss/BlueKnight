@@ -1,6 +1,7 @@
 let mainMain = document.querySelector("main.main");
 let settingsMain = document.querySelector("main.settings");
 let profilesMain = document.querySelector("main.profiles");
+let modsMain = document.querySelector("main.mods");
 
 const playBtn = document.getElementById("playBtn");
 
@@ -13,6 +14,7 @@ function changeSection(section) {
         mainMain.classList.add("__shown");
         settingsMain.classList.remove("__shown");
         profilesMain.classList.remove("__shown");
+        modsMain.classList.remove("__shown");
         return;
     }
 
@@ -20,6 +22,7 @@ function changeSection(section) {
         mainMain.classList.remove("__shown");
         settingsMain.classList.add("__shown");
         profilesMain.classList.remove("__shown");
+        modsMain.classList.remove("__shown");
         return;
     }
 
@@ -27,6 +30,15 @@ function changeSection(section) {
         mainMain.classList.remove("__shown");
         settingsMain.classList.remove("__shown");
         profilesMain.classList.add("__shown");
+        modsMain.classList.remove("__shown");
+        return;
+    }
+
+    if (section === "mods") {
+        mainMain.classList.remove("__shown");
+        settingsMain.classList.remove("__shown");
+        profilesMain.classList.remove("__shown");
+        modsMain.classList.add("__shown");
         return;
     }
 }

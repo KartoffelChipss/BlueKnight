@@ -16,7 +16,7 @@ const { vanilla, fabric, forge, liner } = require('tomate-loaders');
 
 const store = new Store();
 
-store.openInEditor();
+//store.openInEditor();
 
 let top = {};
 let token;
@@ -215,6 +215,9 @@ let launchMinecraft = async (profileName, loader, version) => {
     let opts = {
         ...launchConfig,
         authorization: token.mclc(),
+        overrides: {
+            detached: false,
+        },
         memory: {
             max: (store.get("maxMemMB") || "6000") + "M",
             min: "2G"
@@ -226,7 +229,7 @@ let launchMinecraft = async (profileName, loader, version) => {
 
 launcher.on('debug', (e) => console.log(e));
 launcher.on('data', liner(line => {
-    if (line.match(/\[Render thread\/INFO\]: Setting user:/g)) {
+    if (line.match(/\[Render thread\/INFO\]: Setting user:/g) || line.match(/\[MCLC\]: Launching with arguments/)) {
         top.mainWindow.webContents.send("sendMCstarted");
         if (store.get("minimizeOnStart")) top.mainWindow.hide();
     }
