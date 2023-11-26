@@ -67,9 +67,9 @@
         </div>
 
         <div class="bottomBox">
-            <button type="button" class="profileselect icon icon-smol">
+            <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" class="profileselect icon icon-smol">
                 <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
-                Fabric 1.20.2
+                None
             </button>
             <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()">
                 Spielen
@@ -116,7 +116,7 @@
                     <span class="desc">Deaktiviert den "Spielt Blueknight Launcher" Status für Discord</span>
                 </div>
                 <label class="switch" style="scale: 0.85;">
-                    <input type="checkbox" value="checked" id="showDiscordRPCheckbox" oninput="setSetting('showDiscordRP', this.checked)">
+                    <input type="checkbox" value="checked" id="hideDiscordRPCCheckbox" oninput="setSetting('hideDiscordRPC', this.checked)">
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -149,8 +149,10 @@
     <main class="profiles">
         <div class="topRow">
             <div class="title">
-                <img src="./img/logo.svg" class="logo">
-                <h1>Profile</h1>
+                <button type="button" onclick="changeSection('main')">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
+                </button>
+                <h1>Meine Profile</h1>
             </div>
 
             <div class="user">
@@ -158,7 +160,62 @@
                 <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
+
+        <button type="button" class="icon newProfileBtn" onclick="document.getElementById('newProfileModal').classList.toggle('_shown')">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 12L12 12M12 12L17 12M12 12V7M12 12L12 17" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <circle cx="12" cy="12" r="9" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle> </g></svg>
+            Neues Profil
+        </button>
+        <table class="profileTable" id="profileTable">
+            <tr>
+                <th>Name</th>
+                <th>Loader</th>
+                <th>Version</th>
+                <th></th>
+            </tr>
+        </table>
     </main>
+
+    <div class="modal" id="newProfileModal">
+        <div class="modalBox form">
+            <button type="button" class="closebtn" onclick="document.getElementById('newProfileModal').classList.toggle('_shown')">
+                <svg width="64px"
+                    height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </g>
+                </svg>
+            </button>
+
+            <h2>Neues Profil</h2>
+            <input type="text" placeholder="Name" id="newProfileName">
+            <select id="newProfileLoader">
+                <option value="vanilla">Vanilla</option>
+                <option value="fabric" selected>Fabric</option>
+                <!-- <option value="forge">Forge</option> -->
+            </select>
+            <select id="newProfileVersion">
+                <optgroup label="1.20">
+                    <option value="1.20.2">1.20.2</option>
+                    <option value="1.20.1">1.20.1</option>
+                    <option value="1.20">1.20</option>
+                </optgroup>
+                <optgroup label="1.19">
+                    <option value="1.19.4">1.19.4</option>
+                    <option value="1.19.3">1.19.3</option>
+                    <option value="1.19.2">1.19.2</option>
+                    <option value="1.19.1">1.19.1</option>
+                    <option value="1.19">1.19</option>
+                </optgroup>
+            </select>
+            <button type="button" class="submit" onclick="createNewProfile()">Profil erstellen</button>
+        </div>
+    </div>
 
     <script src="./js/init.js"></script>
     <script src="./js/main.js"></script>

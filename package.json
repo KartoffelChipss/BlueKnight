@@ -1,34 +1,81 @@
 {
-  "name": "kartoffellauncher",
-  "version": "1.0.2",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "start": "electron .",
-    "dist:win": "electron-builder --win",
-    "dist:linux": "electron-builder --linux",
-    "dist:mac": "electron-builder --mac"
-  },
-  "keywords": [],
-  "author": {
-    "name": "Jan Straßburger",
-    "email": "contact@strassburger.org",
-    "url": "https://strassburger.org/"
-  },
-  "homepage": "https://github.com/kartoffelchipss/instantradio#readme",
-  "license": "GNU General Public License v3.0",
-  "devDependencies": {
-    "electron": "^22.0.0",
-    "electron-builder": "^24.4.0"
-  },
-  "dependencies": {
-    "check-internet-connected": "^2.0.6",
-    "cross-fetch": "^3.1.5",
-    "electron-store": "^8.1.0",
-    "fs": "^0.0.1-security",
-    "minecraft-launcher-core": "^3.17.3",
-    "msmc": "^4.1.0",
-    "os": "^0.1.2",
-    "tomate-loaders": "github:doublekekse/tomate-loaders"
-  }
+    "name": "blueknight",
+    "version": "1.0.3",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "electron .",
+        "dist:win": "electron-builder --win",
+        "dist:linux": "electron-builder --linux",
+        "dist:mac": "electron-builder --mac"
+    },
+    "build": {
+        "appId": "org.strassburger.blueknight",
+        "productName": "BlueKnight Launcher",
+        "copyright": "© 2023 Jan Straßburger",
+        "mac": {
+            "target": "dmg",
+            "icon": "public/img/logo.png"
+        },
+        "linux": {
+            "target": [
+                "deb",
+                "snap",
+                "rpm"
+            ],
+            "category": "Utility",
+            "icon": "build/icons/512x512.png",
+            "artifactName": "blueknight-${version}.${ext}",
+            "maintainer": "Jan Straßburger",
+    	    "vendor": "Jan Straßburger",
+    	    "synopsis": "This is a synopsis?"
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "icon": "public/img/logo.ico"
+        },
+        "nsis": {
+            "customNsisBinary": {
+                "url": "https://github.com/electron-userland/electron-builder-binaries/releases/download",
+                "checksum": "VKMiizYdmNdJOWpRGz4trl4lD++BvYP2irAXpMilheUP0pc93iKlWAoP843Vlraj8YG19CVn0j+dCo/hURz9+Q==",
+                "version": "3.0.4.1"
+            },
+            "installerIcon": "public/img/logo.ico",
+            "uninstallerIcon": "public/img/logo.ico",
+            "uninstallDisplayName": "BlueKnight Launcher",
+            "license": "LICENSE",
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true
+        }
+    },
+    "repository": "https://github.com/KartoffelChipss/blueknight",
+    "publish": {
+        "provider": "github",
+        "releaseType": "release"
+    },
+    "keywords": [],
+    "author": {
+        "name": "Jan Straßburger",
+        "email": "contact@strassburger.org",
+        "url": "https://strassburger.org/"
+    },
+    "homepage": "https://github.com/kartoffelchipss/instantradio#readme",
+    "license": "GNU General Public License v3.0",
+    "devDependencies": {
+        "electron": "^22.0.0",
+        "electron-builder": "^24.4.0"
+    },
+    "dependencies": {
+        "check-internet-connected": "^2.0.6",
+        "cross-fetch": "^3.1.5",
+        "discord-rpc": "^4.0.1",
+        "electron-store": "^8.1.0",
+        "fs": "^0.0.1-security",
+        "minecraft-launcher-core": "^3.17.3",
+        "msmc": "^4.1.0",
+        "os": "^0.1.2",
+        "tomate-loaders": "github:doublekekse/tomate-loaders"
+    }
 }

@@ -49,7 +49,7 @@ body.login {
         flex-direction: column;
         align-items: center;
     }
-    
+
     h1 {
         margin: 0;
         margin-bottom: 20px;
@@ -62,7 +62,9 @@ body.login {
     }
 }
 
-button:focus-visible,input:focus-visible {
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
     outline: var(--primary-1) solid 3px;
 }
 
@@ -84,6 +86,7 @@ button {
 
     &:disabled {
         filter: brightness(0.6);
+
         &:hover {
             cursor: default;
         }
@@ -190,6 +193,87 @@ button {
                 background-color: var(--grey-25);
                 border: none;
                 outline: none;
+            }
+        }
+    }
+}
+
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba($color: #000000, $alpha: 0.8);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    &._shown {
+        display: flex;
+    }
+
+    .modalBox {
+        position: relative;
+        background-color: var(--grey-1);
+        border-radius: 7px;
+        padding: 20px;
+
+        min-width: 30%;
+
+        h2 {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        .closebtn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+
+            padding: 0;
+            border-radius: 0;
+
+            background-color: transparent;
+
+            svg {
+                height: 20px;
+                width: 20px;
+                background-color: transparent;
+            }
+        }
+
+        &.form {
+            display: flex;
+            flex-direction: column;
+
+            input, select {
+                color: var(--text-color);
+                font-size: 18px;
+                font-weight: 500;
+                border: none;
+                border-radius: 3px;
+                background-color: var(--grey-2);
+
+                margin-bottom: 15px;
+            }
+
+            input {
+                --padding: 8px;
+                padding: 5px var(--padding);
+                width: 100%;
+                max-width: calc(100% - var(--padding) * 2);
+            }
+
+            select {
+                --padding: 8px;
+                padding: 5px var(--padding);
+            }
+
+            button.submit {
+                background-color: var(--primary-1);
             }
         }
     }

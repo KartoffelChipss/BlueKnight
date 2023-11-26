@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Notification, dialog, nativeImage, Menu, shell, screen, nativeTheme } = require('electron')
+const { app, BrowserWindow, Tray, Notification, dialog, shell, nativeImage, Menu, screen, nativeTheme } = require('electron')
 const path = require('path')
 const fetch = require('cross-fetch');
 const { ipcMain } = require('electron/main');
@@ -6,14 +6,17 @@ const Store = require('electron-store');
 const fs = require("fs");
 const version = require("./package.json").version;
 const os = require("os");
+const RPC = require("discord-rpc");
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
 const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
-const { vanilla, fabric, liner } = require('tomate-loaders');
+const { vanilla, fabric, forge, liner } = require('tomate-loaders');
 
 const store = new Store();
+
+store.openInEditor();
 
 let top = {};
 let token;
@@ -78,29 +81,87 @@ if (!gotTheLock) {
                 top.mainWindow.webContents.send("sendSettings", {
                     maxMemMB: store.get("maxMemMB") || Math.floor((os.totalmem() / 1000000) / 2),
                     minimizeOnStart: store.get("minimizeOnStart"),
-                    showDiscordRP: store.get("showDiscordRP"),
+                    hideDiscordRPC: store.get("hideDiscordRPC"),
+                });
+                top.mainWindow.webContents.send("sendProfiles", {
+                    profiles: store.get("profiles"),
+                    selectedProfile: store.get("selectedProfile"),
                 });
             })
         });
 
         ipcMain.handle('launchMC', (event, arg) => {
-            launchMinecraft("profile4");
+            const selectedProfile = store.get("selectedProfile");
+            launchMinecraft(selectedProfile.name ?? "profile1", selectedProfile.loader ?? "fabric", selectedProfile.version ?? "1.20.2");
         })
+
+        ipcMain.handle('createProfile', async (event, data) => {
+            if (!data.name || !data.loader || !data.version) return;
+
+            let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${data.name}`;
+            if (!fs.existsSync(profilePath)) {
+                fs.mkdirSync(profilePath);
+            }
+
+            let prevProfiles = store.get("profiles");
+            prevProfiles.push({
+                name: data.name,
+                loader: data.loader,
+                version: data.version,
+            });
+            store.set("profiles", prevProfiles);
+
+            top.mainWindow.webContents.send("sendProfiles", {
+                profiles: store.get("profiles"),
+                selectedProfile: store.get("selectedProfile"),
+            });
+        });
+
+        ipcMain.handle('selectProfile', (event, data) => {
+            if (!data.name || !data.loader || !data.version) return;
+
+            store.set("selectedProfile", {
+                name: data.name,
+                loader: data.loader,
+                version: data.version,
+            });
+
+            top.mainWindow.webContents.send("sendProfiles", {
+                profiles: store.get("profiles"),
+                selectedProfile: store.get("selectedProfile"),
+            });
+
+            console.log(`[PROFILES] Switched to ${data.name}`);
+        });
+
+        ipcMain.handle('openProfileFolder', (event, profileName) => {
+            console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}` + "'");
+            shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`);
+        })
+
+        if (!store.get("profiles") || store.get("profiles").length <= 0) {
+            store.set("profiles", [{
+                name: "Fabric 1.20.2",
+                loader: "fabric",
+                version: "1.20.2",
+            }]);
+            store.set("selectedProfile", {
+                name: "Fabric 1.20.2",
+                loader: "fabric",
+                version: "1.20.2",
+            });
+        }
 
         initTray();
 
-        const screenHeight = screen.getPrimaryDisplay().workAreaSize.height;
-        const screenWidth = screen.getPrimaryDisplay().workAreaSize.width;
-
-        let windowWidth = screenWidth * .6;
-        let windowHeight = screenHeight * .75;
+        initDiscordRPC();
 
         top.mainWindow = new BrowserWindow({
             title: "BlueKnight Launcher",
             width: 1200,
             height: 800,
-            minWidth: 400,
-            minHeight: 300,
+            minWidth: 750,
+            minHeight: 500,
             center: true,
             frame: false,
             show: false,
@@ -123,17 +184,33 @@ if (!gotTheLock) {
     });
 }
 
-let launchMinecraft = async (profileName) => {
+let launchMinecraft = async (profileName, loader, version) => {
     if (!token) return;
 
     let rootPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`;
 
     console.log(rootPath)
 
-    const launchConfig = await fabric.getMCLCLaunchConfig({
-        gameVersion: '1.20.2',
-        rootPath,
-    });
+    let launchConfig;
+    if (loader === "fabric") {
+        console.log("[LAUNCHER] Started Fabric")
+        launchConfig = await fabric.getMCLCLaunchConfig({
+            gameVersion: version,
+            rootPath,
+        });
+    } else if (loader === "forge") {
+        console.log("[LAUNCHER] Started Forge")
+        launchConfig = await forge.getMCLCLaunchConfig({
+            gameVersion: version,
+            rootPath,
+        });
+    } else {
+        console.log("[LAUNCHER] Started Vanilla")
+        launchConfig = await vanilla.getMCLCLaunchConfig({
+            gameVersion: version,
+            rootPath,
+        });
+    }
 
     let opts = {
         ...launchConfig,
@@ -187,7 +264,7 @@ function initTray() {
             label: "Hilfe",
             icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/help.${preferredIconType}`).resize({ width: 16 }),
             click: (item, window, event) => {
-                shell.openExternal("//strassburger.org/discord");
+                shell.openExternal("https://strassburger.org/discord");
             }
         },
         {
@@ -229,7 +306,7 @@ function initTray() {
     //Menu.setApplicationMenu(builtmenu);
 
     // !!! UNCOMMENT FOR PRODUCTION !!! //
-    
+
     // YOU FUCKING PRICK WHY DO YOU ALWAYS FORGET TO UNCOMMENT THIS SHIT!
 
     top.tray.on('click', function (e) {
@@ -238,5 +315,36 @@ function initTray() {
         } else {
             top.mainWindow.show();
         }
+    });
+}
+
+function initDiscordRPC() {
+    let client = new RPC.Client({ transport: "ipc" });
+
+    let loginSuccess = true;
+
+    try {
+        client.login({ clientId: "1178319000212611123" }).then(() => {
+            console.log("[DiscordRCP] Login successfull!");
+            console.log("[DiscordRCP] Projecting to: " + client.user.username);
+        })
+    } catch (err) {
+        loginSuccess = false;
+        console.log(err);
+    }
+
+    client.on("ready", () => {
+        setInterval(() => {
+            if (!loginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
+            console.log("[DiscordRCP] Updated DiscordRCP");
+
+            let selectedProfile = store.get("selectedProfile");
+
+            client.setActivity({
+                state: selectedProfile.name,
+                details: `${selectedProfile.loader} ${selectedProfile.version}`,
+                largeImageKey: "logo"
+            })
+        }, 20 * 1000)
     });
 }

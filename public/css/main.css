@@ -225,4 +225,60 @@ main .settingsBox .checkBoxInput .mem-box span {
   font-weight: 600;
   padding: 0;
   margin: 0;
+}
+main.profiles {
+  --padding: 15px;
+  padding: 0 var(--padding);
+  padding-top: var(--dragheight);
+  width: calc(100% - var(--padding) * 2);
+  display: flex;
+  flex-direction: column;
+}
+main.profiles .topRow {
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+}
+main.profiles .newProfileBtn {
+  background-color: var(--success);
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+main.profiles table {
+  --padding: 15px;
+  padding: 0 var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  border-spacing: 0px;
+  table-layout: fixed;
+}
+main.profiles table tr td,
+main.profiles table tr th {
+  text-align: left;
+  padding: 15px;
+  font-size: 18px;
+  border-bottom: solid var(--grey-3) 3px;
+}
+main.profiles table tr th {
+  font-size: 20px;
+}
+main.profiles table tr:last-of-type td {
+  border-bottom: none;
+}
+main.profiles table tr td:last-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main.profiles table tr button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 7px;
+}
+main.profiles table tr button svg {
+  height: 15px;
+  width: 15px;
 }/*# sourceMappingURL=main.css.map */

@@ -67,3 +67,43 @@ function setSetting(setting, value) {
         value,
     });
 }
+
+function createNewProfile() {
+    let name = document.getElementById("newProfileName").value;
+    let invalidPathChars = /[<>:"\/\\|?*\x00-\x1F]/;
+    let invalidWords = /^(?:aux|con|clock\$|nul|prn|com[1-9]|lpt[1-9])$/i;
+
+    if (!name || name.length > 100 || invalidWords.test(name).valueOf() || invalidPathChars.test(name).valueOf()) {
+        alert("Invalid name!");
+        return;
+    }
+
+    let loader = document.getElementById("newProfileLoader").value;
+    let version = document.getElementById("newProfileVersion").value;
+
+    window.api.invoke('createProfile', {
+        name,
+        loader,
+        version
+    });
+}
+
+function selectProfile(name, loader, version) {
+    if (!name || !loader || !version) return;
+
+    // document.getElementById("profileSelectBtn").innerHTML = `
+    //     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
+    //     ${name}`;
+
+    window.api.invoke('selectProfile', {
+        name,
+        loader,
+        version
+    });
+
+    changeSection("main");
+}
+
+function openProfileFolder(name) {
+    window.api.invoke('openProfileFolder', name)
+}
