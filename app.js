@@ -137,7 +137,12 @@ if (!gotTheLock) {
         ipcMain.handle('openProfileFolder', (event, profileName) => {
             console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}` + "'");
             shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`);
-        })
+        });
+
+        ipcMain.handle("openRootFolder", (event, data) => {
+            console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}` + "'");
+            shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}`);
+        });
 
         if (!store.get("profiles") || store.get("profiles").length <= 0) {
             store.set("profiles", [{

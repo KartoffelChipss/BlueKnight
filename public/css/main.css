@@ -295,4 +295,164 @@ main.profiles table tr button {
 main.profiles table tr button svg {
   height: 15px;
   width: 15px;
+}
+main.mods {
+  --searchBarheight: 51px;
+}
+main.mods ::-webkit-scrollbar {
+  width: 10px;
+}
+main.mods ::-webkit-scrollbar-track {
+  background-color: var(--grey-1);
+}
+main.mods ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-radius: 7px;
+}
+main.mods .modmain {
+  --padding: 15px;
+  padding: 0 var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - var(--searchBarheight));
+  max-height: calc(100% - var(--searchBarheight));
+}
+main.mods .searchBar {
+  --padding: 12px;
+  padding: 0 var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  border-radius: 7px;
+  height: var(--searchBarheight);
+  display: flex;
+  align-items: center;
+  background-color: var(--grey-2);
+}
+main.mods .searchBar input {
+  flex-grow: 1;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: var(--text-color);
+  border-radius: 0;
+  font-size: 18px;
+  margin: 0;
+}
+main.mods .searchBar input:focus-visible {
+  outline: none;
+}
+main.mods .searchBar svg {
+  height: 25px;
+  width: 25px;
+  margin-right: 15px;
+}
+main.mods .searchBar .clearSearchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+}
+main.mods .searchBar .clearSearchBtn svg {
+  margin: 0;
+  height: 17px;
+  width: 17px;
+}
+main.mods .modlist {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-grow: 1;
+  margin: 30px 0;
+  padding-right: 10px;
+}
+main.mods .modlist .modbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 7px;
+  background-color: rgba(255, 255, 255, 0.04);
+  margin-bottom: 30px;
+}
+main.mods .modlist .modbox img {
+  height: 100px;
+  width: 100px;
+  margin-right: 15px;
+  border-radius: 3px;
+}
+main.mods .modlist .modbox:last-of-type {
+  margin: 0;
+}
+main.mods .modlist .modbox .desc h3 {
+  font-size: 22px;
+  margin: 0;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+main.mods .modlist .modbox .desc p {
+  font-size: 18px;
+  color: var(--text-color-2);
+  margin: 0;
+}
+main.mods .modlist .modbox .desc .tags {
+  display: flex;
+  align-items: center;
+}
+main.mods .modlist .modbox .desc .tags .tag {
+  display: flex;
+  align-items: center;
+  background-color: var(--grey-2);
+  padding: 5px 7px;
+  border-radius: 7px;
+  margin: 5px 0;
+  margin-left: 7px;
+}
+main.mods .modlist .modbox .desc .tags .tag:first-of-type {
+  margin-left: 14px;
+}
+main.mods .modlist .modbox .desc .tags .tag span {
+  color: var(--text-color);
+  font-size: 14px;
+}
+main.mods .modlist .modbox .desc .tags .tag svg {
+  height: 15px;
+  width: 15px;
+  margin-right: 7px;
+}
+main.mods .modlist .modbox .buttons {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+main.mods .modlist .modbox .buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--success);
+}
+main.mods .modlist .modbox .buttons button svg {
+  height: 25px;
+  width: 25px;
+}
+main.mods .pagination {
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main.mods .pagination span {
+  font-weight: 600;
+  font-size: 20px;
+}
+main.mods .pagination button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15px;
+}
+main.mods .pagination button svg {
+  height: 20px;
+  width: 20px;
 }/*# sourceMappingURL=main.css.map */

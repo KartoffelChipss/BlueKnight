@@ -5,6 +5,17 @@ let modsMain = document.querySelector("main.mods");
 
 const playBtn = document.getElementById("playBtn");
 
+async function fetchAsync(url) {
+    let headers = new Headers({
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "Kartoffelstream/v0.1/JanStraßburger"
+    });
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+
 window.bridge.openSection((event, section) => {
     changeSection(section);
 })

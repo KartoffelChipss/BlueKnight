@@ -22,7 +22,12 @@ window.bridge.sendSettings((event, settings) => {
 
 window.bridge.sendProfiles((event, data) => {
     if (data.selectedProfile) {
-        document.getElementById("profileSelectBtn").innerHTML = `
+        let profileSelectBtn = document.getElementById("profileSelectBtn");
+        profileSelectBtn.dataset.name = data.selectedProfile.name;
+        profileSelectBtn.dataset.version = data.selectedProfile.version;
+        profileSelectBtn.dataset.loader = data.selectedProfile.loader;
+
+        profileSelectBtn.innerHTML = `
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             ${data.selectedProfile.name}`;
     }
