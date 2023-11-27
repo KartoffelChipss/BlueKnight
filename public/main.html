@@ -312,6 +312,29 @@
         </div>
     </div>
 
+    <div class="modal" id="downloadModModal">
+        <div class="modalBox form">
+            <button type="button" class="closebtn" onclick="document.getElementById('downloadModModal').classList.toggle('_shown')">
+                <svg width="64px"
+                    height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </g>
+                </svg>
+            </button>
+
+            <h2>Mod herunterladen</h2>
+            <select id="modDownloadProfileSelect"></select>
+            <button type="button" id="modDownloadButton" class="submit" onclick="downloadMod()">Herunterladen</button>
+        </div>
+    </div>
+
     <script src="./js/init.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/mods.js"></script>

@@ -18,10 +18,12 @@ function searchMods(query, offset, limit, goingBack) {
 
     if (goingBack && goingBack === true) newPageNum = modPageNum - 1;
 
-    console.log("Loading mods page "+ modPageNum + ":")
-    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:${profileSelectBtn.dataset.loader}%22],["versions:${profileSelectBtn.dataset.loader}"],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`)
+    if (newPageNum <= 0) return;
 
-    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:${profileSelectBtn.dataset.loader}%22],["versions:${profileSelectBtn.dataset.version}"],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
+    console.log("Loading mods page "+ modPageNum + ":")
+    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`)
+
+    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
         modlist.innerHTML = "";
 
         if (!data || !data.hits) {
@@ -52,7 +54,7 @@ function searchMods(query, offset, limit, goingBack) {
                     </div>
                 </div>
                 <div class="buttons">
-                    <button type="button" onclick="downloadMod('${mod.project_id}')">
+                    <button type="button" onclick="showDownloadMod('${mod.project_id}')">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.5 4V17M12.5 17L7 12.2105M12.5 17L18 12.2105" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 21H19" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                     </button>
                 </div>
@@ -80,8 +82,52 @@ function clearSearch() {
     searchMods();
 }
 
+function showDownloadMod(modid) {
+    let downloadModModal = document.getElementById("downloadModModal");
+    let modDownloadButton = document.getElementById("modDownloadButton");
+
+    downloadModModal.classList.add("_shown");
+
+    modDownloadButton.setAttribute("onclick", `downloadMod('${modid}')`);
+}
+
+function downloadMod(modid) {
+    let targetProfileMatsch = document.getElementById("modDownloadProfileSelect").value;
+
+    let targetProfileSplit = targetProfileMatsch.split("?");
+    let targetProfile = targetProfileSplit[0];
+    let modversion = targetProfileSplit[1];
+
+    console.log(targetProfile + " " + modversion)
+
+    fetchAsync(`https://api.modrinth.com/v2/project/${modid}/version`).then(data => {
+        if (!data) return;
+
+        let availableversions = data.filter(ver => ver.game_versions.includes(modversion));
+
+        if (availableversions.length <= 0) {
+            // TODO: Throw no correct version error!
+            return;
+        }
+
+        let versiontoDownload = availableversions[0];
+        let filetoDownload = versiontoDownload.files[0];
+
+        window.api.invoke("downloadMod", {
+            targetProfile,
+            modid,
+            modversion,
+            filetoDownload
+        });
+    });
+}
+
 window.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.keyCode === 13) && document.activeElement === searchInput) {
         searchMods(searchInput.value);
     }
-})
+
+    if ((e.key === "Escape" || e.keyCode === 27)) {
+        changeSection("main");
+    }
+});

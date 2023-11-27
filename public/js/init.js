@@ -33,16 +33,23 @@ window.bridge.sendProfiles((event, data) => {
     }
     if (data.profiles) {
         const profileTable = document.getElementById("profileTable");
+        const modDownloadProfileSelect = document.getElementById("modDownloadProfileSelect");
+
+        modDownloadProfileSelect.innerHTML = "";
+
         profileTable.querySelector("tbody").innerHTML = `<tr>
             <th>Name</th>
             <th>Loader</th>
             <th>Version</th>
             <th></th>
         </tr>`;
+
         data.profiles.forEach((profile, index) => {
             let modsBtn = `<button type="button" onclick="addModsToProfile('${profile.name}')" title="Mods verwalten">
                 <svg fill="#fefefe" height="200px" width="200px" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path class="cls-1" d="M9,14H6V8H9ZM8.875,2H6.7226A1.99139,1.99139,0,0,1,5,3,2.486,2.486,0,0,1,3,2H2V6H3A1.79727,1.79727,0,0,1,4.5,5C5.55147,5,5.99725,6.98981,6,7H9c.333-1.53876,1-2.43573,1.741-2.43573,1.481,0,3.259,2.05109,3.259,2.05109S13,2,8.875,2Z"></path> </g></svg>
             </button>`;
+
+            if (profile.loader !== "vanilla") modDownloadProfileSelect.innerHTML += `<option value="${profile.name}?${profile.version}">${profile.name}</option>`;
 
             if (profile.loader === "vanilla") modsBtn = "";
 

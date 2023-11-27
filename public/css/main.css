@@ -378,7 +378,7 @@ main.mods .modlist .modbox img {
   height: 100px;
   width: 100px;
   margin-right: 15px;
-  border-radius: 3px;
+  border-radius: 7px;
 }
 main.mods .modlist .modbox:last-of-type {
   margin: 0;

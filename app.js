@@ -7,12 +7,34 @@ const fs = require("fs");
 const version = require("./package.json").version;
 const os = require("os");
 const RPC = require("discord-rpc");
+const { mkdir, writeFile } = require("fs/promises");
+const { Readable } = require('stream');
+const { finished, pipeline } = require('stream/promises');
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
 const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner } = require('tomate-loaders');
+
+const downloadFile = async (url, profile, filename) => {
+    let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profile}${path.sep}mods`;
+    if (!fs.existsSync(profilePath)) fs.mkdirSync(profilePath);
+    const destination = path.resolve(profilePath, filename);
+    pipeline(
+        (await fetch(url)).body,
+        fs.createWriteStream(destination)
+    );
+}
+
+const downloadFileOld = (async (url, profile, filename = ".") => {
+    const res = await fetch(url);
+    let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profile}${path.sep}mods`;
+    if (!fs.existsSync(profilePath)) fs.mkdirSync(profilePath);
+    const destination = path.resolve(profilePath, filename);
+    const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
+    await finished(Readable.fromWeb(res.body).pipe(fileStream));
+});
 
 const store = new Store();
 
@@ -24,7 +46,7 @@ let token;
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
-    app.quit()
+    app.quit();
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         if (top.mainWindow) {
@@ -142,6 +164,11 @@ if (!gotTheLock) {
         ipcMain.handle("openRootFolder", (event, data) => {
             console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}` + "'");
             shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}`);
+        });
+
+        ipcMain.handle("downloadMod", (event, data) => {
+            console.log("Recieved Mod download request")
+            downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.filetoDownload.filename}`);
         });
 
         if (!store.get("profiles") || store.get("profiles").length <= 0) {
