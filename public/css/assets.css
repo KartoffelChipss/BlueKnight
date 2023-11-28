@@ -87,6 +87,8 @@ button.icon svg {
 button.icon.icon-smol svg {
   height: 20px;
   width: 20px;
+  min-height: 20px;
+  min-width: 20px;
 }
 
 .dragbar {

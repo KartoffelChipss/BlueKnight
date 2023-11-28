@@ -16,6 +16,18 @@ async function fetchAsync(url) {
     return data;
 }
 
+function loadWarning(msg) {
+    let warnbox = document.getElementById("warnbox");
+    let warnspan = warnbox.querySelector("span");
+
+    warnspan.innerHTML = msg;
+    warnbox.classList.add("_shown");
+
+    setTimeout(() => {
+        warnbox.classList.remove("_shown");
+    }, 3500);
+}
+
 window.bridge.openSection((event, section) => {
     changeSection(section);
 })

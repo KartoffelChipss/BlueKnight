@@ -10,6 +10,10 @@
 </head>
 
 <body>
+    <div class="warnbox" id="warnbox">
+        <span>Dieser Sender konnte nicht geladen werden.<br>Bitte versuche es später erneut.</span>
+    </div>
+
     <div class="dragbar">
         <div class="title">
             <img src="./img/logo.svg">
@@ -81,7 +85,7 @@
             <div class="bottom">
                 <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" data-version="1.20.2" data-name="Fabric 1.20.2" data-loader="fabric" class="profileselect icon icon-smol">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    None
+                    <span>None</span>
                 </button>
                 <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -298,14 +302,12 @@
                 <optgroup label="1.20">
                     <option value="1.20.2">1.20.2</option>
                     <option value="1.20.1">1.20.1</option>
-                    <option value="1.20">1.20</option>
                 </optgroup>
                 <optgroup label="1.19">
                     <option value="1.19.4">1.19.4</option>
                     <option value="1.19.3">1.19.3</option>
                     <option value="1.19.2">1.19.2</option>
                     <option value="1.19.1">1.19.1</option>
-                    <option value="1.19">1.19</option>
                 </optgroup>
             </select>
             <button type="button" class="submit" onclick="createNewProfile()">Profil erstellen</button>

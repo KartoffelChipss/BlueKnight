@@ -123,7 +123,7 @@ function downloadMod(modid) {
         let availableversionspre = data.filter(ver => ver.game_versions.includes(modversion));
 
         if (availableversionspre.length <= 0) {
-            // TODO: Throw no correct version error!
+            loadWarning(`Nicht für Version ${modversion} verfügbar!`)
             console.log("[DOWNLOADS] No plugin version for your mc version!")
             return;
         }
@@ -131,7 +131,7 @@ function downloadMod(modid) {
         let availableversions = availableversionspre.filter(ver => ver.loaders.includes("fabric"));
 
         if (availableversions.length <= 0) {
-            // TODO: Throw no correct version error!
+            loadWarning(`Nicht für Fabric in Minecraft ${modversion} verfügbar!`)
             console.log("[DOWNLOADS] No plugin version for you loader and mc version!")
             return;
         }
