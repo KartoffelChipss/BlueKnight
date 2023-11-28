@@ -130,3 +130,7 @@ function selectProfile(name, loader, version) {
 function openProfileFolder(name) {
     window.api.invoke('openProfileFolder', name)
 }
+
+function openExternalLink(url) {
+    window.api.invoke("openExternal", { url });
+}

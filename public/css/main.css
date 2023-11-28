@@ -234,6 +234,9 @@ main .settingsBox .checkBoxInput .mem-box input::-webkit-outer-spin-button, main
   -webkit-appearance: none;
   margin: 0;
 }
+main .settingsBox .checkBoxInput .mem-box input:focus-visible {
+  outline: none;
+}
 main .settingsBox .checkBoxInput .mem-box span {
   color: var(--text-color);
   font-size: 18px;
@@ -291,6 +294,9 @@ main.profiles table tr button {
   align-items: center;
   justify-content: center;
   margin: 0 7px;
+}
+main.profiles table tr button.success {
+  background-color: var(--success);
 }
 main.profiles table tr button svg {
   height: 15px;
@@ -408,7 +414,7 @@ main.mods .modlist .modbox .desc .tags .tag {
   margin: 5px 0;
   margin-left: 7px;
 }
-main.mods .modlist .modbox .desc .tags .tag:first-of-type {
+main.mods .modlist .modbox .desc .tags .tag:first-child {
   margin-left: 14px;
 }
 main.mods .modlist .modbox .desc .tags .tag span {
@@ -419,6 +425,16 @@ main.mods .modlist .modbox .desc .tags .tag svg {
   height: 15px;
   width: 15px;
   margin-right: 7px;
+}
+main.mods .modlist .modbox .desc .tags button.tag {
+  margin: 5px 0;
+  margin-left: 7px;
+}
+main.mods .modlist .modbox .desc .tags button.tag svg {
+  margin: 0;
+}
+main.mods .modlist .modbox .desc .tags button.tag:hover {
+  filter: none;
 }
 main.mods .modlist .modbox .buttons {
   display: flex;
@@ -455,4 +471,14 @@ main.mods .pagination button {
 main.mods .pagination button svg {
   height: 20px;
   width: 20px;
+}
+
+#modDownloadButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#modDownloadButton svg {
+  height: 25px;
+  width: 25px;
 }/*# sourceMappingURL=main.css.map */

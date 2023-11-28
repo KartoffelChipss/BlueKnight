@@ -7,15 +7,22 @@ const fs = require("fs");
 const version = require("./package.json").version;
 const os = require("os");
 const RPC = require("discord-rpc");
-const { mkdir, writeFile } = require("fs/promises");
-const { Readable } = require('stream');
-const { finished, pipeline } = require('stream/promises');
+const { pipeline } = require('stream/promises');
+const chalk = require("chalk");
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
 const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner } = require('tomate-loaders');
+
+const devMode = true;
+
+if (devMode) {
+    console.log(" ");
+    console.log("[DEV] Started in DEVMODE");
+    console.log(" ");
+}
 
 const downloadFile = async (url, profile, filename) => {
     let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profile}${path.sep}mods`;
@@ -26,15 +33,6 @@ const downloadFile = async (url, profile, filename) => {
         fs.createWriteStream(destination)
     );
 }
-
-const downloadFileOld = (async (url, profile, filename = ".") => {
-    const res = await fetch(url);
-    let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profile}${path.sep}mods`;
-    if (!fs.existsSync(profilePath)) fs.mkdirSync(profilePath);
-    const destination = path.resolve(profilePath, filename);
-    const fileStream = fs.createWriteStream(destination, { flags: 'wx' });
-    await finished(Readable.fromWeb(res.body).pipe(fileStream));
-});
 
 const store = new Store();
 
@@ -74,6 +72,13 @@ if (!gotTheLock) {
             if (process.platform === 'darwin') return app.quit();
 
             app.quit();
+        });
+
+        ipcMain.handle("openExternal", (event, args) => {
+            if (args.url) {
+                shell.openExternal(args.url);
+                return;
+            }
         });
 
         ipcMain.handle("setMaxMem", (event, value) => {
@@ -167,8 +172,12 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("downloadMod", (event, data) => {
-            console.log("Recieved Mod download request")
+            console.log("[DOWNLOADS] Recieved Mod download request for " + data.filetoDownload.filename)
             downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.filetoDownload.filename}`);
+            console.log("[DOWNLOADS] Finished downlaoding " + data.filetoDownload.filename);
+            top.mainWindow.webContents.send("modDownloadResult", {
+                result: "success",
+            });
         });
 
         if (!store.get("profiles") || store.get("profiles").length <= 0) {
@@ -259,12 +268,14 @@ let launchMinecraft = async (profileName, loader, version) => {
     launcher.launch(opts);
 };
 
-launcher.on('debug', (e) => console.log(e));
+if (devMode) launcher.on('debug', (e) => console.log("[DEBUG] " + e));
+
 launcher.on('data', liner(line => {
     if (line.match(/\[Render thread\/INFO\]: Setting user:/g) || line.match(/\[MCLC\]: Launching with arguments/)) {
         top.mainWindow.webContents.send("sendMCstarted");
         if (store.get("minimizeOnStart")) top.mainWindow.hide();
     }
+    
     console.log(line);
 }));
 
@@ -275,6 +286,7 @@ launcher.on("progress", (e) => {
 
 launcher.on('close', (e) => {
     console.log("Launcher closed!");
+    top.mainWindow.webContents.send("sendMCstarted");
     top.mainWindow.show();
 })
 
@@ -336,13 +348,7 @@ function initTray() {
 
     top.tray.setToolTip("Instantradio");
 
-    // !!! UNCOMMENT FOR PRODUCTION !!! //
-
-    //Menu.setApplicationMenu(builtmenu);
-
-    // !!! UNCOMMENT FOR PRODUCTION !!! //
-
-    // YOU FUCKING PRICK WHY DO YOU ALWAYS FORGET TO UNCOMMENT THIS SHIT!
+    if (!devMode) Menu.setApplicationMenu(builtmenu);
 
     top.tray.on('click', function (e) {
         if (top.mainWindow.isVisible()) {

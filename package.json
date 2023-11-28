@@ -1,6 +1,6 @@
 {
     "name": "blueknight",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "",
     "main": "app.js",
     "scripts": {
@@ -27,8 +27,8 @@
             "icon": "build/icons/512x512.png",
             "artifactName": "blueknight-${version}.${ext}",
             "maintainer": "Jan Straßburger",
-    	    "vendor": "Jan Straßburger",
-    	    "synopsis": "This is a synopsis?"
+            "vendor": "Jan Straßburger",
+            "synopsis": "This is a synopsis?"
         },
         "win": {
             "target": [

@@ -47,6 +47,9 @@ function searchMods(query, offset, limit, goingBack) {
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.5 4V17M12.5 17L7 12.2105M12.5 17L18 12.2105" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 21H19" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                     <span>${mod.downloads.toLocaleString(undefined)}</span>
                                 </div>
+                                <button class="tag" onclick="openExternalLink('https://modrinth.com/mod/${mod.project_id}')">
+                                    <svg fill="#fefefe" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe" stroke-width="0.192"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" d="M19,14 L19,19 C19,20.1045695 18.1045695,21 17,21 L5,21 C3.8954305,21 3,20.1045695 3,19 L3,7 C3,5.8954305 3.8954305,5 5,5 L10,5 L10,7 L5,7 L5,19 L17,19 L17,14 L19,14 Z M18.9971001,6.41421356 L11.7042068,13.7071068 L10.2899933,12.2928932 L17.5828865,5 L12.9971001,5 L12.9971001,3 L20.9971001,3 L20.9971001,11 L18.9971001,11 L18.9971001,6.41421356 Z"></path> </g></svg>
+                                </button>
                             </div>
                         </h3>
                         <p>${mod.description}</p>
@@ -82,16 +85,30 @@ function clearSearch() {
     searchMods();
 }
 
+function resetModDownladBtn() {
+    let modDownloadButton = document.getElementById("modDownloadButton");
+    if (modDownloadButton.hasAttribute("disabled")) modDownloadButton.removeAttribute("disabled");
+    modDownloadButton.innerHTML = "Herunterladen";
+}
+
+function closeDownloadModModal() {
+    let downloadModModal = document.getElementById("downloadModModal");
+    resetModDownladBtn();
+    if (downloadModModal.classList.contains("_shown")) downloadModModal.classList.remove('_shown');
+}
+
 function showDownloadMod(modid) {
     let downloadModModal = document.getElementById("downloadModModal");
     let modDownloadButton = document.getElementById("modDownloadButton");
 
     downloadModModal.classList.add("_shown");
 
+    resetModDownladBtn();
     modDownloadButton.setAttribute("onclick", `downloadMod('${modid}')`);
 }
 
 function downloadMod(modid) {
+    let modDownloadButton = document.getElementById("modDownloadButton");
     let targetProfileMatsch = document.getElementById("modDownloadProfileSelect").value;
 
     let targetProfileSplit = targetProfileMatsch.split("?");
@@ -103,15 +120,39 @@ function downloadMod(modid) {
     fetchAsync(`https://api.modrinth.com/v2/project/${modid}/version`).then(data => {
         if (!data) return;
 
-        let availableversions = data.filter(ver => ver.game_versions.includes(modversion));
+        let availableversionspre = data.filter(ver => ver.game_versions.includes(modversion));
+
+        if (availableversionspre.length <= 0) {
+            // TODO: Throw no correct version error!
+            console.log("[DOWNLOADS] No plugin version for your mc version!")
+            return;
+        }
+
+        let availableversions = availableversionspre.filter(ver => ver.loaders.includes("fabric"));
 
         if (availableversions.length <= 0) {
             // TODO: Throw no correct version error!
+            console.log("[DOWNLOADS] No plugin version for you loader and mc version!")
             return;
         }
 
         let versiontoDownload = availableversions[0];
         let filetoDownload = versiontoDownload.files[0];
+
+        modDownloadButton.setAttribute("disabled", true);
+        modDownloadButton.innerHTML = `<svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+            <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                <animateTransform 
+                attributeName="transform" 
+                attributeType="XML" 
+                type="rotate"
+                dur="1s" 
+                from="0 50 50"
+                to="360 50 50" 
+                repeatCount="indefinite" />
+            </path>
+        </svg>`;
 
         window.api.invoke("downloadMod", {
             targetProfile,
@@ -122,12 +163,30 @@ function downloadMod(modid) {
     });
 }
 
+window.bridge.modDownloadResult((event, data) => {
+    let modDownloadButton = document.getElementById("modDownloadButton");
+
+    if (data.result === "success") {
+        console.log("Successfull downlaod");
+        modDownloadButton.innerHTML = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5L8 15l-5-4"></path> </g></svg>`;
+        setTimeout(() => {
+            closeDownloadModModal();
+        }, 500)
+    }
+
+    if (data.result === "error") {
+        resetModDownladBtn();
+        console.log("Successfull downlaod");
+    }
+})
+
 window.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.keyCode === 13) && document.activeElement === searchInput) {
         searchMods(searchInput.value);
     }
 
     if ((e.key === "Escape" || e.keyCode === 27)) {
+        if (document.getElementById("downloadModModal").classList.contains("_shown")) return closeDownloadModModal();
         changeSection("main");
     }
 });

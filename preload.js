@@ -17,7 +17,21 @@ window.addEventListener('DOMContentLoaded', () => {
 contextBridge.exposeInMainWorld(
     "api", {
         invoke: (channel, data) => {
-            let validChannels = ["minimize", "togglemaxwindow", "closeWindow", "launchMC", "initLogin", "setMaxMem", "setSetting", "createProfile", "selectProfile", "openProfileFolder", "openRootFolder", "downloadMod"];
+            let validChannels = [
+                "minimize", 
+                "togglemaxwindow", 
+                "closeWindow", 
+                "launchMC", 
+                "initLogin", 
+                "setMaxMem", 
+                "setSetting", 
+                "createProfile", 
+                "selectProfile", 
+                "openProfileFolder", 
+                "openRootFolder", 
+                "downloadMod", 
+                "openExternal"
+            ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);
             }
