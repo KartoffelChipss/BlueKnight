@@ -186,8 +186,6 @@ if (!gotTheLock) {
 
         initTray();
 
-        initDiscordRPC();
-
         top.mainWindow = new BrowserWindow({
             title: "BlueKnight Launcher",
             width: 1200,
@@ -213,6 +211,8 @@ if (!gotTheLock) {
         })
 
         top.mainWindow.show();
+
+        initDiscordRPC();
     });
 }
 

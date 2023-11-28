@@ -52,5 +52,8 @@ contextBridge.exposeInMainWorld(
         sendProfiles: (message) => {
             ipcRenderer.on("sendProfiles", message);
         },
+        modDownloadResult: (message) => {
+            ipcRenderer.on("modDownloadResult", message);
+        }
     }
 );

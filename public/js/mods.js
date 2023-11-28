@@ -21,9 +21,9 @@ function searchMods(query, offset, limit, goingBack) {
     if (newPageNum <= 0) return;
 
     console.log("Loading mods page "+ modPageNum + ":")
-    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`)
+    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`)
 
-    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
+    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
         modlist.innerHTML = "";
 
         if (!data || !data.hits) {
