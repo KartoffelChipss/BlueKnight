@@ -8,7 +8,6 @@ const version = require("./package.json").version;
 const os = require("os");
 const RPC = require("discord-rpc");
 const { pipeline } = require('stream/promises');
-const chalk = require("chalk");
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
