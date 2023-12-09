@@ -13,7 +13,7 @@ const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
 const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
-const { vanilla, fabric, forge, liner } = require('tomate-loaders');
+const { vanilla, fabric, forge, liner, quilt } = require('tomate-loaders');
 
 const devMode = true;
 
@@ -57,6 +57,9 @@ if (!gotTheLock) {
         if (process.platform === 'win32') {
             app.setAppUserModelId("BlueKnight Launcher");
         }
+
+        let blueKnightPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight`;
+        if (!fs.existsSync(blueKnightPath)) fs.mkdirSync(blueKnightPath);
 
         ipcMain.handle('minimize', (event, arg) => {
             top.mainWindow.isMinimized() ? top.mainWindow.restore() : top.mainWindow.minimize();
@@ -177,6 +180,18 @@ if (!gotTheLock) {
             top.mainWindow.webContents.send("modDownloadResult", {
                 result: "success",
             });
+
+            // Delete old versions of installed mod
+            const modsDirPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${data.targetProfile}${path.sep}mods`;
+            fs.readdirSync(path.resolve(modsDirPath)).forEach(file => {
+                let nameSplit = file.split("_");
+                if (!nameSplit || nameSplit[0].length !== 8) return;
+
+                if (nameSplit[0] === data.modid && file !== data.filetoDownload.filename) {
+                    fs.unlinkSync(path.resolve(modsDirPath, file));
+                    console.log("[DOWNLOADS] Removed old mod: " + data.targetProfile + "/" + file);
+                }
+            });
         });
 
         if (!store.get("profiles") || store.get("profiles").length <= 0) {
@@ -274,7 +289,7 @@ launcher.on('data', liner(line => {
         top.mainWindow.webContents.send("sendMCstarted");
         if (store.get("minimizeOnStart")) top.mainWindow.hide();
     }
-    
+
     console.log(line);
 }));
 

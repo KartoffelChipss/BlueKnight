@@ -1,6 +1,6 @@
 {
     "name": "blueknight",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "",
     "main": "app.js",
     "scripts": {
@@ -37,11 +37,6 @@
             "icon": "public/img/logo.ico"
         },
         "nsis": {
-            "customNsisBinary": {
-                "url": "https://github.com/electron-userland/electron-builder-binaries/releases/download",
-                "checksum": "VKMiizYdmNdJOWpRGz4trl4lD++BvYP2irAXpMilheUP0pc93iKlWAoP843Vlraj8YG19CVn0j+dCo/hURz9+Q==",
-                "version": "3.0.4.1"
-            },
             "installerIcon": "public/img/logo.ico",
             "uninstallerIcon": "public/img/logo.ico",
             "uninstallDisplayName": "BlueKnight Launcher",
