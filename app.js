@@ -8,6 +8,10 @@ const version = require("./package.json").version;
 const os = require("os");
 const RPC = require("discord-rpc");
 const { pipeline } = require('stream/promises');
+const logger = require('electron-log');
+
+logger.transports.file.resolvePathFn = () => path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`, 'logs.log');
+logger.transports.file.level = "info";
 
 const { Client } = require('minecraft-launcher-core');
 const launcher = new Client();
@@ -17,10 +21,11 @@ const { vanilla, fabric, forge, liner, quilt } = require('tomate-loaders');
 
 const devMode = true;
 
+logger.info("\n === APP STARTED === \n");
 if (devMode) {
-    console.log(" ");
-    console.log("[DEV] Started in DEVMODE");
-    console.log(" ");
+    logger.info(" ");
+    logger.info("[DEV] Started in DEVMODE");
+    logger.info(" ");
 }
 
 const downloadFile = async (url, profile, filename) => {
@@ -101,7 +106,7 @@ if (!gotTheLock) {
             token = await xboxManager.getMinecraft();
             let savabletoken = xboxManager.save();
             store.set("token", savabletoken);
-            console.log(`Logged in as ${token.profile.name}`);
+            logger.info(`Logged in as ${token.profile.name}`);
 
             top.mainWindow.loadFile("public/main.html").then(() => {
                 top.mainWindow.send("sendProfile", token.profile);
@@ -160,23 +165,23 @@ if (!gotTheLock) {
                 selectedProfile: store.get("selectedProfile"),
             });
 
-            console.log(`[PROFILES] Switched to ${data.name}`);
+            logger.info(`[PROFILES] Switched to ${data.name}`);
         });
 
         ipcMain.handle('openProfileFolder', (event, profileName) => {
-            console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}` + "'");
+            logger.info("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}` + "'");
             shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`);
         });
 
         ipcMain.handle("openRootFolder", (event, data) => {
-            console.log("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}` + "'");
+            logger.info("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}` + "'");
             shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}`);
         });
 
         ipcMain.handle("downloadMod", (event, data) => {
-            console.log("[DOWNLOADS] Recieved Mod download request for " + data.filetoDownload.filename)
+            logger.info("[DOWNLOADS] Recieved Mod download request for " + data.filetoDownload.filename)
             downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.filetoDownload.filename}`);
-            console.log("[DOWNLOADS] Finished downlaoding " + data.filetoDownload.filename);
+            logger.info("[DOWNLOADS] Finished downlaoding " + data.filetoDownload.filename);
             top.mainWindow.webContents.send("modDownloadResult", {
                 result: "success",
             });
@@ -189,7 +194,7 @@ if (!gotTheLock) {
 
                 if (nameSplit[0] === data.modid && file !== data.filetoDownload.filename) {
                     fs.unlinkSync(path.resolve(modsDirPath, file));
-                    console.log("[DOWNLOADS] Removed old mod: " + data.targetProfile + "/" + file);
+                    logger.info("[DOWNLOADS] Removed old mod: " + data.targetProfile + "/" + file);
                 }
             });
         });
@@ -244,27 +249,32 @@ let launchMinecraft = async (profileName, loader, version) => {
 
     let rootPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`;
 
-    console.log(rootPath)
+    logger.info("Root Path: ")
+    logger.info(rootPath)
 
     let launchConfig;
     if (loader === "fabric") {
-        console.log("[LAUNCHER] Started Fabric")
+        logger.info("[LAUNCHER] Getting Fabric config...")
         launchConfig = await fabric.getMCLCLaunchConfig({
             gameVersion: version,
             rootPath,
         });
+        logger.info("[LAUNCHER] Finished getting Fabric config!")
+
     } else if (loader === "forge") {
-        console.log("[LAUNCHER] Started Forge")
+        logger.info("[LAUNCHER] Starting Forge...")
         launchConfig = await forge.getMCLCLaunchConfig({
             gameVersion: version,
             rootPath,
         });
+        logger.info("[LAUNCHER] Finished getting Forge config!")
     } else {
-        console.log("[LAUNCHER] Started Vanilla")
+        logger.info("[LAUNCHER] Starting Vanilla...")
         launchConfig = await vanilla.getMCLCLaunchConfig({
             gameVersion: version,
             rootPath,
         });
+        logger.info("[LAUNCHER] Finished getting Vanilla config!")
     }
 
     let opts = {
@@ -279,10 +289,12 @@ let launchMinecraft = async (profileName, loader, version) => {
         }
     }
 
+    logger.info("[LAUNCHER] Launching game...")
     launcher.launch(opts);
+    logger.info("[LAUNCHER] Launched game!")
 };
 
-if (devMode) launcher.on('debug', (e) => console.log("[DEBUG] " + e));
+if (devMode) launcher.on('debug', (e) => logger.info("[LAUNCHER-DEBUG] " + e));
 
 launcher.on('data', liner(line => {
     if (line.match(/\[Render thread\/INFO\]: Setting user:/g) || line.match(/\[MCLC\]: Launching with arguments/)) {
@@ -290,16 +302,17 @@ launcher.on('data', liner(line => {
         if (store.get("minimizeOnStart")) top.mainWindow.hide();
     }
 
-    console.log(line);
+    logger.info("[LAUNCHER-DATA] " + line);
 }));
 
 launcher.on("progress", (e) => {
-    console.log(e)
+    logger.info("[LAUNCHER-PROGRESS]:")
+    logger.info(e)
     top.mainWindow.webContents.send("sendDownloadProgress", e);
 });
 
 launcher.on('close', (e) => {
-    console.log("Launcher closed!");
+    logger.info("[LAUNCHER] Launcher closed!");
     top.mainWindow.webContents.send("sendMCstarted");
     top.mainWindow.show();
 })
@@ -380,18 +393,18 @@ function initDiscordRPC() {
 
     try {
         client.login({ clientId: "1178319000212611123" }).then(() => {
-            console.log("[DiscordRCP] Login successfull!");
-            console.log("[DiscordRCP] Projecting to: " + client.user.username);
+            logger.info("[DiscordRCP] Login successfull!");
+            logger.info("[DiscordRCP] Projecting to: " + client.user.username);
         })
     } catch (err) {
         loginSuccess = false;
-        console.log(err);
+        logger.info(err);
     }
 
     client.on("ready", () => {
         setInterval(() => {
             if (!loginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
-            console.log("[DiscordRCP] Updated DiscordRCP");
+            logger.info("[DiscordRCP] Updated DiscordRCP");
 
             let selectedProfile = store.get("selectedProfile");
 
