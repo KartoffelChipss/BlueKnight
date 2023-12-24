@@ -194,9 +194,15 @@ main .settingsBox .checkBoxInput .slider.round {
 main .settingsBox .checkBoxInput .slider.round:before {
   border-radius: 50%;
 }
-main .settingsBox .checkBoxInput.range {
+main .settingsBox .checkBoxInput.column {
   flex-direction: column;
   align-items: flex-start;
+}
+main .settingsBox .checkBoxInput .widetextinput {
+  --padding: 13px;
+  padding: 10px var(--padding);
+  width: calc(100% - var(--padding) * 2);
+  margin-top: 15px;
 }
 main .settingsBox .checkBoxInput .range-box {
   display: flex;

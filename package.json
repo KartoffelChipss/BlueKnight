@@ -68,6 +68,7 @@
         "discord-rpc": "^4.0.1",
         "electron-log": "^5.0.1",
         "electron-store": "^8.1.0",
+        "find-java-home": "^2.0.0",
         "fs": "^0.0.1-security",
         "minecraft-launcher-core": "^3.17.3",
         "msmc": "^4.1.0",

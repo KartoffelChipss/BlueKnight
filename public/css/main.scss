@@ -241,9 +241,16 @@ main {
                 border-radius: 50%;
             }
 
-            &.range {
+            &.column {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .widetextinput {
+                --padding: 13px;
+                padding: 10px var(--padding);
+                width: calc(100% - var(--padding) * 2);
+                margin-top: 15px;
             }
 
             .range-box {

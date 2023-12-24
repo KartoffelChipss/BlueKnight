@@ -18,6 +18,8 @@ window.bridge.sendSettings((event, settings) => {
 
     document.getElementById("minimizeOnStartCheckbox").checked = settings.minimizeOnStart ?? false;
     document.getElementById("hideDiscordRPCCheckbox").checked = settings.hideDiscordRPC ?? false;
+
+    document.getElementById("javaPath").value = settings.javaPath;
 });
 
 window.bridge.sendProfiles((event, data) => {

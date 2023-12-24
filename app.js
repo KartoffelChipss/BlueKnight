@@ -10,7 +10,12 @@ const RPC = require("discord-rpc");
 const { pipeline } = require('stream/promises');
 const logger = require('electron-log');
 
-logger.transports.file.resolvePathFn = () => path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`, 'logs.log');
+const javaURL = "https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip";
+
+const blueKnightRoot = path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`);
+const profilespath = path.join(blueKnightRoot, `profiles`);
+
+logger.transports.file.resolvePathFn = () => path.join(blueKnightRoot, 'logs.log');
 logger.transports.file.level = "info";
 
 const { Client } = require('minecraft-launcher-core');
@@ -29,9 +34,9 @@ if (devMode) {
 }
 
 const downloadFile = async (url, profile, filename) => {
-    let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profile}${path.sep}mods`;
-    if (!fs.existsSync(profilePath)) fs.mkdirSync(profilePath);
-    const destination = path.resolve(profilePath, filename);
+    let profileModsPath = path.join(profilespath, profile, "mods");
+    if (!fs.existsSync(profileModsPath)) fs.mkdirSync(profileModsPath);
+    const destination = path.resolve(profileModsPath, filename);
     pipeline(
         (await fetch(url)).body,
         fs.createWriteStream(destination)
@@ -41,6 +46,15 @@ const downloadFile = async (url, profile, filename) => {
 const store = new Store();
 
 //store.openInEditor();
+
+function downlaodJava(url) {
+    logger.info("[JAVA] Downloading Java...")
+
+    // TODO: Download java xD
+
+    logger.info("[JAVA] Finished downloading Java!")
+    return false;
+}
 
 let top = {};
 let token;
@@ -63,8 +77,30 @@ if (!gotTheLock) {
             app.setAppUserModelId("BlueKnight Launcher");
         }
 
-        let blueKnightPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight`;
-        if (!fs.existsSync(blueKnightPath)) fs.mkdirSync(blueKnightPath);
+        const setJavaPath = store.get("javaPath");
+        if (setJavaPath) {
+            if (!fs.existsSync(setJavaPath)) return downlaodJava();
+            logger.info("[JAVA] Using custom set java path: " + setJavaPath)
+        } else {
+            require('find-java-home')((err, home) => {
+                logger.info("[JAVA] Looking for installed java path...")
+                if (err) return console.log(err);
+                const javaPath = path.join(home, "bin", "javaw.exe");
+
+                if (!fs.existsSync(javaPath)) {
+                    logger.info("[JAVA] Could not find java path")
+                    downlaodJava();
+                    return;
+                }
+
+                logger.info("[JAVA] Found installed java!")
+                store.set("javaPath", javaPath);
+                logger.info("[JAVA] Java path: " + javaPath);
+            });
+        }
+
+        if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot);
+        if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath);
 
         ipcMain.handle('minimize', (event, arg) => {
             top.mainWindow.isMinimized() ? top.mainWindow.restore() : top.mainWindow.minimize();
@@ -116,6 +152,7 @@ if (!gotTheLock) {
                     maxMemMB: store.get("maxMemMB") || Math.floor((os.totalmem() / 1000000) / 2),
                     minimizeOnStart: store.get("minimizeOnStart"),
                     hideDiscordRPC: store.get("hideDiscordRPC"),
+                    javaPath: store.get("javaPath"),
                 });
                 top.mainWindow.webContents.send("sendProfiles", {
                     profiles: store.get("profiles"),
@@ -132,7 +169,7 @@ if (!gotTheLock) {
         ipcMain.handle('createProfile', async (event, data) => {
             if (!data.name || !data.loader || !data.version) return;
 
-            let profilePath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${data.name}`;
+            let profilePath = path.join(profilespath, data.name);
             if (!fs.existsSync(profilePath)) {
                 fs.mkdirSync(profilePath);
             }
@@ -169,13 +206,15 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle('openProfileFolder', (event, profileName) => {
-            logger.info("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}` + "'");
-            shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`);
+            const myProfilePath = path.join(profilespath, profileName);
+            if (!fs.existsSync(myProfilePath)) fs.mkdirSync(myProfilePath)
+            shell.openPath(myProfilePath);
+            logger.info("[PROFILES] Opened folder '" + myProfilePath + "'");
         });
 
         ipcMain.handle("openRootFolder", (event, data) => {
-            logger.info("[PROFILES] Opened folder '" + `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}` + "'");
-            shell.openPath(`${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}`);
+            logger.info("[PROFILES] Opened folder '" + blueKnightRoot + "'");
+            shell.openPath(blueKnightRoot);
         });
 
         ipcMain.handle("downloadMod", (event, data) => {
@@ -187,7 +226,7 @@ if (!gotTheLock) {
             });
 
             // Delete old versions of installed mod
-            const modsDirPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${data.targetProfile}${path.sep}mods`;
+            const modsDirPath = path.join(profilespath, data.targetProfile, "mods")
             fs.readdirSync(path.resolve(modsDirPath)).forEach(file => {
                 let nameSplit = file.split("_");
                 if (!nameSplit || nameSplit[0].length !== 8) return;
@@ -247,7 +286,7 @@ if (!gotTheLock) {
 let launchMinecraft = async (profileName, loader, version) => {
     if (!token) return;
 
-    let rootPath = `${app.getPath("appData") ?? "."}${path.sep}.blueknight${path.sep}${profileName}`;
+    let rootPath = path.join(profilespath, profileName);
 
     logger.info("Root Path: ")
     logger.info(rootPath)
@@ -286,8 +325,11 @@ let launchMinecraft = async (profileName, loader, version) => {
         memory: {
             max: (store.get("maxMemMB") || "6000") + "M",
             min: "2G"
-        }
+        },
+        javaPath: store.get("javaPath")
     }
+
+    logger.info("[LAUNCHER] Using javapath: " + store.get("javaPath"))
 
     logger.info("[LAUNCHER] Launching game...")
     launcher.launch(opts);

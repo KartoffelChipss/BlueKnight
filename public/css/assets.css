@@ -91,6 +91,17 @@ button.icon.icon-smol svg {
   min-width: 20px;
 }
 
+input {
+  background-color: var(--grey-2);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  color: var(--text-color);
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .dragbar {
   position: fixed;
   top: 0;
@@ -207,7 +218,8 @@ button.icon.icon-smol svg {
   display: flex;
   flex-direction: column;
 }
-.modal .modalBox.form input, .modal .modalBox.form select {
+.modal .modalBox.form input,
+.modal .modalBox.form select {
   color: var(--text-color);
   font-size: 18px;
   font-weight: 500;
