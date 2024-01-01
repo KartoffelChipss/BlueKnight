@@ -68,6 +68,9 @@ contextBridge.exposeInMainWorld(
         },
         modDownloadResult: (message) => {
             ipcRenderer.on("modDownloadResult", message);
+        },
+        showWarnbox: (message) => {
+            ipcRenderer.on("showWarnbox", message);
         }
     }
 );

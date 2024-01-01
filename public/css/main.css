@@ -503,11 +503,12 @@ main.mods .pagination button svg {
 
 .warnbox {
   position: absolute;
-  top: 50px;
+  top: 130px;
   right: -100%;
   background-color: var(--danger);
   border: var(--danger-2) solid 3px;
   color: var(--white-1);
+  font-weight: 600;
   border-radius: 12px;
   padding: 12px;
   z-index: 10;
@@ -516,6 +517,10 @@ main.mods .pagination button svg {
   align-items: center;
   justify-content: center;
   transition: right 1s ease-in-out;
+}
+.warnbox.green {
+  background-color: var(--success);
+  border: var(--success-2) solid 3px;
 }
 .warnbox span {
   color: var(--white-1);

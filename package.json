@@ -1,6 +1,6 @@
 {
     "name": "blueknight",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.",
     "main": "app.js",
     "scripts": {
@@ -12,7 +12,7 @@
     "build": {
         "appId": "org.strassburger.blueknight",
         "productName": "BlueKnight Launcher",
-        "copyright": "© 2023 Jan Straßburger",
+        "copyright": "© 2024 Jan Straßburger",
         "mac": {
             "target": "dmg",
             "icon": "public/img/logo.png"
@@ -20,15 +20,14 @@
         "linux": {
             "target": [
                 "deb",
-                "snap",
-                "rpm"
+                "snap"
             ],
             "category": "Utility",
-            "icon": "build/icons/512x512.png",
+            "icon": "build/icons/256x256.png",
             "artifactName": "blueknight-${version}.${ext}",
             "maintainer": "Jan Straßburger",
             "vendor": "Jan Straßburger",
-            "synopsis": "This is a synopsis?"
+            "synopsis": "Minecraft Fabric Launcher for Windows and Linux"
         },
         "win": {
             "target": [
@@ -56,7 +55,7 @@
         "email": "contact@strassburger.org",
         "url": "https://strassburger.org/"
     },
-    "homepage": "https://github.com/kartoffelchipss/instantradio#readme",
+    "homepage": "https://github.com/kartoffelchipss/blueknight#readme",
     "license": "GNU General Public License v3.0",
     "devDependencies": {
         "electron": "^22.0.0",
@@ -73,6 +72,7 @@
         "minecraft-launcher-core": "^3.17.3",
         "msmc": "^4.1.0",
         "os": "^0.1.2",
+        "tar": "^6.2.0",
         "tomate-loaders": "github:doublekekse/tomate-loaders"
     }
 }

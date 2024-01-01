@@ -9,8 +9,7 @@ const os = require("os");
 const RPC = require("discord-rpc");
 const { pipeline } = require('stream/promises');
 const logger = require('electron-log');
-
-const javaURL = "https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip";
+const tar = require('tar');
 
 const blueKnightRoot = path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`);
 const profilespath = path.join(blueKnightRoot, `profiles`);
@@ -24,7 +23,8 @@ const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner, quilt } = require('tomate-loaders');
 
-const devMode = true;
+const devMode = false;
+let downlaodingJava = false;
 
 logger.info("\n === APP STARTED === \n");
 if (devMode) {
@@ -45,12 +45,20 @@ const downloadFile = async (url, profile, filename) => {
 
 const store = new Store();
 
-//store.openInEditor();
+store.openInEditor();
 
-function downlaodJava(url) {
+async function downlaodJava() {
     logger.info("[JAVA] Downloading Java...")
 
-    // TODO: Download java xD
+    downlaodingJava = true;
+    top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjava" });
+
+    await downloadAndUnpackJava(path.join(blueKnightRoot, "java"));
+    store.set("javaPath", path.join(blueKnightRoot, "java", "jdk-17.0.9", "bin", "java"));
+    refreshSettings();
+
+    top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjavasuc" });
+    downlaodingJava = false;
 
     logger.info("[JAVA] Finished downloading Java!")
     return false;
@@ -79,17 +87,26 @@ if (!gotTheLock) {
 
         const setJavaPath = store.get("javaPath");
         if (setJavaPath) {
-            if (!fs.existsSync(setJavaPath)) return downlaodJava();
+            if (!fs.existsSync(setJavaPath)) return await downlaodJava();
             logger.info("[JAVA] Using custom set java path: " + setJavaPath)
         } else {
-            require('find-java-home')((err, home) => {
+            require('find-java-home')(async (err, home) => {
                 logger.info("[JAVA] Looking for installed java path...")
                 if (err) return console.log(err);
-                const javaPath = path.join(home, "bin", "javaw.exe");
+
+                if (!home) {
+                    logger.info("[JAVA] Could not find java path")
+                    await downlaodJava();
+                    return;
+                }
+
+                let javaPath;
+                if (process.platform === "win32") javaPath = path.join(home, "bin", "javaw.exe");
+                else javaPath = path.join(home, "bin", "java");
 
                 if (!fs.existsSync(javaPath)) {
                     logger.info("[JAVA] Could not find java path")
-                    downlaodJava();
+                    await downlaodJava();
                     return;
                 }
 
@@ -148,12 +165,7 @@ if (!gotTheLock) {
                 top.mainWindow.send("sendProfile", token.profile);
                 top.mainWindow.webContents.send("sendVersion", version);
                 top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
-                top.mainWindow.webContents.send("sendSettings", {
-                    maxMemMB: store.get("maxMemMB") || Math.floor((os.totalmem() / 1000000) / 2),
-                    minimizeOnStart: store.get("minimizeOnStart"),
-                    hideDiscordRPC: store.get("hideDiscordRPC"),
-                    javaPath: store.get("javaPath"),
-                });
+                refreshSettings();
                 top.mainWindow.webContents.send("sendProfiles", {
                     profiles: store.get("profiles"),
                     selectedProfile: store.get("selectedProfile"),
@@ -214,7 +226,7 @@ if (!gotTheLock) {
 
         ipcMain.handle("openRootFolder", (event, data) => {
             logger.info("[PROFILES] Opened folder '" + blueKnightRoot + "'");
-            shell.openPath(blueKnightRoot);
+            shell.openPath(profilespath);
         });
 
         ipcMain.handle("downloadMod", (event, data) => {
@@ -253,6 +265,8 @@ if (!gotTheLock) {
 
         initTray();
 
+        let icon = process.platform === "win32" ? path.join(__dirname + '/public/img/logo.ico') : path.join(__dirname + '/public/img/logo256x256.png');
+
         top.mainWindow = new BrowserWindow({
             title: "BlueKnight Launcher",
             width: 1200,
@@ -265,7 +279,7 @@ if (!gotTheLock) {
             backgroundColor: "#1A1B1E",
             resizable: true,
             autoHideMenuBar: false,
-            icon: __dirname + '/public/img/logo.ico',
+            icon,
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),
                 nodeIntegration: false,
@@ -283,8 +297,47 @@ if (!gotTheLock) {
     });
 }
 
+async function downloadAndUnpackJava(targetDirectory) {
+    const jdkUrl = 'https://download.oracle.com/java/17/archive/jdk-17.0.9_linux-x64_bin.tar.gz';
+
+    if (!fs.existsSync(targetDirectory)) fs.mkdirSync(targetDirectory);
+  
+    try {
+        const response = await fetch(jdkUrl);
+        const buffer = await response.buffer();
+  
+        const filePath = path.join(app.getPath('userData'), 'jdk.tar.gz');
+        fs.writeFileSync(filePath, buffer);
+  
+        // Unpack the downloaded tar.gz file
+        await tar.x({
+            file: filePath,
+            C: targetDirectory,
+        });
+  
+        console.log('JDK downloaded and unpacked successfully.');
+    } catch (error) {
+        console.error('Error downloading and unpacking JDK:', error.message);
+    }
+}
+
+function refreshSettings() {
+    top.mainWindow.webContents.send("sendSettings", {
+        maxMemMB: store.get("maxMemMB") || Math.floor((os.totalmem() / 1000000) / 2),
+        minimizeOnStart: store.get("minimizeOnStart"),
+        hideDiscordRPC: store.get("hideDiscordRPC"),
+        javaPath: store.get("javaPath"),
+    });
+}
+
 let launchMinecraft = async (profileName, loader, version) => {
     if (!token) return;
+
+    if (downlaodingJava) {
+        top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjava" });
+        top.mainWindow.webContents.send("sendMCstarted");
+        return;
+    }
 
     let rootPath = path.join(profilespath, profileName);
 

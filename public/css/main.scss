@@ -653,11 +653,12 @@ main {
 
 .warnbox {
     position: absolute;
-    top: 50px;
+    top: 130px;
     right: -100%;
     background-color: var(--danger);
     border: var(--danger-2) solid 3px;
     color: var(--white-1);
+    font-weight: 600;
     border-radius: 12px;
     padding: 12px;
 
@@ -669,6 +670,11 @@ main {
     justify-content: center;
 
     transition: right 1s ease-in-out;
+
+    &.green {
+        background-color: var(--success);
+        border: var(--success-2) solid 3px;
+    }
 
     span {
         color: var(--white-1);

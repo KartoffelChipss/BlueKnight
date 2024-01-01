@@ -146,3 +146,12 @@ function openProfileFolder(name) {
 function openExternalLink(url) {
     window.api.invoke("openExternal", { url });
 }
+
+window.bridge.showWarnbox((event, data) => {
+    let warnbox = document.getElementById(data.boxid);
+    warnbox.classList.add("_shown");
+
+    setTimeout(() => {
+        warnbox.classList.remove("_shown");
+    }, 5 * 1000);
+})

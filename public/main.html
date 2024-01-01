@@ -14,6 +14,14 @@
         <span>Dieser Sender konnte nicht geladen werden.<br>Bitte versuche es später erneut.</span>
     </div>
 
+    <div class="warnbox green" id="downloadingjava">
+        <span>Benötigte Java version wird installiert...</span>
+    </div>
+
+    <div class="warnbox green" id="downloadingjavasuc">
+        <span>Java wurde erfolgreich installiert!</span>
+    </div>
+
     <div class="dragbar">
         <div class="title">
             <img src="./img/logo.svg">
@@ -169,7 +177,7 @@
                     <span class="label">Benutzerdefinierter Java-Path</span>
                     <span class="desc">Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 17 empfohlen)</span>
                 </div>
-                <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" value="" class="widetextinput">
+                <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" value="" class="widetextinput" oninput="setSetting('javaPath', this.value)">
             </div>
         </div>
     </main>
