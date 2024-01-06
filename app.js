@@ -45,7 +45,7 @@ const downloadFile = async (url, profile, filename) => {
 
 const store = new Store();
 
-store.openInEditor();
+//store.openInEditor();
 
 async function downlaodJava() {
     logger.info("[JAVA] Downloading Java...")

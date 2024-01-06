@@ -15,7 +15,7 @@
         "copyright": "© 2024 Jan Straßburger",
         "mac": {
             "target": "dmg",
-            "icon": "public/img/logo.png"
+            "icon": "public/img/logo512x512.png"
         },
         "linux": {
             "target": [
@@ -23,8 +23,8 @@
                 "snap"
             ],
             "category": "Utility",
-            "icon": "build/icons/256x256.png",
-            "artifactName": "blueknight-${version}.${ext}",
+            "icon": "public/img/logo.icns",
+            "artifactName": "blueknight-launcher-setup-${version}.${ext}",
             "maintainer": "Jan Straßburger",
             "vendor": "Jan Straßburger",
             "synopsis": "Minecraft Fabric Launcher for Windows and Linux"
@@ -59,7 +59,7 @@
     "license": "GNU General Public License v3.0",
     "devDependencies": {
         "electron": "^22.0.0",
-        "electron-builder": "^24.4.0"
+        "electron-builder": "^24.9.1"
     },
     "dependencies": {
         "check-internet-connected": "^2.0.6",
