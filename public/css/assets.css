@@ -55,40 +55,54 @@ select:focus-visible {
   outline: var(--primary-1) solid 3px;
 }
 
-button {
+button, a.button {
   background-color: var(--grey-2);
   color: var(--text-color);
+  text-decoration: none;
   font-size: 18px;
   border: none;
   padding: 10px 13px;
   border-radius: 7px;
   transition: filter 0.2s ease-in-out;
 }
-button:hover {
+button:hover, a.button:hover {
   cursor: pointer;
   filter: brightness(0.85);
 }
-button:disabled {
+button:disabled, a.button:disabled {
   filter: brightness(0.6);
 }
-button:disabled:hover {
+button:disabled:hover, a.button:disabled:hover {
   cursor: default;
 }
-button.icon {
+button.icon, a.button.icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-button.icon svg {
+button.icon svg, a.button.icon svg {
   height: 25px;
   width: 25px;
   margin-right: 7px;
 }
-button.icon.icon-smol svg {
+button.icon.icon-smol svg, a.button.icon.icon-smol svg {
   height: 20px;
   width: 20px;
   min-height: 20px;
   min-width: 20px;
+}
+button.green, button.success, a.button.green, a.button.success {
+  background-color: var(--success);
+}
+button.yellow, button.warning, a.button.yellow, a.button.warning {
+  background-color: var(--warning);
+}
+button.red, button.danger, a.button.red, a.button.danger {
+  background-color: var(--danger);
+}
+button.blue, a.button.blue {
+  background-color: var(--primary-1);
+  font-weight: 500;
 }
 
 input {
@@ -240,4 +254,52 @@ input {
 }
 .modal .modalBox.form button.submit {
   background-color: var(--primary-1);
+}
+
+dialog {
+  --padding: 20px;
+  padding: var(--padding);
+  display: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: calc(100% - var(--padding) * 2);
+  max-width: 80%;
+  z-index: 10;
+  align-self: center;
+  background-color: var(--grey-2);
+  color: var(--white-1);
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+dialog._open {
+  display: block;
+}
+dialog h3 {
+  margin: 0;
+  font-size: 24px;
+}
+dialog p {
+  font-size: 17px;
+  font-weight: 500;
+}
+dialog .buttonbox {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+dialog button {
+  background-color: var(--grey-3);
+}
+
+body:has(dialog._open)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7);
 }/*# sourceMappingURL=assets.css.map */

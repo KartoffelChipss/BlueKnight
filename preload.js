@@ -28,9 +28,11 @@ contextBridge.exposeInMainWorld(
                 "createProfile", 
                 "selectProfile", 
                 "openProfileFolder", 
-                "openRootFolder", 
+                "openRootFolder",
                 "downloadMod", 
-                "openExternal"
+                "openExternal",
+                "installjava",
+                "getLang"
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);
@@ -71,6 +73,15 @@ contextBridge.exposeInMainWorld(
         },
         showWarnbox: (message) => {
             ipcRenderer.on("showWarnbox", message);
+        },
+        showJavaModal: (message) => {
+            ipcRenderer.on("showJavaModal", message);
+        },
+        closeJavaModal: (message) => {
+            ipcRenderer.on("closeJavaModal", message);
+        },
+        sendLang: (message) => {
+            ipcRenderer.on("sendLang", message);
         }
     }
 );

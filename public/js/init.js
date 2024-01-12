@@ -20,6 +20,12 @@ window.bridge.sendSettings((event, settings) => {
     document.getElementById("hideDiscordRPCCheckbox").checked = settings.hideDiscordRPC ?? false;
 
     document.getElementById("javaPath").value = settings.javaPath;
+
+    if (document.getElementById("javaPath").value === "undefined") document.getElementById("javaPath").value = "";
+});
+
+window.bridge.sendVersion((event, version) => {
+    document.getElementById("versionnum").innerHTML = version;
 });
 
 window.bridge.sendProfiles((event, data) => {

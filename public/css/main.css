@@ -141,6 +141,30 @@ main .settingsBox .checkBoxInput div.desc .desc {
   color: var(--text-color-2);
   margin-top: 10px;
 }
+main .settingsBox .checkBoxInput select {
+  background-color: var(--grey-2);
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  padding: 10px 13px;
+  border-radius: 7px;
+  min-width: 150px;
+  transition: filter 0.2s ease-in-out;
+}
+main .settingsBox .checkBoxInput select:hover {
+  cursor: pointer;
+}
+main .settingsBox .checkBoxInput select:disabled {
+  filter: brightness(0.6);
+}
+main .settingsBox .checkBoxInput select:disabled:hover {
+  cursor: default;
+}
+main .settingsBox .checkBoxInput select:focus-visible {
+  outline: none;
+}
 main .settingsBox .checkBoxInput .switch {
   position: relative;
   display: inline-block;
@@ -216,6 +240,7 @@ main .settingsBox .checkBoxInput .range-container {
 main .settingsBox .checkBoxInput .range-container input {
   accent-color: var(--primary-2);
   width: 100%;
+  padding: 0;
 }
 main .settingsBox .checkBoxInput .range-container .range-marks {
   display: flex;
@@ -531,4 +556,23 @@ main.mods .pagination button svg {
 }
 .warnbox._shown {
   right: 30px;
+}
+
+.versionbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px;
+  margin-top: 25px;
+}
+.versionbox span {
+  color: var(--text-color-2);
+  text-align: center;
+}
+.versionbox .version {
+  margin-bottom: 15px;
+}
+.versionbox .disclaimer {
+  line-height: 1.5;
+  font-size: 14px;
 }/*# sourceMappingURL=main.css.map */

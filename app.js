@@ -24,14 +24,24 @@ const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner, quilt } = require('tomate-loaders');
 
 const devMode = false;
-let downlaodingJava = false;
 
-logger.info("\n === APP STARTED === \n");
+let downlaodingJava = false;
+let foundjava = false;
+
+logger.info(" ");
+logger.info("=== APP STARTED ===");
+logger.info(" ");
 if (devMode) {
-    logger.info(" ");
     logger.info("[DEV] Started in DEVMODE");
     logger.info(" ");
 }
+
+const store = new Store();
+
+// store.openInEditor();
+
+let top = {};
+let token;
 
 const downloadFile = async (url, profile, filename) => {
     let profileModsPath = path.join(profilespath, profile, "mods");
@@ -43,29 +53,47 @@ const downloadFile = async (url, profile, filename) => {
     );
 }
 
-const store = new Store();
+async function downloadAndUnpackJava(targetDirectory) {
+    const jdkUrl = 'https://download.oracle.com/java/17/archive/jdk-17.0.9_linux-x64_bin.tar.gz';
 
-//store.openInEditor();
-
-async function downlaodJava() {
-    logger.info("[JAVA] Downloading Java...")
-
-    downlaodingJava = true;
-    top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjava" });
-
-    await downloadAndUnpackJava(path.join(blueKnightRoot, "java"));
-    store.set("javaPath", path.join(blueKnightRoot, "java", "jdk-17.0.9", "bin", "java"));
-    refreshSettings();
-
-    top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjavasuc" });
-    downlaodingJava = false;
-
-    logger.info("[JAVA] Finished downloading Java!")
-    return false;
+    if (!fs.existsSync(targetDirectory)) fs.mkdirSync(targetDirectory);
+  
+    try {
+        const response = await fetch(jdkUrl);
+        const buffer = await response.buffer();
+  
+        const filePath = path.join(app.getPath('userData'), 'jdk.tar.gz');
+        fs.writeFileSync(filePath, buffer);
+  
+        // Unpack the downloaded tar.gz file
+        await tar.x({
+            file: filePath,
+            C: targetDirectory,
+        });
+  
+        logger.info('[JAVA] JDK downloaded and unpacked successfully.');
+    } catch (error) {
+        console.error('[JAVA] Error downloading and unpacking JDK:', error.message);
+    }
 }
 
-let top = {};
-let token;
+async function downlaodJava() {
+    logger.info("Download function initiated!");
+    // logger.info("[JAVA] Downloading Java...")
+
+    // downlaodingJava = true;
+    // top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjava" });
+
+    // await downloadAndUnpackJava(path.join(blueKnightRoot, "java"));
+    // store.set("javaPath", path.join(blueKnightRoot, "java", "jdk-17.0.9", "bin", "java"));
+    // refreshSettings();
+
+    // top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjavasuc" });
+    // downlaodingJava = false;
+
+    // logger.info("[JAVA] Finished downloading Java!")
+    return false;
+}
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -74,6 +102,7 @@ if (!gotTheLock) {
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         if (top.mainWindow) {
+            logger.info("[APP] Tried to start second instance.");
             top.mainWindow.show();
             if (top.mainWindow.isMinimized()) top.mainWindow.restore();
             top.mainWindow.focus();
@@ -81,22 +110,31 @@ if (!gotTheLock) {
     });
 
     app.whenReady().then(async () => {
+        logger.info("[APP] App ready!");
+
         if (process.platform === 'win32') {
             app.setAppUserModelId("BlueKnight Launcher");
         }
 
         const setJavaPath = store.get("javaPath");
         if (setJavaPath) {
-            if (!fs.existsSync(setJavaPath)) return await downlaodJava();
-            logger.info("[JAVA] Using custom set java path: " + setJavaPath)
+            if (!fs.existsSync(setJavaPath)) {
+                logger.info("[JAVA] Custom set path does not exist");
+                foundjava = false;
+                logger.info("[JAVA] Java not found. Opening modal after login.")
+            } else {
+                foundjava = true;
+                logger.info("[JAVA] Using custom set java path: " + setJavaPath)
+            }
         } else {
             require('find-java-home')(async (err, home) => {
                 logger.info("[JAVA] Looking for installed java path...")
-                if (err) return console.log(err);
+                if (err) return logger.error(err);
 
                 if (!home) {
                     logger.info("[JAVA] Could not find java path")
-                    await downlaodJava();
+                    foundjava = false;
+                    logger.info("[JAVA] Java not found. Opening modal after login.")
                     return;
                 }
 
@@ -106,15 +144,19 @@ if (!gotTheLock) {
 
                 if (!fs.existsSync(javaPath)) {
                     logger.info("[JAVA] Could not find java path")
-                    await downlaodJava();
+                    foundjava = false;
+                    logger.info("[JAVA] Java not found. Opening modal after login.")
                     return;
                 }
 
+                foundjava = true;
                 logger.info("[JAVA] Found installed java!")
                 store.set("javaPath", javaPath);
                 logger.info("[JAVA] Java path: " + javaPath);
             });
         }
+
+        logger.info("[APP] Java functions executed!");
 
         if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot);
         if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath);
@@ -148,6 +190,7 @@ if (!gotTheLock) {
         ipcMain.handle("setSetting", (event, arg) => {
             if (arg.setting === undefined || arg.value === undefined) return;
             store.set(arg.setting, arg.value);
+            logger.info(`[SETTINGS] Set setting "${arg.setting}" to "${arg.value}"`);
         });
 
         ipcMain.handle("initLogin", async (event, args) => {
@@ -170,6 +213,11 @@ if (!gotTheLock) {
                     profiles: store.get("profiles"),
                     selectedProfile: store.get("selectedProfile"),
                 });
+
+                if (!foundjava) {
+                    top.mainWindow.webContents.send("showJavaModal", {});
+                    logger.info("[JAVA] Sent JavaInstallModal!")
+                }
             })
         });
 
@@ -250,6 +298,26 @@ if (!gotTheLock) {
             });
         });
 
+        ipcMain.handle("installjava", (event, data) => {
+            downlaodJava();
+        });
+
+        ipcMain.handle("getLang", (event, data) => {
+            logger.info("[LANG] Requested lang refresh")
+            let selectedLang = store.get("lang") ?? "en_US";
+
+            if (selectedLang === "auto" && (app.getLocale() === "de" || app.getLocale() === "de_DE")) selectedLang = "de_DE";
+            else if (selectedLang === "auto") selectedLang = "en_US";
+
+            top.mainWindow.webContents.send("sendLang", {
+                "selected": selectedLang,
+                "en_US": require("./lang/en_US.json"),
+                "de_DE": require("./lang/de_DE.json")
+            });
+        });
+
+        logger.info("[STARTUP] Regitsered all ipc handler")
+
         if (!store.get("profiles") || store.get("profiles").length <= 0) {
             store.set("profiles", [{
                 name: "Fabric 1.20.2",
@@ -289,36 +357,13 @@ if (!gotTheLock) {
 
         top.mainWindow.loadFile("public/login.html").then(() => {
             top.mainWindow.webContents.send("sendVersion", version);
+            logger.info("[STARTUP] Loaded login file")
         })
 
         top.mainWindow.show();
 
         initDiscordRPC();
     });
-}
-
-async function downloadAndUnpackJava(targetDirectory) {
-    const jdkUrl = 'https://download.oracle.com/java/17/archive/jdk-17.0.9_linux-x64_bin.tar.gz';
-
-    if (!fs.existsSync(targetDirectory)) fs.mkdirSync(targetDirectory);
-  
-    try {
-        const response = await fetch(jdkUrl);
-        const buffer = await response.buffer();
-  
-        const filePath = path.join(app.getPath('userData'), 'jdk.tar.gz');
-        fs.writeFileSync(filePath, buffer);
-  
-        // Unpack the downloaded tar.gz file
-        await tar.x({
-            file: filePath,
-            C: targetDirectory,
-        });
-  
-        console.log('JDK downloaded and unpacked successfully.');
-    } catch (error) {
-        console.error('Error downloading and unpacking JDK:', error.message);
-    }
 }
 
 function refreshSettings() {
@@ -479,6 +524,8 @@ function initTray() {
             top.mainWindow.show();
         }
     });
+
+    logger.info("[STARTUP] Set up tray menu")
 }
 
 function initDiscordRPC() {
@@ -493,7 +540,7 @@ function initDiscordRPC() {
         })
     } catch (err) {
         loginSuccess = false;
-        logger.info(err);
+        logger.error(err);
     }
 
     client.on("ready", () => {

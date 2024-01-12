@@ -139,6 +139,12 @@ function selectProfile(name, loader, version) {
     changeSection("main");
 }
 
+function setJavaPath(value) {
+    if (!value || value === "" || value === "undefined") return;
+    
+    setSetting('javaPath', value)
+}
+
 function openProfileFolder(name) {
     window.api.invoke('openProfileFolder', name)
 }
@@ -155,3 +161,22 @@ window.bridge.showWarnbox((event, data) => {
         warnbox.classList.remove("_shown");
     }, 5 * 1000);
 })
+
+function openModal(modalid) {
+    document.getElementById(modalid).classList.add("_open");
+}
+
+function closeModal(modalid) {
+    document.getElementById(modalid).classList.remove("_open");
+}
+
+window.onclick = (e) => {
+    if (e.target.tagName === "BODY") {
+        document.querySelectorAll("dialog._open").forEach((ele, index) => {
+            if (ele.id === "javamodal") return;
+            ele.classList.remove("_open");
+        });
+    }
+}
+
+window.bridge.showJavaModal(data => { openModal("javamodal"); });

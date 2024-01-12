@@ -1,0 +1,43 @@
+{
+    "login_title": "Anmelden",
+    "login_desc": "Du musst dich mit deinem Microsoft Account anmelden",
+    "login_btn": "Anmelden",
+
+    "java_modal_title": "Java konnte nicht gefunden werden!",
+    "java_modal_desc": "Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.",
+    "java_modal_btn_1": "Java Downloads",
+    "java_modal_btn_2": "Einstellungen",
+
+    "nousername": "Kein Benutzername",
+
+    "bottombox_play": "Spielen",
+    "bottombox_settings": "Einstellungen",
+    "bottombox_mods": "Mods",
+
+    "settings_title": "Einstellungen",
+    "settings_minimize_title": "Launcher minimieren",
+    "settings_minimize_desc": "Minimiert den Launcher nachdem Minecraft gestartet wurde",
+    "settings_richpresence_title": "Discord Rich Presence deaktivieren",
+    "settings_richpresence_desc": "Deaktiviert den \"Spielt Blueknight Launcher\" Status für Discord",
+    "settings_ram_title": "Zugewiesener Arbeitsspeicher",
+    "settings_ram_desc": "Wie viel Arbeitsspeicher (RAM) soll Minecraft benutzen dürfen?",
+    "settings_java_title": "Benutzerdefinierter Java Installationsort",
+    "settings_java_desc": "Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 17 empfohlen)",
+    "settings_java_input": "Weg zu einer benutzerdefinierten javaw.exe Datei",
+    "settings_lang_title": "Anzeigesprache",
+    "settings_lang_desc": "Ändere die Anzeigesprache",
+    "settings_lang_auto": "Automatisch",
+
+    "profiles_title": "Meine Profile",
+    "profiles_new": "Neues Profil",
+    "profiles_create": "Profil erstellen",
+    "profiles_openfolder": "Ordner öffnen",
+    "profiles_column_name": "Name",
+    "profiles_loader_name": "Loader",
+    "profiles_version_name": "Version",
+
+    "mods_title": "Mods durchsuchen",
+    "mods_search": "Nach Mods suchen",
+    "mod_download_title": "Mod herunterladen",
+    "mod_download_btn": "Herunterladen"
+}

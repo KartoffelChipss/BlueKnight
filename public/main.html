@@ -10,10 +10,6 @@
 </head>
 
 <body>
-    <div class="warnbox" id="warnbox">
-        <span>Dieser Sender konnte nicht geladen werden.<br>Bitte versuche es später erneut.</span>
-    </div>
-
     <div class="warnbox green" id="downloadingjava">
         <span>Benötigte Java version wird installiert...</span>
     </div>
@@ -21,6 +17,21 @@
     <div class="warnbox green" id="downloadingjavasuc">
         <span>Java wurde erfolgreich installiert!</span>
     </div>
+
+    <dialog id="javamodal">
+        <h3 data-lang="java_modal_title">Java konnte nicht gefunden werden!</h3>
+        <p data-lang="java_modal_desc">Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.</p>
+        <div class="buttonbox">
+            <button type="button" class="icon icon-smol blue button" onclick="openExternalLink('https\:\/\/www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html')">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <line x1="10.8492" y1="13.0606" x2="19.435" y2="4.47485" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line> <path d="M19.7886 4.12134L20.1421 8.01042" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M19.7886 4.12134L15.8995 3.76778" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18 13.1465V17.6465C18 19.3033 16.6569 20.6465 15 20.6465H6C4.34315 20.6465 3 19.3033 3 17.6465V8.64648C3 6.98963 4.34315 5.64648 6 5.64648H10.5" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                <span data-lang="java_modal_btn_1">Java Downloads</span>
+            </button>
+            <button type="button" class="icon icon-smol" onclick="changeSection('settings'); closeModal('javamodal');">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                <span data-lang="java_modal_btn_2">Einstellungen</span>
+            </button>
+        </div>
+    </dialog>
 
     <div class="dragbar">
         <div class="title">
@@ -33,10 +44,7 @@
                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M6.00001 11.25L18 11.25L18 12.75L6.00001 12.75L6.00001 11.25Z" fill="#fefefe"></path>
-                    </g>
+                    <g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.00001 11.25L18 11.25L18 12.75L6.00001 12.75L6.00001 11.25Z" fill="#fefefe"></path></g>
                 </svg>
             </button>
             <button type="button" onclick="window.api.invoke('togglemaxwindow')">
@@ -44,10 +52,7 @@
                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18 6H6V18H18V6ZM4.5 4.5V19.5H19.5V4.5H4.5Z"
-                            fill="#fefefe"></path>
-                    </g>
+                    <g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M18 6H6V18H18V6ZM4.5 4.5V19.5H19.5V4.5H4.5Z" ill="#fefefe"></path></g>
                 </svg>
             </button>
             <button type="button" onclick="window.api.invoke('closeWindow')" class="close">
@@ -56,12 +61,7 @@
                     stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round"></path>
-                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round"></path>
-                    </g>
+                    <g id="SVGRepo_iconCarrier"><path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g>
                 </svg>
             </button>
         </div>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="user">
-                <span class="username">Kein Benutzername</span>
+                <span data-lang="nousername" class="username">Kein Benutzername</span>
                 <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
@@ -86,9 +86,7 @@
 
         <div class="bottomBox">
             <div class="top">
-                <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()">
-                    Spielen
-                </button>
+                <button type="button" id="playBtn" class="playBtn icon icon-big" onclick="launchMC()" data-lang="bottombox_play">Spielen</button>
             </div>
             <div class="bottom">
                 <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" data-version="1.20.2" data-name="Fabric 1.20.2" data-loader="fabric" class="profileselect icon icon-smol">
@@ -97,11 +95,11 @@
                 </button>
                 <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    Einstellungen
+                    <span data-lang="bottombox_settings">Einstellungen</span>
                 </button>
                 <button type="button" id="modsButton" onclick="changeSection('mods')" class="icon icon-smol">
                     <svg fill="#fefefe" height="200px" width="200px" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path class="cls-1" d="M9,14H6V8H9ZM8.875,2H6.7226A1.99139,1.99139,0,0,1,5,3,2.486,2.486,0,0,1,3,2H2V6H3A1.79727,1.79727,0,0,1,4.5,5C5.55147,5,5.99725,6.98981,6,7H9c.333-1.53876,1-2.43573,1.741-2.43573,1.481,0,3.259,2.05109,3.259,2.05109S13,2,8.875,2Z"></path> </g></svg>
-                    Mods
+                    <span data-lang="bottombox_mods">Mods</span>
                 </button>
             </div>
         </div>
@@ -113,11 +111,11 @@
                 <button type="button" onclick="changeSection('main')">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
                 </button>
-                <h1>Einstellungen</h1>
+                <h1 data-lang="settings_title">Einstellungen</h1>
             </div>
 
             <div class="user">
-                <span class="username">Kein Benutzername</span>
+                <span class="username" data-lang="nousername">Kein Benutzername</span>
                 <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
@@ -125,8 +123,8 @@
         <div class="settingsBox">
             <div class="checkBoxInput">
                 <div class="desc">
-                    <span class="label">Launcher minimieren</span>
-                    <span class="desc">Minimiert den Launcher nachdem Minecraft gestartet wurde</span>
+                    <span class="label" data-lang="settings_minimize_title">Launcher minimieren</span>
+                    <span class="desc" data-lang="settings_minimize_desc">Minimiert den Launcher nachdem Minecraft gestartet wurde</span>
                 </div>
                 <label class="switch" style="scale: 0.85;">
                     <input type="checkbox" value="checked" id="minimizeOnStartCheckbox" oninput="setSetting('minimizeOnStart', this.checked)">
@@ -138,8 +136,8 @@
         <div class="settingsBox">
             <div class="checkBoxInput">
                 <div class="desc">
-                    <span class="label">Discord Rich Presence deaktivieren</span>
-                    <span class="desc">Deaktiviert den "Spielt Blueknight Launcher" Status für Discord</span>
+                    <span class="label" data-lang="settings_richpresence_title">Discord Rich Presence deaktivieren</span>
+                    <span class="desc" data-lang="settings_richpresence_desc">Deaktiviert den "Spielt Blueknight Launcher" Status für Discord</span>
                 </div>
                 <label class="switch" style="scale: 0.85;">
                     <input type="checkbox" value="checked" id="hideDiscordRPCCheckbox" oninput="setSetting('hideDiscordRPC', this.checked)">
@@ -149,10 +147,24 @@
         </div>
 
         <div class="settingsBox">
+            <div class="checkBoxInput">
+                <div class="desc">
+                    <span class="label" data-lang="settings_lang_title">Anzeigesprache</span>
+                    <span class="desc" data-lang="settings_lang_desc">Ändere die Anzeigesprache</span>
+                </div>
+                <select id="setting_lang" oninput="setSetting('lang', this.value); refreshLang();">
+                    <option value="auto" data-lang="settings_lang_auto">Automatisch</option>
+                    <option value="en_US">English</option>
+                    <option value="de_DE">Deutsch</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settingsBox">
             <div class="checkBoxInput column">
                 <div class="desc">
-                    <span class="label">Zugewiesener Arbeitsspeicher</span>
-                    <span class="desc">Wie viel Arbeitsspeicher (RAM) soll Minecraft benutzen dürfen?</span>
+                    <span class="label" data-lang="settings_ram_title">Zugewiesener Arbeitsspeicher</span>
+                    <span class="desc" data-lang="settings_ram_desc">Wie viel Arbeitsspeicher (RAM) soll Minecraft benutzen dürfen?</span>
                 </div>
                 <div class="range-box">
                     <div class="range-container">
@@ -174,11 +186,16 @@
         <div class="settingsBox">
             <div class="checkBoxInput column">
                 <div class="desc">
-                    <span class="label">Benutzerdefinierter Java-Path</span>
-                    <span class="desc">Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 17 empfohlen)</span>
+                    <span class="label" data-lang="settings_java_title">Benutzerdefinierter Java-Path</span>
+                    <span class="desc" data-lang="settings_java_desc">Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 17 empfohlen)</span>
                 </div>
-                <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" value="" class="widetextinput" oninput="setSetting('javaPath', this.value)">
+                <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" data-langplaceholder="settings_java_input" value="" class="widetextinput" oninput="setJavaPath(this.value)">
             </div>
+        </div>
+
+        <div class="versionbox">
+            <span class="version">v<span id="versionnum">0.0.0</span></span>
+            <span class="disclaimer">This app is an independent project and is not affiliated with, endorsed, or specifically approved by Mojang. Minecraft and the Minecraft logo are trademarks or registered trademarks of Mojang Synergies AB. The official Minecraft website can be found at https://minecraft.net.</span>
         </div>
     </main>
 
@@ -188,11 +205,11 @@
                 <button type="button" onclick="changeSection('main')">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
                 </button>
-                <h1>Meine Profile</h1>
+                <h1 data-lang="profiles_title">Meine Profile</h1>
             </div>
 
             <div class="user">
-                <span class="username">Kein Benutzername</span>
+                <span class="username" data-lang="nousername">Kein Benutzername</span>
                 <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
@@ -200,18 +217,18 @@
         <div style="display: flex; align-items: center;">
             <button type="button" class="icon newProfileBtn" onclick="document.getElementById('newProfileModal').classList.toggle('_shown')">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 12L12 12M12 12L17 12M12 12V7M12 12L12 17" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <circle cx="12" cy="12" r="9" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle> </g></svg>
-                Neues Profil
+                <span data-lang="profiles_new">Neues Profil</span>
             </button>
             <button type="button" style="background-color: var(--grey-2);" class="icon newProfileBtn" onclick="window.api.invoke('openRootFolder')">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2H8.43845C9.81505 2 11.015 2.93689 11.3489 4.27239L11.7808 6H13.5H20C21.6569 6 23 7.34315 23 9V19C23 20.6569 21.6569 22 20 22H4C2.34315 22 1 20.6569 1 19V10V9V5ZM3 9V10V19C3 19.5523 3.44772 20 4 20H20C20.5523 20 21 19.5523 21 19V9C21 8.44772 20.5523 8 20 8H13.5H11.7808H4C3.44772 8 3 8.44772 3 9ZM9.71922 6H4C3.64936 6 3.31278 6.06015 3 6.17071V5C3 4.44772 3.44772 4 4 4H8.43845C8.89732 4 9.2973 4.3123 9.40859 4.75746L9.71922 6Z" fill="#fefefe"></path> </g></svg>
-                Ordner öffnen
+                <span data-lang="profiles_openfolder">Ordner öffnen</span>
             </button>
         </div>
         <table class="profileTable" id="profileTable">
             <tr>
-                <th>Name</th>
-                <th>Loader</th>
-                <th>Version</th>
+                <th data-lang="profiles_column_name">Name</th>
+                <th data-lang="profiles_loader_name">Loader</th>
+                <th data-lang="profiles_version_name">Version</th>
                 <th></th>
             </tr>
         </table>
@@ -223,11 +240,11 @@
                 <button type="button" onclick="changeSection('main')">
                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
                 </button>
-                <h1>Mods durchsuchen</h1>
+                <h1 data-lang="mods_title">Mods durchsuchen</h1>
             </div>
 
             <div class="user">
-                <span class="username">Kein Benutzername</span>
+                <span class="username" data-lang="nousername">Kein Benutzername</span>
                 <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
             </div>
         </div>
@@ -235,7 +252,7 @@
         <div class="modmain">
             <div class="searchBar">
                 <svg viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fefefe" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>search</title> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Shape" fill="#fefefe" transform="translate(42.666667, 42.666667)"> <path d="M426.630187,396.463573 L305.314987,275.148373 C327.799467,246.239573 341.333333,210.04032 341.333333,170.666667 C341.333333,76.56256 264.770773,-7.10542736e-15 170.666667,-7.10542736e-15 C76.56256,-7.10542736e-15 7.10542736e-15,76.56256 7.10542736e-15,170.666667 C7.10542736e-15,264.770773 76.56256,341.333333 170.666667,341.333333 C210.04032,341.333333 246.239573,327.799467 275.148373,305.3152 L396.463573,426.6304 L426.630187,396.463573 Z M170.666667,298.666667 C100.083413,298.666667 42.6666667,241.24992 42.6666667,170.666667 C42.6666667,100.083413 100.083413,42.6666667 170.666667,42.6666667 C241.24992,42.6666667 298.666667,100.083413 298.666667,170.666667 C298.666667,241.24992 241.24992,298.666667 170.666667,298.666667 Z"> </path> </g> </g> </g></svg>
-                <input type="text" placeholder="Nach Mods suchen" class="searchBar" id="searchInput">
+                <input type="text" placeholder="Nach Mods suchen" class="searchBar" id="searchInput" data-langplaceholder="mods_search">
                 <button type="button" onclick="clearSearch()" class="clearSearchBtn">
                     <svg width="64px"
                         height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -309,8 +326,8 @@
                 </svg>
             </button>
 
-            <h2>Neues Profil</h2>
-            <input type="text" placeholder="Name" id="newProfileName">
+            <h2 data-lang="profiles_new">Neues Profil</h2>
+            <input type="text" placeholder="Name" id="newProfileName" data-langplaceholder="profiles_column_name">
             <select id="newProfileLoader">
                 <option value="vanilla">Vanilla</option>
                 <option value="fabric" selected>Fabric</option>
@@ -328,7 +345,7 @@
                     <option value="1.19.1">1.19.1</option>
                 </optgroup>
             </select>
-            <button type="button" class="submit" onclick="createNewProfile()">Profil erstellen</button>
+            <button type="button" class="submit" onclick="createNewProfile()" data-lang="profiles_create">Profil erstellen</button>
         </div>
     </div>
 
@@ -349,13 +366,14 @@
                 </svg>
             </button>
 
-            <h2>Mod herunterladen</h2>
+            <h2 data-lang="mod_download_title">Mod herunterladen</h2>
             <select id="modDownloadProfileSelect"></select>
-            <button type="button" id="modDownloadButton" class="submit" onclick="downloadMod()">Herunterladen</button>
+            <button type="button" id="modDownloadButton" class="submit" onclick="downloadMod()" data-lang="mod_download_btn">Herunterladen</button>
         </div>
     </div>
 
     <script src="./js/init.js"></script>
+    <script src="./js/lang.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/mods.js"></script>
 </body>

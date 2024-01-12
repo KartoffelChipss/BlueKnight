@@ -32,3 +32,7 @@ If you want to build an installer yourself use one of the following commands:
 - Windows: `npm run dist:win`
 - MacOS: `npm run dist:mac`
 - Linux: `npm run dist:linux`
+
+## License
+
+[GNU General Public License v3.0](LICENSE)

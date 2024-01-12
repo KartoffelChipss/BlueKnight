@@ -1,0 +1,43 @@
+{
+    "login_title": "Sign in",
+    "login_desc": "You need to login with your Microsoft Account",
+    "login_btn": "Login",
+
+    "java_modal_title": "Java not found!",
+    "java_modal_desc": "Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.",
+    "java_modal_btn_1": "Java Downloads",
+    "java_modal_btn_2": "Settings",
+
+    "nousername": "Kein Benutzername",
+
+    "bottombox_play": "Play",
+    "bottombox_settings": "Settings",
+    "bottombox_mods": "Mods",
+
+    "settings_title": "Settings",
+    "settings_minimize_title": "Minimize launcher",
+    "settings_minimize_desc": "Minimize the launcher after starting Minecraft",
+    "settings_richpresence_title": "Deactivate Discord Rich Presence",
+    "settings_richpresence_desc": "Deactivates the \"Paying Blueknight Launcher\" status for Discord",
+    "settings_ram_title": "Allocated memory",
+    "settings_ram_desc": "How much memory (RAM) should minecraft be allowed to use?",
+    "settings_java_title": "Custom Java path",
+    "settings_java_desc": "Please only change this option, if you know what you are doing! (Java 17 or newer recommended)",
+    "settings_java_input": "Path to your javaw.exe file",
+    "settings_lang_title": "Language",
+    "settings_lang_desc": "Change the language",
+    "settings_lang_auto": "Automatic",
+
+    "profiles_title": "My Profiles",
+    "profiles_new": "New Profile",
+    "profiles_create": "Create Profile",
+    "profiles_openfolder": "Open Folder",
+    "profiles_column_name": "Name",
+    "profiles_loader_name": "Loader",
+    "profiles_version_name": "Version",
+
+    "mods_title": "Search Mods",
+    "mods_search": "Search Mods",
+    "mod_download_title": "Downlaod Mod",
+    "mod_download_btn": "Download"
+}

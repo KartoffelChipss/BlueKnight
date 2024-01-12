@@ -2,6 +2,19 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.1.0 - 2024-01-12
+
+### Added
+- Added language option
+- Added version number
+
+### Changed
+- Removed automatic Java download
+- Added "Java not found" Notification
+- Added more logging
+
+### Fixed
+
 ## 1.0.10 - 2024-01-06
 
 ### Added
