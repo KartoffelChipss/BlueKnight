@@ -1,0 +1,27 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+<svg fill="#fefefe" height="512px" width="512px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.00 512.00" xml:space="preserve" stroke="#fefefe">
+
+<defs>
+    <linearGradient id="gradient_top" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(90 0.5 0.5)">
+        <stop offset="50%" stop-color="#386fa4" />
+        <stop offset="50%" stop-color="#59A5D8" />
+    </linearGradient>
+    <linearGradient id="gradient_left" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(315 0.5 0.5)">
+        <stop offset="50%" stop-color="#386fa4" />
+        <stop offset="50%" stop-color="#59A5D8" />
+    </linearGradient>
+    <linearGradient id="gradient_right" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(225 0.5 0.5)">
+        <stop offset="50%" stop-color="#386fa4" />
+        <stop offset="50%" stop-color="#59A5D8" />
+    </linearGradient>
+</defs>
+
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+<g id="SVGRepo_iconCarrier"> <g> <g> <polygon fill="url(#gradient_left)" points="26.624,142.166 26.624,409.6 231.424,512 231.424,244.564 "/> </g> </g> <g> <g> <polygon fill="url(#gradient_top)" points="256,0 54.102,100.95 256,201.898 457.898,100.95 "/> </g> </g> <g> <g> <polygon fill="url(#gradient_right)" points="280.576,244.564 280.576,512 485.376,409.6 485.376,142.166 "/> </g> </g> </g>
+
+</svg>
