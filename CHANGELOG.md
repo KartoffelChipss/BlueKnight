@@ -2,6 +2,16 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.1.1 - 2024-01-31
+
+### Added
+- Minevraft version 1.20.3 and 1.20.4
+- Now remembering main window position on close
+
+### Changed
+
+### Fixed
+
 ## 1.1.0 - 2024-01-12
 
 ### Added

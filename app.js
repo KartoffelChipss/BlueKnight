@@ -335,12 +335,16 @@ if (!gotTheLock) {
 
         let icon = process.platform === "win32" ? path.join(__dirname + '/public/img/logo.ico') : path.join(__dirname + '/public/img/logo256x256.png');
 
+        const lastPos = store.get('windowPosition');
+
         top.mainWindow = new BrowserWindow({
             title: "BlueKnight Launcher",
-            width: 1200,
-            height: 800,
+            width: lastPos ? lastPos.width : 1200,
+            height: lastPos ? lastPos.height : 800,
             minWidth: 750,
             minHeight: 500,
+            x: lastPos ? lastPos.x : undefined,
+            y: lastPos ? lastPos.y : undefined,
             center: true,
             frame: false,
             show: false,
@@ -361,6 +365,11 @@ if (!gotTheLock) {
         })
 
         top.mainWindow.show();
+
+        top.mainWindow.on('close', () => {
+            const bounds = top.mainWindow.getBounds();
+            store.set('windowPosition', bounds);
+        });
 
         initDiscordRPC();
     });
