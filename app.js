@@ -194,11 +194,28 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("initLogin", async (event, args) => {
+            const lastPos = store.get('windowPosition');
+
+            let loginWidth = 550;
+            let loginHeight = 550;
+
+            let loginX = lastPos ? (lastPos.x + ((lastPos.width / 2) - (loginWidth / 2))).toFixed(0) : undefined;
+            let loginY = lastPos ? (lastPos.y + ((lastPos.height / 2) - (loginHeight / 2))).toFixed(0) : undefined;
+
+            console.log("x: ", loginX);
+            console.log("y: ", loginY)
+
             const xboxManager = await authManager.launch("electron", {
                 title: "Microsoft Authentication",
                 icon: __dirname + '/public/img/logo.ico',
                 backgroundColor: "#1A1B1E",
+                width: loginWidth,
+                height: loginHeight,
+                x: loginX,
+                y: loginY,
             });
+
+            console.log(xboxManager);
             token = await xboxManager.getMinecraft();
             let savabletoken = xboxManager.save();
             store.set("token", savabletoken);
