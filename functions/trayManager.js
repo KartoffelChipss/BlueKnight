@@ -62,7 +62,7 @@ function init(top, app, mainDir) {
 
     top.tray.setToolTip("Instantradio");
 
-    if (!devMode) Menu.setApplicationMenu(builtmenu);
+    // if (!devMode) Menu.setApplicationMenu(builtmenu);
 
     top.tray.on("click", function (e) {
         if (top.mainWindow.isVisible()) {

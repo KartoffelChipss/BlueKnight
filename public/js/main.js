@@ -69,20 +69,20 @@ function changeSection(section) {
 function launchMC() {
     console.log(playBtn)
     playBtn.setAttribute("disabled", true);
-    playBtn.innerHTML = `Laden...`;
+    playBtn.innerHTML = lang[lang.selected].loading;
     window.api.invoke('launchMC');
 }
 
 window.bridge.sendMCstarted((event, data) => {
     playBtn.removeAttribute("disabled");
-    playBtn.innerHTML = `Spielen`
+    playBtn.innerHTML = lang[lang.selected].bottombox_play;
 });
 
 window.bridge.sendDownloadProgress((event, progressevent) => {
     //console.log(progressevent)
 
     if (progressevent.task >= progressevent.total) {
-        playBtn.innerHTML = `Laden...`;
+        playBtn.innerHTML = lang[lang.selected].loading;
         return;
     }
 
@@ -91,7 +91,7 @@ window.bridge.sendDownloadProgress((event, progressevent) => {
     //console.log((progressevent.task * 100) / progressevent.total)
 
     playBtn.setAttribute("disabled", true);
-    playBtn.innerHTML = `Laden... (${percentage}%)`;
+    playBtn.innerHTML = `${lang[lang.selected].loading} (${percentage}%)`;
 });
 
 console.log(navigator.deviceMemory)

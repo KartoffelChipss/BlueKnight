@@ -144,16 +144,18 @@ function downloadMod(modid) {
         let availableversionspre = data.filter(ver => ver.game_versions.includes(modversion));
 
         if (availableversionspre.length <= 0) {
-            loadWarning(`Nicht für Version ${modversion} verfügbar!`)
-            console.log("[DOWNLOADS] No plugin version for your mc version!")
+            loadWarning(`Nicht für Version ${modversion} verfügbar!`);
+            console.log("[DOWNLOADS] No plugin version for your mc version!");
             return;
         }
 
-        let availableversions = availableversionspre.filter(ver => ver.loaders.includes("fabric"));
+        const modloader = document.getElementById("currentprofile_loader").value || "fabric";
+
+        let availableversions = availableversionspre.filter(ver => ver.loaders.includes(modloader));
 
         if (availableversions.length <= 0) {
-            loadWarning(`Nicht für Fabric in Minecraft ${modversion} verfügbar!`)
-            console.log("[DOWNLOADS] No plugin version for you loader and mc version!")
+            loadWarning(`Nicht für ${capitalizeFirstLetter(modloader)} in Minecraft ${modversion} verfügbar!`);
+            console.log("[DOWNLOADS] No plugin version for you loader and mc version!");
             return;
         }
 
@@ -211,3 +213,8 @@ window.addEventListener("keydown", (e) => {
         changeSection("main");
     }
 });
+
+function capitalizeFirstLetter(str) {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

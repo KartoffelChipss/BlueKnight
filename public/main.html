@@ -18,6 +18,10 @@
         <span>Java wurde erfolgreich installiert!</span>
     </div>
 
+    <div class="warnbox" id="warnbox">
+        <span>warn</span>
+    </div>
+
     <dialog id="javamodal">
         <h3 data-lang="java_modal_title">Java konnte nicht gefunden werden!</h3>
         <p data-lang="java_modal_desc">Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.</p>
@@ -349,7 +353,7 @@
                 <option value="vanilla">Vanilla</option>
                 <option value="fabric" selected>Fabric</option>
                 <option value="quilt">Quilt</option>
-                <option value="forge">Forge</option>
+                <!-- <option value="forge">Forge</option> -->
             </select>
             <select id="newProfileVersion">
                 <optgroup label="1.20">

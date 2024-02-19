@@ -3,7 +3,7 @@ const store = new Store();
 const RPC = require("discord-rpc");
 const logger = require("electron-log");
 
-function init() {
+function init(top) {
     let client = new RPC.Client({ transport: "ipc" });
 
     let dcLoginSuccess = true;
@@ -16,7 +16,7 @@ function init() {
         })
         .catch((err) => {
             dcLoginSuccess = false;
-            logger.error("[DiscordRCP] ", err);
+            logger.error("[DiscordRCP] ", err); 
         });
 
     client.on("ready", () => {
@@ -29,7 +29,7 @@ function init() {
             client
                 .setActivity({
                     state: selectedProfile.name,
-                    details: `${selectedProfile.loader} ${selectedProfile.version}`,
+                    details: `${capitalizeFirstLetter(selectedProfile.loader)} ${selectedProfile.version}`,
                     largeImageKey: "logo",
                 })
                 .catch((err) => {
@@ -51,6 +51,11 @@ function setActivity(state, details, largeImageKey) {
         .catch((err) => {
             logger.error("[DiscordRCP] ", err);
         });
+}
+
+function capitalizeFirstLetter(str) {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 module.exports = { init, setActivity };

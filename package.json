@@ -5,7 +5,7 @@
     "main": "app.js",
     "scripts": {
         "start": "NODE_ENV=development electron .",
-        "startprod": "NODE_ENV=production electron .",
+        "startprod": "electron .",
         "dist": "electron-builder",
         "dist:win": "electron-builder --win",
         "dist:linux": "electron-builder --linux",

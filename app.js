@@ -327,7 +327,7 @@ if (!gotTheLock) {
             store.set("windowPosition", bounds);
         });
 
-        discordRPCManager.init();
+        discordRPCManager.init(top);
     });
 }
 
