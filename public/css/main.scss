@@ -163,7 +163,7 @@ main {
         border-radius: 7px;
 
         -webkit-mask: linear-gradient(0deg, transparent, white 20%, white 70%, transparent);
-        mask: linear-gradient(0deg, white 80%, transparent);
+        mask: linear-gradient(0deg, transparent, white 20%, white 70%, transparent);
     }
 
     .bottomBox {
@@ -524,6 +524,10 @@ main {
                         height: 15px;
                         width: 15px;
                     }
+
+                    &:disabled {
+                        filter: brightness(0.7);
+                    }
                 }
             }
         }
@@ -620,6 +624,12 @@ main {
             padding-right: 10px;
 
             //background-color: pink;
+
+            .noMods {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
             .modbox {
                 display: flex;

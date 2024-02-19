@@ -8,8 +8,6 @@ const version = require("./package.json").version;
 const os = require("os");
 const { pipeline } = require("stream/promises");
 const logger = require("electron-log");
-const tar = require("tar");
-const { getLang } = require("./functions/langManager.js");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
 
@@ -42,7 +40,7 @@ if (devMode) {
 
 const store = new Store();
 
-store.openInEditor();
+// store.openInEditor();
 
 let top = {};
 let currentuser;
@@ -53,48 +51,6 @@ const downloadFile = async (url, profile, filename) => {
     const destination = path.resolve(profileModsPath, filename);
     pipeline((await fetch(url)).body, fs.createWriteStream(destination));
 };
-
-async function downloadAndUnpackJava(targetDirectory) {
-    const jdkUrl = "https://download.oracle.com/java/17/archive/jdk-17.0.9_linux-x64_bin.tar.gz";
-
-    if (!fs.existsSync(targetDirectory)) fs.mkdirSync(targetDirectory);
-
-    try {
-        const response = await fetch(jdkUrl);
-        const buffer = await response.buffer();
-
-        const filePath = path.join(app.getPath("userData"), "jdk.tar.gz");
-        fs.writeFileSync(filePath, buffer);
-
-        // Unpack the downloaded tar.gz file
-        await tar.x({
-            file: filePath,
-            C: targetDirectory,
-        });
-
-        logger.info("[JAVA] JDK downloaded and unpacked successfully.");
-    } catch (error) {
-        console.error("[JAVA] Error downloading and unpacking JDK:", error.message);
-    }
-}
-
-async function downlaodJava() {
-    logger.info("Download function initiated!");
-    // logger.info("[JAVA] Downloading Java...")
-
-    // downlaodingJava = true;
-    // top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjava" });
-
-    // await downloadAndUnpackJava(path.join(blueKnightRoot, "java"));
-    // store.set("javaPath", path.join(blueKnightRoot, "java", "jdk-17.0.9", "bin", "java"));
-    // refreshSettings();
-
-    // top.mainWindow.webContents.send("showWarnbox",  { boxid: "downloadingjavasuc" });
-    // downlaodingJava = false;
-
-    // logger.info("[JAVA] Finished downloading Java!")
-    return false;
-}
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -298,9 +254,7 @@ if (!gotTheLock) {
             });
         });
 
-        ipcMain.handle("installjava", (event, data) => {
-            downlaodJava();
-        });
+        ipcMain.handle("installjava", (event, data) => {});
 
         ipcMain.handle("getLang", (event, data) => {
             logger.info("[LANG] Requested lang refresh");
@@ -473,6 +427,13 @@ let launchMinecraft = async (profileName, loader, version) => {
             rootPath,
         });
         logger.info("[LAUNCHER] Finished getting Forge config!");
+    } else if (loader === "quilt") {
+        logger.info("[LAUNCHER] Starting Quilt...");
+        launchConfig = await quilt.getMCLCLaunchConfig({
+            gameVersion: version,
+            rootPath,
+        });
+        logger.info("[LAUNCHER] Finished getting Quilt config!");
     } else {
         logger.info("[LAUNCHER] Starting Vanilla...");
         launchConfig = await vanilla.getMCLCLaunchConfig({

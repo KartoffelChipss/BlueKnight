@@ -126,9 +126,9 @@ function createNewProfile() {
 function selectProfile(name, loader, version) {
     if (!name || !loader || !version) return;
 
-    // document.getElementById("profileSelectBtn").innerHTML = `
-    //     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7l6 6 6-6"></path> </g></svg>
-    //     ${name}`;
+    // console.log("Loaded profile: " + name + " " + loader + " " + version)
+    document.getElementById("currentprofile_loader").value = loader;
+    searchMods();
 
     window.api.invoke('selectProfile', {
         name,

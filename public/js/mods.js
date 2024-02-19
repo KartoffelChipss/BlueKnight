@@ -20,10 +20,31 @@ function searchMods(query, offset, limit, goingBack) {
 
     if (newPageNum <= 0) return;
 
-    console.log("Loading mods page "+ modPageNum + ":")
-    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`)
+    const currentprofile_loader = document.getElementById("currentprofile_loader").value || "fabric";
 
-    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:fabric%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
+    if (currentprofile_loader === "vanilla") {
+        modlist.innerHTML = `<div class="noMods">
+            <h2>Keine Mods für Vanilla</h2>
+            <p>Mods sind nur für Fabric, Quilt oder Forge verfügbar.</p>
+        </div>`;
+        modlist.innerHTML += `<div class="pagination">
+            <button type="button" id="prevButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset - 10}, ${limit}, true)">
+                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
+            </button>
+            <span id="modPageNum">${newPageNum}</span>
+            <button type="button" id="nextButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset + 10}, ${limit})">
+                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l6-6-6-6"></path> </g></svg>
+            </button>
+        </div>`;
+        return;
+    }
+
+    console.log("Loading mods page "+ modPageNum + ":")
+    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:${currentprofile_loader}%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`)
+
+    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:${currentprofile_loader}%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
+        if (currentprofile_loader !== document.getElementById("currentprofile_loader").value) return;
+    
         modlist.innerHTML = "";
 
         if (!data || !data.hits) {
@@ -78,7 +99,7 @@ function searchMods(query, offset, limit, goingBack) {
     });
 }
 
-searchMods()
+searchMods();
 
 function clearSearch() {
     searchInput.value = "";

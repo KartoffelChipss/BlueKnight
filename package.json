@@ -74,7 +74,6 @@
         "minecraft-launcher-core": "^3.17.3",
         "msmc": "^4.1.0",
         "os": "^0.1.2",
-        "tar": "^6.2.0",
         "tomate-loaders": "github:doublekekse/tomate-loaders"
     }
 }

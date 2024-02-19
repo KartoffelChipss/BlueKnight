@@ -348,7 +348,8 @@
             <select id="newProfileLoader">
                 <option value="vanilla">Vanilla</option>
                 <option value="fabric" selected>Fabric</option>
-                <!-- <option value="forge">Forge</option> -->
+                <option value="quilt">Quilt</option>
+                <option value="forge">Forge</option>
             </select>
             <select id="newProfileVersion">
                 <optgroup label="1.20">
@@ -390,6 +391,8 @@
             <button type="button" id="modDownloadButton" class="submit" onclick="downloadMod()" data-lang="mod_download_btn">Herunterladen</button>
         </div>
     </div>
+
+    <input type="text" id="currentprofile_loader">
 
     <script src="./js/init.js"></script>
     <script src="./js/lang.js"></script>
