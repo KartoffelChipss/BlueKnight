@@ -39,5 +39,10 @@
     "mods_title": "Mods durchsuchen",
     "mods_search": "Nach Mods suchen",
     "mod_download_title": "Mod herunterladen",
-    "mod_download_btn": "Herunterladen"
+    "mod_download_btn": "Herunterladen",
+
+    "tray_help_title": "Hilfe",
+    "tray_home_title": "Startseite",
+    "tray_settings_title": "Einstellungen",
+    "tray_quit_title": "Beenden"
 }

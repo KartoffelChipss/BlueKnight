@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Notification, dialog, shell, nativeImage, Menu, screen, nativeTheme } = require("electron");
+const { app, BrowserWindow, Tray, Notification, dialog, shell, nativeImage, Menu, screen, nativeTheme, safeStorage } = require("electron");
 const path = require("path");
 const fetch = require("cross-fetch");
 const { ipcMain } = require("electron/main");
@@ -6,10 +6,12 @@ const Store = require("electron-store");
 const fs = require("fs");
 const version = require("./package.json").version;
 const os = require("os");
-const RPC = require("discord-rpc");
 const { pipeline } = require("stream/promises");
 const logger = require("electron-log");
 const tar = require("tar");
+const { getLang } = require("./functions/langManager.js");
+const trayManager = require("./functions/trayManager.js");
+const discordRPCManager = require("./functions/discordRPCManager.js");
 
 const blueKnightRoot = path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`);
 const profilespath = path.join(blueKnightRoot, `profiles`);
@@ -23,10 +25,12 @@ const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner, quilt } = require("tomate-loaders");
 
-const devMode = false;
+const devMode = process.env.NODE_ENV === 'development';
 
 let downlaodingJava = false;
 let foundjava = false;
+
+let startTimestamp = new Date();
 
 logger.info(" ");
 logger.info("=== APP STARTED ===");
@@ -38,7 +42,7 @@ if (devMode) {
 
 const store = new Store();
 
-// store.openInEditor();
+store.openInEditor();
 
 let top = {};
 let currentuser;
@@ -192,23 +196,28 @@ if (!gotTheLock) {
 
         ipcMain.handle("initLogin", async (event, args) => {
             let tokenString = store.get("token");
+            if (tokenString && safeStorage.isEncryptionAvailable()) {
+                try {
+                    let tokenBuffer = Buffer.from(tokenString, "base64");
+                    tokenString = safeStorage.decryptString(tokenBuffer);
+                } catch (e) {
+                    logger.warn("[AUTH] Could not decrypt token: ", e);
+                    tokenString = null;
+                }
+            }
             let token = null;
             if (tokenString) tokenXbox = await authManager.refresh(tokenString);
             if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
 
-            // console.log("\n---\n");
-            // console.log(token);
-            // console.log("\n---\n");
-
             if (token && token.profile) {
                 // If token exists, use it for automatic login
-                logger.info(`Auto-logged in as ${token.profile.name}`);
+                logger.info(`[AUTH] Auto-logged in as ${token.profile.name}`);
                 proceedToMain(token);
                 return;
             }
 
             const newtoken = await loginUsingMicrosoft();
-            logger.info(`Logged in as ${newtoken.profile.name}`);
+            logger.info(`[AUTH] First time login as ${newtoken.profile.name}`);
             proceedToMain(newtoken);
         });
 
@@ -324,7 +333,7 @@ if (!gotTheLock) {
             });
         }
 
-        initTray();
+        trayManager.init(top, app, __dirname);
 
         let icon = process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png");
 
@@ -354,7 +363,7 @@ if (!gotTheLock) {
 
         top.mainWindow.loadFile("public/login.html").then(() => {
             top.mainWindow.webContents.send("sendVersion", version);
-            logger.info("[STARTUP] Loaded login window");
+            logger.info(`[STARTUP] Loaded login window (${new Date() - startTimestamp}ms after start)`);
         });
 
         top.mainWindow.show();
@@ -364,7 +373,7 @@ if (!gotTheLock) {
             store.set("windowPosition", bounds);
         });
 
-        initDiscordRPC();
+        discordRPCManager.init();
     });
 }
 
@@ -389,6 +398,8 @@ function proceedToMain(token) {
             profiles: store.get("profiles"),
             selectedProfile: store.get("selectedProfile"),
         });
+
+        logger.info(`[STARTUP] Loaded main window (${new Date() - startTimestamp}ms after start)`);
 
         if (!foundjava) {
             top.mainWindow.webContents.send("showJavaModal", {});
@@ -421,6 +432,13 @@ async function loginUsingMicrosoft() {
     currentuser = await xboxManager.getMinecraft();
 
     let savabletoken = xboxManager.save();
+    if (safeStorage.isEncryptionAvailable()) {
+        try {
+            savabletoken = safeStorage.encryptString(savabletoken).toString("base64");
+        } catch (e) {
+            logger.warn("[AUTH] Could not encrypt token: ", e);
+        }
+    }
     store.set("token", savabletoken);
 
     return currentuser;
@@ -509,110 +527,3 @@ launcher.on("close", (e) => {
     top.mainWindow.webContents.send("sendMCstarted");
     top.mainWindow.show();
 });
-
-function initTray() {
-    let iconColor = "black";
-    if (nativeTheme.shouldUseDarkColors) {
-        iconColor = "white";
-    }
-
-    top.tray = null;
-
-    let preferredIconType = "ico";
-
-    if (process.platform === "darwin" || process.platform === "linux") {
-        preferredIconType = "png";
-    }
-
-    top.tray = new Tray(path.join(__dirname + `/public/img/logo.${preferredIconType}`));
-
-    let menu = [
-        {
-            label: "Hilfe",
-            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/help.${preferredIconType}`).resize({ width: 16 }),
-            click: (item, window, event) => {
-                shell.openExternal("https://strassburger.org/discord");
-            },
-        },
-        {
-            type: "separator",
-        },
-        {
-            label: "Startseite",
-            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/home.${preferredIconType}`).resize({ width: 16 }),
-            click: (item, window, event) => {
-                top.mainWindow.show();
-                top.mainWindow.webContents.send("openSection", "main");
-            },
-        },
-        {
-            label: "Einstellungen",
-            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/settings.${preferredIconType}`).resize({ width: 16 }),
-            click: (item, window, event) => {
-                top.mainWindow.show();
-                top.mainWindow.webContents.send("openSection", "settings");
-            },
-        },
-        {
-            type: "separator",
-        },
-        {
-            label: "Beenden",
-            icon: nativeImage.createFromPath(__dirname + `/public/img/icons/${iconColor}/off.${preferredIconType}`).resize({ width: 16 }),
-            role: "quit",
-        },
-    ];
-
-    const builtmenu = Menu.buildFromTemplate(menu);
-    top.tray.setContextMenu(builtmenu);
-
-    top.tray.setToolTip("Instantradio");
-
-    if (!devMode) Menu.setApplicationMenu(builtmenu);
-
-    top.tray.on("click", function (e) {
-        if (top.mainWindow.isVisible()) {
-            top.mainWindow.hide();
-        } else {
-            top.mainWindow.show();
-        }
-    });
-
-    logger.info("[STARTUP] Set up tray menu");
-}
-
-function initDiscordRPC() {
-    let client = new RPC.Client({ transport: "ipc" });
-
-    let dcLoginSuccess = true;
-
-    client
-        .login({ clientId: "1178319000212611123" })
-        .then(() => {
-            logger.info("[DiscordRCP] Login successfull!");
-            logger.info("[DiscordRCP] Projecting to: " + client.user.username);
-        })
-        .catch((err) => {
-            dcLoginSuccess = false;
-            logger.error("[DiscordRCP] ", err);
-        });
-
-    client.on("ready", () => {
-        setInterval(() => {
-            if (!dcLoginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
-            logger.info("[DiscordRCP] Updated DiscordRCP");
-
-            let selectedProfile = store.get("selectedProfile");
-
-            client
-                .setActivity({
-                    state: selectedProfile.name,
-                    details: `${selectedProfile.loader} ${selectedProfile.version}`,
-                    largeImageKey: "logo",
-                })
-                .catch((err) => {
-                    logger.error("[DiscordRCP] ", err);
-                });
-        }, 20 * 1000);
-    });
-}

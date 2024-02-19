@@ -1,0 +1,56 @@
+const Store = require("electron-store");
+const store = new Store();
+const RPC = require("discord-rpc");
+const logger = require("electron-log");
+
+function init() {
+    let client = new RPC.Client({ transport: "ipc" });
+
+    let dcLoginSuccess = true;
+
+    client
+        .login({ clientId: "1178319000212611123" })
+        .then(() => {
+            logger.info("[DiscordRCP] Login successfull!");
+            logger.info("[DiscordRCP] Projecting to: " + client.user.username);
+        })
+        .catch((err) => {
+            dcLoginSuccess = false;
+            logger.error("[DiscordRCP] ", err);
+        });
+
+    client.on("ready", () => {
+        setInterval(() => {
+            if (!dcLoginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
+            logger.info("[DiscordRCP] Updated DiscordRCP");
+
+            let selectedProfile = store.get("selectedProfile");
+
+            client
+                .setActivity({
+                    state: selectedProfile.name,
+                    details: `${selectedProfile.loader} ${selectedProfile.version}`,
+                    largeImageKey: "logo",
+                })
+                .catch((err) => {
+                    logger.error("[DiscordRCP] ", err);
+                });
+        }, 20 * 1000);
+    });
+}
+
+function setActivity(state, details, largeImageKey) {
+    if (!dcLoginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
+
+    client
+        .setActivity({
+            state: state,
+            details: details,
+            largeImageKey: largeImageKey,
+        })
+        .catch((err) => {
+            logger.error("[DiscordRCP] ", err);
+        });
+}
+
+module.exports = { init, setActivity };
