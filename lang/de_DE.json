@@ -1,6 +1,6 @@
 {
-    "login_title": "Anmelden",
-    "login_desc": "Du musst dich mit deinem Microsoft Account anmelden",
+    "login_title": "Anmelden...",
+    "login_desc": "Bitte warte einen Moment, du wirst gerade angemeldet.<br><br>Wenn länger nichts passiert, nutze den button hier:",
     "login_btn": "Anmelden",
 
     "java_modal_title": "Java konnte nicht gefunden werden!",

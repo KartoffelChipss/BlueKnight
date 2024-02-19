@@ -74,9 +74,26 @@
                 <h1>BlueKnight Launcher</h1>
             </div>
 
-            <div class="user">
-                <span data-lang="nousername" class="username">Kein Benutzername</span>
-                <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+            <div class="user-out">
+                <div class="user main">
+                    <span data-lang="nousername" class="username">Kein Benutzername</span>
+                    <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                </div>
+
+                <div class="userlist">
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">Offline</span>
+                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                    </div>
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">Offline</span>
+                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                    </div>
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">Offline</span>
+                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -105,7 +122,7 @@
         </div>
     </main>
 
-    <main class="settings">
+    <main class="settings _scroll">
         <div class="topRow">
             <div class="title">
                 <button type="button" onclick="changeSection('main')">
@@ -199,7 +216,7 @@
         </div>
     </main>
 
-    <main class="profiles">
+    <main class="profiles _scroll">
         <div class="topRow">
             <div class="title">
                 <button type="button" onclick="changeSection('main')">

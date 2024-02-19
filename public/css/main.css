@@ -1,9 +1,26 @@
 @import url("./assets.css");
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--grey-2);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+
 main {
   display: none;
   flex-direction: column;
   padding-top: var(--dragheight);
   height: calc(100% - var(--dragheight));
+}
+main._scroll {
+  overflow: auto;
 }
 main.__shown {
   display: flex;
@@ -43,6 +60,7 @@ main .topRow .title h1 {
 main .topRow .user {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   background-color: var(--grey-2);
   padding: 10px 12px;
   border-radius: 7px;
@@ -55,6 +73,54 @@ main .topRow .user img {
 main .topRow .user span {
   font-size: 18px;
   font-weight: 600;
+}
+main .topRow .user-out {
+  z-index: 5;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 55px;
+}
+main .topRow .user-out .userlist {
+  z-index: 1000;
+  display: block;
+  flex-direction: column;
+  position: absolute;
+  overflow: hidden;
+  height: 300px;
+  width: 100%;
+  transition: max-height 0.3s ease-in-out;
+  height: 300px;
+  max-height: 0px;
+  right: 0px;
+  top: 55px;
+}
+main .topRow .user-out .user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: var(--grey-2);
+  padding: 10px 12px;
+  border-radius: 0px;
+}
+main .topRow .user-out .user:hover {
+  filter: brightness(0.9);
+  cursor: pointer;
+}
+main .topRow .user-out .user:last-of-type {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+main .topRow .user-out .user.main {
+  border-radius: 7px;
+}
+main .topRow .user-out:hover .userlist {
+  max-height: 300px;
+}
+main .topRow .user-out:hover .user.main {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 main .mainBox {
   flex-grow: 1;
