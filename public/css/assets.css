@@ -43,6 +43,23 @@ body.login h1 {
   margin: 0;
   margin-bottom: 20px;
 }
+body.login #mainLoader {
+  --wh: 150px;
+  height: var(--wh);
+  width: var(--wh);
+}
+body.login .bottomRow {
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+body.login .bottomRow button {
+  color: var(--primary-2);
+  font-weight: 600;
+}
 body.login p {
   font-size: 18px;
   margin: 0;
@@ -103,6 +120,12 @@ button.red, button.danger, a.button.red, a.button.danger {
 button.blue, a.button.blue {
   background-color: var(--primary-1);
   font-weight: 500;
+}
+button.clear, a.button.clear {
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  outline: none;
 }
 
 input {

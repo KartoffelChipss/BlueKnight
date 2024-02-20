@@ -55,6 +55,26 @@ body.login {
         margin-bottom: 20px;
     }
 
+    #mainLoader {
+        --wh: 150px;
+        height: var(--wh);
+        width: var(--wh);
+    }
+
+    .bottomRow {
+        position: absolute;
+        bottom: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+
+        button {
+            color: var(--primary-2);
+            font-weight: 600;
+        }
+    }
+
     p {
         font-size: 18px;
         margin: 0;
@@ -129,6 +149,13 @@ button, a.button {
     &.blue {
         background-color: var(--primary-1);
         font-weight: 500;
+    }
+
+    &.clear {
+        background-color: transparent;
+        color: var(--text-color);
+        border: none;
+        outline: none;
     }
 }
 

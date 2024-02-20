@@ -2,6 +2,7 @@
     "login_title": "Anmelden...",
     "login_desc": "Bitte warte einen Moment, du wirst gerade angemeldet.<br><br>Wenn länger nichts passiert, nutze den button hier:",
     "login_btn": "Anmelden",
+    "retry_login": "Anmeldung erneut versuchen",
 
     "java_modal_title": "Java konnte nicht gefunden werden!",
     "java_modal_desc": "Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.",
