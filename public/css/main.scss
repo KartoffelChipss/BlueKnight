@@ -68,6 +68,7 @@ main {
         }
 
         .user {
+            --faceheight: 35px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -76,15 +77,61 @@ main {
             padding: 10px 12px;
             border-radius: 7px;
 
-            img {
-                height: 35px;
-                width: 35px;
+            img, .actionbox, .faceBox {
+                height: var(--faceheight);
+                width: var(--faceheight);
+                min-width: var(--faceheight);
                 margin-left: 10px;
+                border-radius: 3px;
             }
 
             span {
                 font-size: 18px;
                 font-weight: 600;
+                text-align: right;
+            }
+
+            .actionbox {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &.green {
+                    background-color: var(--success);
+                }
+
+                &.red {
+                    background-color: var(--danger);
+                }
+
+                svg {
+                    height: calc(var(--faceheight) - 10px);
+                    width: calc(var(--faceheight) - 10px);
+                }
+            }
+
+            .faceBox {
+                position: relative;
+
+                img, .actionbox {
+                    display: none;
+                    position: absolute;
+                    margin-left: 0px;
+                }
+
+                img {
+                    display: block;
+                }
+
+                &:hover {
+                    img {
+                        display: none;
+                    }
+
+                    .actionbox {
+                        display: flex;
+                    }
+                }
             }
         }
 

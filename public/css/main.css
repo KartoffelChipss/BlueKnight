@@ -58,6 +58,7 @@ main .topRow .title h1 {
   margin: 0;
 }
 main .topRow .user {
+  --faceheight: 35px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -65,14 +66,49 @@ main .topRow .user {
   padding: 10px 12px;
   border-radius: 7px;
 }
-main .topRow .user img {
-  height: 35px;
-  width: 35px;
+main .topRow .user img, main .topRow .user .actionbox, main .topRow .user .faceBox {
+  height: var(--faceheight);
+  width: var(--faceheight);
+  min-width: var(--faceheight);
   margin-left: 10px;
+  border-radius: 3px;
 }
 main .topRow .user span {
   font-size: 18px;
   font-weight: 600;
+  text-align: right;
+}
+main .topRow .user .actionbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main .topRow .user .actionbox.green {
+  background-color: var(--success);
+}
+main .topRow .user .actionbox.red {
+  background-color: var(--danger);
+}
+main .topRow .user .actionbox svg {
+  height: calc(var(--faceheight) - 10px);
+  width: calc(var(--faceheight) - 10px);
+}
+main .topRow .user .faceBox {
+  position: relative;
+}
+main .topRow .user .faceBox img, main .topRow .user .faceBox .actionbox {
+  display: none;
+  position: absolute;
+  margin-left: 0px;
+}
+main .topRow .user .faceBox img {
+  display: block;
+}
+main .topRow .user .faceBox:hover img {
+  display: none;
+}
+main .topRow .user .faceBox:hover .actionbox {
+  display: flex;
 }
 main .topRow .user-out {
   z-index: 5;

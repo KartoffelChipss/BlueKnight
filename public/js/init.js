@@ -1,13 +1,3 @@
-window.bridge.sendProfile((event, profile) => {
-    console.log(profile)
-    document.querySelectorAll(".userface").forEach((userfacebox) => {
-        userfacebox.src = `https://visage.surgeplay.com/face/512/${profile.id}`;
-    });
-    document.querySelectorAll(".username").forEach((usernamebox) => {
-        usernamebox.innerHTML = profile.name;
-    });
-})
-
 window.bridge.sendSettings((event, settings) => {
     if (!settings) return;
 
@@ -25,6 +15,7 @@ window.bridge.sendSettings((event, settings) => {
 });
 
 window.bridge.sendVersion((event, version) => {
+    console.log("Received version: ", version);
     document.getElementById("versionnum").innerHTML = version;
 });
 
@@ -69,7 +60,7 @@ window.bridge.sendProfiles((event, data) => {
             profileTable.querySelector("tbody").innerHTML += `
             <tr>
                 <td>${profile.name}</td>
-                <td>${profile.loader}</td>
+                <td>${capitalizeFirstLetter(profile.loader)}</td>
                 <td>${profile.version}</td>
                 <td>
                     <button class="success" type="button" onclick="selectProfile('${profile.name}', '${profile.loader}', '${profile.version}')" title="Profil auswählen">
@@ -118,4 +109,9 @@ function setMaxMem(value) {
     document.getElementById("memslider").value = value;
     window.api.invoke('setMaxMem', value);
     console.log("[SETTINGS] Set max memory to " + value + "MB");
+}
+
+function capitalizeFirstLetter(str) {
+    if (str.length === 0) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }

@@ -18,21 +18,24 @@ contextBridge.exposeInMainWorld(
     "api", {
         invoke: (channel, data) => {
             let validChannels = [
-                "minimize", 
-                "togglemaxwindow", 
-                "closeWindow", 
-                "launchMC", 
-                "initLogin", 
-                "setMaxMem", 
-                "setSetting", 
-                "createProfile", 
-                "selectProfile", 
-                "openProfileFolder", 
+                "minimize",
+                "togglemaxwindow",
+                "closeWindow",
+                "launchMC",
+                "initLogin",
+                "setMaxMem",
+                "setSetting",
+                "createProfile",
+                "selectProfile",
+                "openProfileFolder",
                 "openRootFolder",
-                "downloadMod", 
+                "downloadMod",
                 "openExternal",
                 "installjava",
-                "getLang"
+                "getLang",
+                "addAccount",
+                "removeAccount",
+                "selectAccount"
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);
@@ -49,6 +52,9 @@ contextBridge.exposeInMainWorld(
         },
         sendProfile: (message) => {
             ipcRenderer.on("sendProfile", message);
+        },
+        updateAccounts: (message) => {
+            ipcRenderer.on("updateAccounts", message);
         },
         sendDownloadProgress: (message) => {
             ipcRenderer.on("sendDownloadProgress", message);

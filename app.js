@@ -23,6 +23,9 @@ const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner, quilt } = require("tomate-loaders");
 
+const { AccountManager } = require("./functions/AccountManager.js");
+let accountManager = new AccountManager();
+
 const devMode = process.env.NODE_ENV === 'development';
 
 let downlaodingJava = false;
@@ -40,10 +43,9 @@ if (devMode) {
 
 const store = new Store();
 
-// store.openInEditor();
+store.openInEditor();
 
 let top = {};
-let currentuser;
 
 const downloadFile = async (url, profile, filename) => {
     let profileModsPath = path.join(profilespath, profile, "mods");
@@ -151,30 +153,23 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("initLogin", async (event, args) => {
-            let tokenString = store.get("token");
-            if (tokenString && safeStorage.isEncryptionAvailable()) {
-                try {
-                    let tokenBuffer = Buffer.from(tokenString, "base64");
-                    tokenString = safeStorage.decryptString(tokenBuffer);
-                } catch (e) {
-                    logger.warn("[AUTH] Could not decrypt token: ", e);
-                    tokenString = null;
-                }
-            }
-            let token = null;
-            if (tokenString) tokenXbox = await authManager.refresh(tokenString);
-            if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
+            await accountManager.init(top.mainWindow);
+            proceedToMain();
+        });
 
-            if (token && token.profile) {
-                // If token exists, use it for automatic login
-                logger.info(`[AUTH] Auto-logged in as ${token.profile.name}`);
-                proceedToMain(token);
-                return;
-            }
+        ipcMain.handle("addAccount", async (event, args) => {
+            await accountManager.loginWithNewAccount(top.mainWindow);
+            top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
+        });
 
-            const newtoken = await loginUsingMicrosoft();
-            logger.info(`[AUTH] First time login as ${newtoken.profile.name}`);
-            proceedToMain(newtoken);
+        ipcMain.handle("removeAccount", async (event, accountID) => {
+            await accountManager.removeAccount(accountID, top.mainWindow);
+            top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
+        });
+
+        ipcMain.handle("selectAccount", (event, accountID) => {
+            accountManager.selectAccount(accountID, top.mainWindow);
+            top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         });
 
         ipcMain.handle("launchMC", (event, arg) => {
@@ -254,7 +249,7 @@ if (!gotTheLock) {
             });
         });
 
-        ipcMain.handle("installjava", (event, data) => {});
+        ipcMain.handle("installjava", (event, data) => { });
 
         ipcMain.handle("getLang", (event, data) => {
             logger.info("[LANG] Requested lang refresh");
@@ -340,18 +335,16 @@ function refreshSettings() {
     });
 }
 
-function proceedToMain(token) {
-    currentuser = token;
-
+function proceedToMain() {
     top.mainWindow.loadFile("public/main.html").then(() => {
-        top.mainWindow.send("sendProfile", currentuser.profile);
+        top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         top.mainWindow.webContents.send("sendVersion", version);
         top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
-        refreshSettings();
         top.mainWindow.webContents.send("sendProfiles", {
             profiles: store.get("profiles"),
             selectedProfile: store.get("selectedProfile"),
         });
+        refreshSettings();
 
         logger.info(`[STARTUP] Loaded main window (${new Date() - startTimestamp}ms after start)`);
 
@@ -362,43 +355,8 @@ function proceedToMain(token) {
     });
 }
 
-async function loginUsingMicrosoft() {
-    const lastPos = store.get("windowPosition");
-    let loginWidth = 550;
-    let loginHeight = 550;
-    let loginX = lastPos ? (lastPos.x + (lastPos.width / 2 - loginWidth / 2)).toFixed(0) : undefined;
-    let loginY = lastPos ? (lastPos.y + (lastPos.height / 2 - loginHeight / 2)).toFixed(0) : undefined;
-
-    console.log("x: ", loginX);
-    console.log("y: ", loginY);
-
-    // If token does not exist, perform regular login process
-    const xboxManager = await authManager.launch("electron", {
-        title: "Microsoft Authentication",
-        icon: __dirname + "/public/img/logo.ico",
-        backgroundColor: "#1A1B1E",
-        width: loginWidth,
-        height: loginHeight,
-        x: loginX,
-        y: loginY,
-    });
-
-    currentuser = await xboxManager.getMinecraft();
-
-    let savabletoken = xboxManager.save();
-    if (safeStorage.isEncryptionAvailable()) {
-        try {
-            savabletoken = safeStorage.encryptString(savabletoken).toString("base64");
-        } catch (e) {
-            logger.warn("[AUTH] Could not encrypt token: ", e);
-        }
-    }
-    store.set("token", savabletoken);
-
-    return currentuser;
-}
-
 let launchMinecraft = async (profileName, loader, version) => {
+    const currentuser = accountManager.getActiveAccount().minecraft;
     if (!currentuser) return;
 
     if (downlaodingJava) {
