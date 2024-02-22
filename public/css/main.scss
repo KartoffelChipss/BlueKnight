@@ -33,6 +33,7 @@ main {
         padding: var(--padding);
         width: calc(100% - var(--padding) * 2);
 
+        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -135,6 +136,62 @@ main {
             }
         }
 
+        .userlist {
+            position: absolute;
+            right: var(--padding);
+            top: calc(var(--padding) / 2);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            transition: max-height .3s ease-in-out;
+
+            max-height: 55px;
+            overflow: hidden;
+
+            &::-webkit-scrollbar {
+                width: 0px;
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                background-color: var(--grey-2);
+                border-radius: 6px;
+            }
+            
+            ::-webkit-scrollbar-track {
+                background: transparent;
+                border-radius: 8px;
+            }
+
+            .user {
+                background-color: var(--grey-2);
+                padding: 10px 12px;
+                border-radius: 0px;
+
+                &:hover {
+                    filter: brightness(0.9);
+                    cursor: pointer;
+                }
+
+                &:first-of-type {
+                    border-radius: 7px;
+                }
+
+                &:last-of-type {
+                    border-bottom-left-radius: 7px;
+                    border-bottom-right-radius: 7px;
+                }
+            }
+
+            &:hover {
+                max-height: 330px;
+
+                .user:first-of-type {
+                    border-bottom-left-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                }
+            }
+        }
+
         .user-out {
             z-index: 5;
             position: relative;
@@ -144,19 +201,21 @@ main {
 
             max-height: 55px;
 
+            width: auto;
+
             .userlist {
                 z-index: 1000;
                 display: block;
                 flex-direction: column;
                 position: absolute;
-                overflow: hidden;
+                overflow-y: hidden;
+                overflow-x: visible;
                 
                 height: 300px;
-                width: 100%;
+                width: auto;
 
                 transition: max-height .3s ease-in-out;
 
-                height: 300px;
                 max-height: 0px;
                 right: 0px;
                 top: 55px;
@@ -166,6 +225,7 @@ main {
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
+                overflow: visible;
     
                 background-color: var(--grey-2);
                 padding: 10px 12px;
@@ -488,32 +548,36 @@ main {
     }
 
     &.profiles {
-        --padding: 15px;
-        padding: 0 var(--padding);
-        padding-top: var(--dragheight);
-        width: calc(100% - var(--padding) * 2);
-
         flex-direction: column;
 
-        .topRow {
-            padding-left: 0;
-            padding-right: 0;
-            width: 100%;
+        .profilesmain {
+            --padding: 30px;
+            padding: 0 var(--padding);
+            padding-top: 15px;
+            width: calc(100% - var(--padding) * 2);
+
+            display: flex;
+            flex-direction: column;
+
+            height: calc(100% - var(--searchBarheight));
+            max-height: calc(100% - var(--searchBarheight));
         }
 
-        .newProfileBtn {
-            background-color: var(--success);
-            width: fit-content;
-            padding: 10px 20px;
-
+        .btns {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 15px;
-            margin-left: 15px;
 
-            //align-self: flex-end;
+            .newProfileBtn {
+                background-color: var(--success);
+                width: fit-content;
+                padding: 10px 20px;
+            }
         }
 
         table {
-            --padding: 15px;
+            --padding: 0px;
             padding: 0 var(--padding);
             width: calc(100% - var(--padding) * 2);
 
@@ -599,6 +663,7 @@ main {
         .modmain {
             --padding: 15px;
             padding: 0 var(--padding);
+            padding-top: var(--padding);
             width: calc(100% - var(--padding) * 2);
 
             display: flex;

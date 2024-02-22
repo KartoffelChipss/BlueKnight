@@ -147,7 +147,7 @@ class AccountManager {
                     this.sendUpdatedAccounts();
                 })
                 .catch(error => {
-                    if (error.message === "") return;
+                    if (error.message === "error.gui.closed") return;
                     else console.log(error.message);
                 });
 

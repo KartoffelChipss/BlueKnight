@@ -29,6 +29,7 @@ main .topRow {
   --padding: 15px;
   padding: var(--padding);
   width: calc(100% - var(--padding) * 2);
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,6 +111,51 @@ main .topRow .user .faceBox:hover img {
 main .topRow .user .faceBox:hover .actionbox {
   display: flex;
 }
+main .topRow .userlist {
+  position: absolute;
+  right: var(--padding);
+  top: calc(var(--padding) / 2);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: max-height 0.3s ease-in-out;
+  max-height: 55px;
+  overflow: hidden;
+}
+main .topRow .userlist::-webkit-scrollbar {
+  width: 0px;
+}
+main .topRow .userlist ::-webkit-scrollbar-thumb {
+  background-color: var(--grey-2);
+  border-radius: 6px;
+}
+main .topRow .userlist ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+main .topRow .userlist .user {
+  background-color: var(--grey-2);
+  padding: 10px 12px;
+  border-radius: 0px;
+}
+main .topRow .userlist .user:hover {
+  filter: brightness(0.9);
+  cursor: pointer;
+}
+main .topRow .userlist .user:first-of-type {
+  border-radius: 7px;
+}
+main .topRow .userlist .user:last-of-type {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+main .topRow .userlist:hover {
+  max-height: 330px;
+}
+main .topRow .userlist:hover .user:first-of-type {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
 main .topRow .user-out {
   z-index: 5;
   position: relative;
@@ -117,17 +163,18 @@ main .topRow .user-out {
   flex-direction: column;
   align-items: center;
   max-height: 55px;
+  width: auto;
 }
 main .topRow .user-out .userlist {
   z-index: 1000;
   display: block;
   flex-direction: column;
   position: absolute;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: visible;
   height: 300px;
-  width: 100%;
+  width: auto;
   transition: max-height 0.3s ease-in-out;
-  height: 300px;
   max-height: 0px;
   right: 0px;
   top: 55px;
@@ -136,6 +183,7 @@ main .topRow .user-out .user {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  overflow: visible;
   background-color: var(--grey-2);
   padding: 10px 12px;
   border-radius: 0px;
@@ -387,27 +435,32 @@ main .settingsBox .checkBoxInput .mem-box span {
   margin: 0;
 }
 main.profiles {
-  --padding: 15px;
-  padding: 0 var(--padding);
-  padding-top: var(--dragheight);
-  width: calc(100% - var(--padding) * 2);
   flex-direction: column;
 }
-main.profiles .topRow {
-  padding-left: 0;
-  padding-right: 0;
-  width: 100%;
+main.profiles .profilesmain {
+  --padding: 30px;
+  padding: 0 var(--padding);
+  padding-top: 15px;
+  width: calc(100% - var(--padding) * 2);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - var(--searchBarheight));
+  max-height: calc(100% - var(--searchBarheight));
 }
-main.profiles .newProfileBtn {
+main.profiles .btns {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+main.profiles .btns .newProfileBtn {
   background-color: var(--success);
   width: -moz-fit-content;
   width: fit-content;
   padding: 10px 20px;
-  margin-bottom: 15px;
-  margin-left: 15px;
 }
 main.profiles table {
-  --padding: 15px;
+  --padding: 0px;
   padding: 0 var(--padding);
   width: calc(100% - var(--padding) * 2);
   border-spacing: 0px;
@@ -466,6 +519,7 @@ main.mods ::-webkit-scrollbar-thumb {
 main.mods .modmain {
   --padding: 15px;
   padding: 0 var(--padding);
+  padding-top: var(--padding);
   width: calc(100% - var(--padding) * 2);
   display: flex;
   flex-direction: column;
