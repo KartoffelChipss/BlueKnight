@@ -4,7 +4,7 @@ const fetch = require("cross-fetch");
 const { ipcMain } = require("electron/main");
 const Store = require("electron-store");
 const fs = require("fs");
-const version = require("./package.json").version;
+const version = require("../package.json").version;
 const os = require("os");
 const { pipeline } = require("stream/promises");
 const logger = require("electron-log");
@@ -43,7 +43,7 @@ if (devMode) {
 
 const store = new Store();
 
-store.openInEditor();
+// if (devMode) store.openInEditor();
 
 let top = {};
 
@@ -314,7 +314,7 @@ if (!gotTheLock) {
             },
         });
 
-        top.mainWindow.loadFile("public/login.html").then(() => {
+        top.mainWindow.loadFile("src/public/login.html").then(() => {
             top.mainWindow.webContents.send("sendVersion", version);
             logger.info(`[STARTUP] Loaded login window (${new Date() - startTimestamp}ms after start)`);
         });
@@ -340,7 +340,7 @@ function refreshSettings() {
 }
 
 function proceedToMain() {
-    top.mainWindow.loadFile("public/main.html").then(() => {
+    top.mainWindow.loadFile("src/public/main.html").then(() => {
         top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         top.mainWindow.webContents.send("sendVersion", version);
         top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
@@ -412,7 +412,7 @@ let launchMinecraft = async (profileName, loader, version) => {
             detached: false,
         },
         memory: {
-            max: (store.get("maxMemMB") || "6000") + "M",
+            max: (store.get("maxMemMB") || "4000") + "M",
             min: "2G",
         },
         javaPath: store.get("javaPath"),
@@ -440,8 +440,10 @@ launcher.on(
 );
 
 launcher.on("progress", (e) => {
-    logger.info("[LAUNCHER-PROGRESS]:");
-    logger.info(e);
+    if (devMode) {
+        logger.info("[LAUNCHER-PROGRESS]:");
+        logger.info(e);
+    }
     top.mainWindow.webContents.send("sendDownloadProgress", e);
 });
 

@@ -1,8 +1,8 @@
 {
     "name": "blueknight",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.",
-    "main": "app.js",
+    "main": "./src/app.js",
     "scripts": {
         "start": "NODE_ENV=development electron .",
         "startprod": "electron .",
@@ -17,7 +17,7 @@
         "copyright": "© 2024 Jan Straßburger",
         "mac": {
             "target": "dmg",
-            "icon": "public/img/logo512x512.png"
+            "icon": "src/public/img/logo512x512.png"
         },
         "linux": {
             "target": [
@@ -25,7 +25,7 @@
                 "snap"
             ],
             "category": "Utility",
-            "icon": "public/img/logo.icns",
+            "icon": "src/public/img/logo.icns",
             "artifactName": "blueknight-launcher-setup-${version}.${ext}",
             "maintainer": "Jan Straßburger",
             "vendor": "Jan Straßburger",
@@ -35,11 +35,11 @@
             "target": [
                 "nsis"
             ],
-            "icon": "public/img/logo.ico"
+            "icon": "src/public/img/logo.ico"
         },
         "nsis": {
-            "installerIcon": "public/img/logo.ico",
-            "uninstallerIcon": "public/img/logo.ico",
+            "installerIcon": "src/public/img/logo.ico",
+            "uninstallerIcon": "src/public/img/logo.ico",
             "uninstallDisplayName": "BlueKnight Launcher",
             "license": "LICENSE",
             "oneClick": false,
