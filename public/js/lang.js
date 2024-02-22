@@ -16,3 +16,7 @@ function refreshLang() {
 }
 
 refreshLang();
+
+function getTranslation(key) {
+    return lang[lang.selected][key] ?? "Missing translation";
+}

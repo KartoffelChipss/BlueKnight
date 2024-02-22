@@ -158,6 +158,10 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("addAccount", async (event, args) => {
+            if (accountManager.getAccounts().length >= 5) {
+                top.mainWindow.webContents.send("showWarnbox", { boxid: "maxaccounts" });
+                return;
+            }
             await accountManager.loginWithNewAccount(top.mainWindow);
             top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         });
