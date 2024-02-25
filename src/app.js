@@ -19,8 +19,6 @@ logger.transports.file.level = "info";
 
 const { Client } = require("minecraft-launcher-core");
 const launcher = new Client();
-const { Auth } = require("msmc");
-const authManager = new Auth("select_account");
 const { vanilla, fabric, forge, liner, quilt } = require("tomate-loaders");
 
 const { AccountManager } = require("./functions/AccountManager.js");
@@ -179,6 +177,24 @@ if (!gotTheLock) {
         ipcMain.handle("launchMC", (event, arg) => {
             const selectedProfile = store.get("selectedProfile");
             launchMinecraft(selectedProfile.name ?? "profile1", selectedProfile.loader ?? "fabric", selectedProfile.version ?? "1.20.2");
+        });
+
+        ipcMain.handle("getSelectedProfileMods", async (event, arg) => {
+            const selectedProfile = store.get("selectedProfile");
+            const profileModsPath = path.join(profilespath, selectedProfile.name, "mods");
+            const mods = fs.readdirSync(path.resolve(profileModsPath));
+            mods = mods.map(async (mod) => {
+                if (arg.idonly) return mod.split("_")[0];
+
+                const res = await fetch(`https://api.modrinth.com/api/v2/project/${mod.split("_")[0]}`);
+                const data = await res.json();
+                return {
+                    id: mod.split("_")[0],
+                    mod: data,
+                };
+            });
+
+            top.mainWindow.webContents.send("sendSelectedProfileMods", mods);
         });
 
         ipcMain.handle("createProfile", async (event, data) => {
