@@ -3,6 +3,7 @@ const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const Store = require("electron-store");
 const { safeStorage } = require("electron");
+const Logger = require("electron-log");
 const store = new Store();
 
 /**
@@ -45,8 +46,8 @@ class AccountManager {
 
             let token = null;
             let tokenXbox = null;
-            if (tokenString) tokenXbox = await authManager.refresh(tokenString);
-            if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
+            if (tokenString) tokenXbox = await authManager.refresh(tokenString).catch((err) => { Logger.error(err.message); });
+            if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft().catch((err) => { Logger.error(err.message); });
 
             if (token) {
                 account.minecraft = token;

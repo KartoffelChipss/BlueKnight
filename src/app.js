@@ -162,7 +162,7 @@ if (!gotTheLock) {
                 top.mainWindow.webContents.send("showWarnbox", { boxid: "maxaccounts" });
                 return;
             }
-            await accountManager.loginWithNewAccount(top.mainWindow);
+            await accountManager.loginWithNewAccount(top.mainWindow).catch((e) => { logger.error(e); });
             top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         });
 
