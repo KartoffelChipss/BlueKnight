@@ -41,7 +41,7 @@ if (devMode) {
 
 const store = new Store();
 
-// if (devMode) store.openInEditor();
+if (devMode) store.openInEditor();
 
 let top = {};
 
@@ -160,8 +160,16 @@ if (!gotTheLock) {
                 top.mainWindow.webContents.send("showWarnbox", { boxid: "maxaccounts" });
                 return;
             }
-            await accountManager.loginWithNewAccount(top.mainWindow).catch((e) => { logger.error(e); });
-            top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
+            console.log("[!!!] Can add new account")
+            accountManager.loginWithNewAccount(top.mainWindow)
+                .then((account) => {
+                    console.log("[!!!] Added new account")
+                    top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
+                })
+                .catch((e) => {
+                    console.log("[!!!] Error adding new account")
+                    logger.error(e);
+                });
         });
 
         ipcMain.handle("removeAccount", async (event, accountID) => {

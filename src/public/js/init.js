@@ -8,6 +8,7 @@ window.bridge.sendSettings((event, settings) => {
 
     document.getElementById("minimizeOnStartCheckbox").checked = settings.minimizeOnStart ?? false;
     document.getElementById("hideDiscordRPCCheckbox").checked = settings.hideDiscordRPC ?? false;
+    document.getElementById("autoUpdatesCheckbox").checked = settings.autoUpdates ?? true;
 
     document.getElementById("javaPath").value = settings.javaPath;
 

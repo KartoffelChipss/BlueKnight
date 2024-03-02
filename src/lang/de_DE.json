@@ -33,6 +33,8 @@
     "settings_lang_title": "Anzeigesprache",
     "settings_lang_desc": "Ändere die Anzeigesprache",
     "settings_lang_auto": "Automatisch",
+    "settings_autoUpdates_title": "Automatische Updates",
+    "settings_autoUpdates_desc": "Benachrichtigt dich bei verfügbaren Updates",
 
     "profiles_title": "Meine Profile",
     "profiles_new": "Neues Profil",

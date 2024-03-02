@@ -365,11 +365,12 @@ main {
                 font-size: 16px;
                 font-weight: 500;
                 border: none;
+                border-right: 13px solid transparent;
 
                 padding: 10px 13px;
                 border-radius: 7px;
 
-                min-width: 150px;
+                min-width: 170px;
 
                 transition: filter .2s ease-in-out;
 

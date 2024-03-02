@@ -2,6 +2,9 @@ const Store = require("electron-store");
 const store = new Store();
 const RPC = require("discord-rpc");
 const logger = require("electron-log");
+const { AccountManager } = require("./AccountManager");
+
+const startTimestamp = new Date();
 
 function init(top) {
     let client = new RPC.Client({ transport: "ipc" });
@@ -16,7 +19,7 @@ function init(top) {
         })
         .catch((err) => {
             dcLoginSuccess = false;
-            logger.error("[DiscordRCP] ", err); 
+            logger.error("[DiscordRCP] ", err);
         });
 
     client.on("ready", () => {
@@ -26,11 +29,20 @@ function init(top) {
 
             let selectedProfile = store.get("selectedProfile");
 
+            const accountManager = new AccountManager();
+            const activeAccount = accountManager.findAccount(store.get("activeAccount"));
+
             client
                 .setActivity({
-                    state: selectedProfile.name,
-                    details: `${capitalizeFirstLetter(selectedProfile.loader)} ${selectedProfile.version}`,
+                    details: `${selectedProfile.name} (${capitalizeFirstLetter(selectedProfile.loader)} ${selectedProfile.version})`,
+                    // state: `${new Date() - startTimestamp}ms in the launcher`,
+                    startTimestamp: startTimestamp,
                     largeImageKey: "logo",
+                    smallImageKey: `https://visage.surgeplay.com/face/512/${activeAccount.id}`,
+                    smallImageText: activeAccount.name,
+                    buttons: [
+                        { label: "BlueKnight", url: "https://github.com/KartoffelChipss/blueknight" },
+                    ]
                 })
                 .catch((err) => {
                     logger.error("[DiscordRCP] ", err);

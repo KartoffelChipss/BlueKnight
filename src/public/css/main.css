@@ -298,9 +298,10 @@ main .settingsBox .checkBoxInput select {
   font-size: 16px;
   font-weight: 500;
   border: none;
+  border-right: 13px solid transparent;
   padding: 10px 13px;
   border-radius: 7px;
-  min-width: 150px;
+  min-width: 170px;
   transition: filter 0.2s ease-in-out;
 }
 main .settingsBox .checkBoxInput select:hover {

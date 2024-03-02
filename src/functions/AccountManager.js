@@ -32,43 +32,61 @@ class AccountManager {
      */
     async init(mainWindow) {
         this.mainWindow = mainWindow;
-
+    
         if (this.activeAccountID === null || (this.activeAccountID && !this.findAccount(this.activeAccountID))) {
-            let newAccount = await this.openMicrosoftLogin();
-            this.addAccount(newAccount);
-            this.selectAccount(newAccount.id);
-        }
-
-        const accounts = this.getAccounts();
-
-        for (let account of accounts) {
-            let tokenString = this.decryptToken(account.accessToken);
-
-            let token = null;
-            let tokenXbox = null;
-            if (tokenString) tokenXbox = await authManager.refresh(tokenString).catch((err) => { Logger.error(err.message); });
-            if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft().catch((err) => { Logger.error(err.message); });
-
-            if (token) {
-                account.minecraft = token;
-            } else {
-                this.removeAccount(account.id);
+            try {
+                let newAccount = await this.openMicrosoftLogin();
+                this.addAccount(newAccount);
+                this.selectAccount(newAccount.id);
+            } catch (err) {
+                Logger.error(err.message);
             }
         }
-
+    
+        const accounts = this.getAccounts();
+    
+        for (let account of accounts) {
+            let tokenString = this.decryptToken(account.accessToken);
+    
+            let token = null;
+            let tokenXbox = null;
+            try {
+                if (tokenString) tokenXbox = await authManager.refresh(tokenString);
+                if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
+            } catch (err) {
+                Logger.error(err.message);
+                // Handle the error as needed, such as removing the account or displaying an error message.
+                this.removeAccount(account.id);
+            }
+    
+            if (token) {
+                account.minecraft = token;
+            }
+        }
+    
         this.sendUpdatedAccounts();
-    }
+    }    
 
     loginWithNewAccount() {
         return new Promise(async (resolve, reject) => {
+            console.log("[AccountManager] Logging in with new account")
             try {
-                let account = await this.openMicrosoftLogin();
-                this.addAccount(account);
-                this.selectAccount(account.id);
-                this.sendUpdatedAccounts();
-                resolve(account);
-            } catch (error) {
-                reject(error);
+                this.openMicrosoftLogin()
+                    .then(account => {
+                        console.log("[AccountManager] Account added (pre): ", account);
+                        this.addAccount(account);
+                        this.selectAccount(account.id);
+                        this.sendUpdatedAccounts();
+                        resolve(account);
+                        console.log("[AccountManager] Account added: ", account);
+                    })
+                    .catch(err => {
+                        console.log("[AccountManager] Error: ", err.message);
+                        reject(err);
+                    });
+            } catch (err) {
+                console.log("[AccountManager] Error: ", err.message)
+                reject(err);
             }
         });
     }
@@ -188,6 +206,7 @@ class AccountManager {
             let loginHeight = 550;
             let loginX = lastPos ? (lastPos.x + (lastPos.width / 2 - loginWidth / 2)).toFixed(0) : undefined;
             let loginY = lastPos ? (lastPos.y + (lastPos.height / 2 - loginHeight / 2)).toFixed(0) : undefined;
+            
             const xboxManager = await authManager.launch("electron", {
                 title: "Microsoft Authentication",
                 icon: __dirname + "/public/img/logo.ico",
@@ -196,7 +215,7 @@ class AccountManager {
                 height: loginHeight,
                 x: loginX,
                 y: loginY,
-            }).catch(reject);
+            }).catch(err => { reject(err) });
 
             let user = await xboxManager.getMinecraft();
 

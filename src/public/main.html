@@ -182,6 +182,19 @@
         <div class="settingsBox">
             <div class="checkBoxInput">
                 <div class="desc">
+                    <span class="label" data-lang="settings_autoUpdates_title">Automatische Updates</span>
+                    <span class="desc" data-lang="settings_autoUpdates_desc">Benachrichtigt dich bei verfügbaren Updates</span>
+                </div>
+                <label class="switch" style="scale: 0.85;">
+                    <input type="checkbox" value="checked" id="autoUpdatesCheckbox" oninput="setSetting('autoUpdates', this.checked)">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settingsBox">
+            <div class="checkBoxInput">
+                <div class="desc">
                     <span class="label" data-lang="settings_richpresence_title">Discord Rich Presence deaktivieren</span>
                     <span class="desc" data-lang="settings_richpresence_desc">Deaktiviert den "Spielt Blueknight Launcher" Status für Discord</span>
                 </div>

@@ -33,6 +33,8 @@
     "settings_lang_title": "Language",
     "settings_lang_desc": "Change the language",
     "settings_lang_auto": "Automatic",
+    "settings_autoUpdates_title": "Automatic updates",
+    "settings_autoUpdates_desc": "Should the launcher check for updates on startup?",
 
     "profiles_title": "My Profiles",
     "profiles_new": "New Profile",
