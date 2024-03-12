@@ -27,7 +27,7 @@
             ],
             "category": "Utility",
             "icon": "src/public/img/logo.icns",
-            "artifactName": "blueknight-launcher-setup-${version}.${ext}",
+            "artifactName": "blueknight-launcher-${ext}-${version}.${ext}",
             "maintainer": "Jan Straßburger",
             "vendor": "Jan Straßburger",
             "synopsis": "Minecraft Fabric Launcher for Windows and Linux"
@@ -36,7 +36,8 @@
             "target": [
                 "nsis"
             ],
-            "icon": "src/public/img/logo.ico"
+            "icon": "src/public/img/logo.ico",
+            "artifactName": "blueknight-launcher-win-${version}.${ext}"
         },
         "nsis": {
             "installerIcon": "src/public/img/logo.ico",
