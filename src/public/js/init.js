@@ -20,6 +20,8 @@ window.bridge.sendVersion((event, version) => {
     document.getElementById("versionnum").innerHTML = version;
 });
 
+window.api.invoke('getProfiles');
+
 window.bridge.sendProfiles((event, data) => {
     if (data.selectedProfile) {
         let profileSelectBtn = document.getElementById("profileSelectBtn");
@@ -54,14 +56,14 @@ window.bridge.sendProfiles((event, data) => {
 
             if (profile.loader !== "vanilla") modDownloadProfileSelect.innerHTML += `<option value="${profile.name}?${profile.version}">${profile.name}</option>`;
 
-            if (profile.loader === "vanilla") modsBtn = `<button type="button" disabled title="Mods verwalten">
+            if (profile.loader === "vanilla") modsBtn = `<button type="button" disabled title="Mods für Vanilla nicht verfügbar">
                 <svg fill="#fefefe" height="200px" width="200px" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path class="cls-1" d="M9,14H6V8H9ZM8.875,2H6.7226A1.99139,1.99139,0,0,1,5,3,2.486,2.486,0,0,1,3,2H2V6H3A1.79727,1.79727,0,0,1,4.5,5C5.55147,5,5.99725,6.98981,6,7H9c.333-1.53876,1-2.43573,1.741-2.43573,1.481,0,3.259,2.05109,3.259,2.05109S13,2,8.875,2Z"></path> </g></svg>
             </button>`;
 
             profileTable.querySelector("tbody").innerHTML += `
             <tr>
                 <td>${profile.name}</td>
-                <td>${capitalizeFirstLetter(profile.loader)}</td>
+                <td class="loader"><img src="./img/loader/${profile.loader}.png" alt="${profile.loader}-logo" onerror="this.remove()">${capitalizeFirstLetter(profile.loader)}</td>
                 <td>${profile.version}</td>
                 <td>
                     <button class="success" type="button" onclick="selectProfile('${profile.name}', '${profile.loader}', '${profile.version}')" title="Profil auswählen">

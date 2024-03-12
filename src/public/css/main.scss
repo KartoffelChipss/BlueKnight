@@ -571,7 +571,7 @@ main {
             margin-bottom: 15px;
 
             .newProfileBtn {
-                background-color: var(--success);
+                background-color: var(--primary-1);
                 width: fit-content;
                 padding: 10px 20px;
             }
@@ -605,6 +605,17 @@ main {
                     text-overflow: ellipsis;
                     overflow: hidden; 
                     white-space: nowrap;
+
+                    &.loader {
+                        vertical-align: middle;
+
+                        img {
+                            vertical-align: middle;
+                            height: 30px;
+                            margin-right: 7px;
+                            border-radius: 3px;
+                        }
+                    }
                 }
 
                 th {
@@ -629,7 +640,7 @@ main {
                     margin: 0 7px;
 
                     &.success {
-                        background-color: var(--success);
+                        background-color: var(--primary-1);
                     }
 
                     svg {
@@ -838,7 +849,7 @@ main {
                         align-items: center;
                         justify-content: center;
 
-                        background-color: var(--success);
+                        background-color: var(--primary-1);
 
                         svg {
                             height: 25px;

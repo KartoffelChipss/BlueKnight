@@ -2,6 +2,31 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.1.3 - 2024-03-12
+
+### Added
+- Added login error warnings
+- Added loader icons
+
+### Changed
+- Improved DiscordRPC visuals
+- Changed accent color in profile and mods section to blue
+
+### Fixed
+
+## 1.1.2 - 2024-01-31
+
+### Added
+- Automatic login system by saving refresh token (no more logging in every time you start the launcher!)
+- New Account managing system
+- Support for multiple accounts
+
+### Changed
+- Changed login screen to display a loading spinner and helpful links
+- Improved project structure
+
+### Fixed
+
 ## 1.1.1 - 2024-01-31
 
 ### Added

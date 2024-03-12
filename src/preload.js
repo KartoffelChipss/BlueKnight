@@ -33,9 +33,11 @@ contextBridge.exposeInMainWorld(
                 "openExternal",
                 "installjava",
                 "getLang",
+                "updateAccounts",
                 "addAccount",
                 "removeAccount",
-                "selectAccount"
+                "selectAccount",
+                "getProfiles"
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);

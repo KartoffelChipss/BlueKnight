@@ -55,7 +55,6 @@ class AccountManager {
                 if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
             } catch (err) {
                 Logger.error(err.message);
-                // Handle the error as needed, such as removing the account or displaying an error message.
                 this.removeAccount(account.id);
             }
     
@@ -69,23 +68,23 @@ class AccountManager {
 
     loginWithNewAccount() {
         return new Promise(async (resolve, reject) => {
-            console.log("[AccountManager] Logging in with new account")
+            Logger.info("[AccountManager] Logging in with new account")
             try {
                 this.openMicrosoftLogin()
                     .then(account => {
-                        console.log("[AccountManager] Account added (pre): ", account);
+                        Logger.info("[AccountManager] Account added (pre): ", account);
                         this.addAccount(account);
                         this.selectAccount(account.id);
                         this.sendUpdatedAccounts();
                         resolve(account);
-                        console.log("[AccountManager] Account added: ", account);
+                        Logger.info("[AccountManager] Account added: ", account);
                     })
                     .catch(err => {
-                        console.log("[AccountManager] Error: ", err.message);
+                        Logger.info("[AccountManager] Error: ", err);
                         reject(err);
                     });
             } catch (err) {
-                console.log("[AccountManager] Error: ", err.message)
+                Logger.info("[AccountManager] Error: ", err)
                 reject(err);
             }
         });
@@ -207,7 +206,7 @@ class AccountManager {
             let loginX = lastPos ? (lastPos.x + (lastPos.width / 2 - loginWidth / 2)).toFixed(0) : undefined;
             let loginY = lastPos ? (lastPos.y + (lastPos.height / 2 - loginHeight / 2)).toFixed(0) : undefined;
             
-            const xboxManager = await authManager.launch("electron", {
+            authManager.launch("electron", {
                 title: "Microsoft Authentication",
                 icon: __dirname + "/public/img/logo.ico",
                 backgroundColor: "#1A1B1E",
@@ -215,21 +214,23 @@ class AccountManager {
                 height: loginHeight,
                 x: loginX,
                 y: loginY,
-            }).catch(err => { reject(err) });
+            })
+                .then(async (xboxManager) => {
+                    let user = await xboxManager.getMinecraft().catch(err => reject(err));
 
-            let user = await xboxManager.getMinecraft();
-
-            let savabletoken = xboxManager.save();
-            savabletoken = this.encryptToken(savabletoken);
-
-            const account = {
-                id: user.profile.id,
-                name: user.profile.name,
-                accessToken: savabletoken,
-                minecraft: user
-            };
-
-            resolve(account);
+                    let savabletoken = xboxManager.save();
+                    savabletoken = this.encryptToken(savabletoken);
+        
+                    const account = {
+                        id: user.profile.id,
+                        name: user.profile.name,
+                        accessToken: savabletoken,
+                        minecraft: user
+                    };
+        
+                    resolve(account);
+                })
+                .catch(err => reject(err));
         });
     }
 

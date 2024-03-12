@@ -455,7 +455,7 @@ main.profiles .btns {
   margin-bottom: 15px;
 }
 main.profiles .btns .newProfileBtn {
-  background-color: var(--success);
+  background-color: var(--primary-1);
   width: -moz-fit-content;
   width: fit-content;
   padding: 10px 20px;
@@ -477,6 +477,17 @@ main.profiles table tr th {
   overflow: hidden;
   white-space: nowrap;
 }
+main.profiles table tr td.loader,
+main.profiles table tr th.loader {
+  vertical-align: middle;
+}
+main.profiles table tr td.loader img,
+main.profiles table tr th.loader img {
+  vertical-align: middle;
+  height: 30px;
+  margin-right: 7px;
+  border-radius: 3px;
+}
 main.profiles table tr th {
   font-size: 20px;
 }
@@ -495,7 +506,7 @@ main.profiles table tr button {
   margin: 0 7px;
 }
 main.profiles table tr button.success {
-  background-color: var(--success);
+  background-color: var(--primary-1);
 }
 main.profiles table tr button svg {
   height: 15px;
@@ -653,7 +664,7 @@ main.mods .modlist .modbox .buttons button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--success);
+  background-color: var(--primary-1);
 }
 main.mods .modlist .modbox .buttons button svg {
   height: 25px;

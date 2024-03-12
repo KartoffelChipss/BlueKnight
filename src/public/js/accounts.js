@@ -1,3 +1,5 @@
+window.api.invoke('updateAccounts');
+
 window.bridge.updateAccounts((event, data) => {
     console.log("Received accounts: ", data);
     const userLists = document.querySelectorAll(".userlist");

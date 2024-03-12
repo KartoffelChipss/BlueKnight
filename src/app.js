@@ -163,13 +163,19 @@ if (!gotTheLock) {
             console.log("[!!!] Can add new account")
             accountManager.loginWithNewAccount(top.mainWindow)
                 .then((account) => {
-                    console.log("[!!!] Added new account")
+                    // console.log("[!!!] Added new account")
                     top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
                 })
                 .catch((e) => {
-                    console.log("[!!!] Error adding new account")
+                    // console.log("[!!!] Error adding new account")
+                    logger.error("[ACCOUNTS] Error adding new account!");
                     logger.error(e);
+                    if (e.ts && e.ts === "error.auth.minecraft.profile") top.mainWindow.webContents.send("showWarnbox", { boxid: "nomcprofile" });
                 });
+        });
+
+        ipcMain.handle("updateAccounts", (event, args) => {
+            top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         });
 
         ipcMain.handle("removeAccount", async (event, accountID) => {
@@ -221,6 +227,13 @@ if (!gotTheLock) {
             });
             store.set("profiles", prevProfiles);
 
+            top.mainWindow.webContents.send("sendProfiles", {
+                profiles: store.get("profiles"),
+                selectedProfile: store.get("selectedProfile"),
+            });
+        });
+
+        ipcMain.handle("getProfiles", (event, data) => {
             top.mainWindow.webContents.send("sendProfiles", {
                 profiles: store.get("profiles"),
                 selectedProfile: store.get("selectedProfile"),
@@ -365,13 +378,8 @@ function refreshSettings() {
 
 function proceedToMain() {
     top.mainWindow.loadFile("src/public/main.html").then(() => {
-        top.mainWindow.webContents.send("updateAccounts", accountManager.getUpdateData());
         top.mainWindow.webContents.send("sendVersion", version);
         top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
-        top.mainWindow.webContents.send("sendProfiles", {
-            profiles: store.get("profiles"),
-            selectedProfile: store.get("selectedProfile"),
-        });
         refreshSettings();
 
         logger.info(`[STARTUP] Loaded main window (${new Date() - startTimestamp}ms after start)`);

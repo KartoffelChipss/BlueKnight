@@ -13,6 +13,7 @@
 
     "accounts_add": "Add Account",
     "accounts_limit": "You have reached the maximum number of accounts",
+    "nomcprofile": "This account does not own Minecraft",
 
     "loading": "Loading ...",
 
