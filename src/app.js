@@ -1,15 +1,14 @@
-const { app, BrowserWindow, Tray, Notification, dialog, shell, nativeImage, Menu, screen, nativeTheme, safeStorage } = require("electron");
+const { app, BrowserWindow, shell, nativeImage } = require("electron");
 const path = require("path");
 const fetch = require("cross-fetch");
 const { ipcMain } = require("electron/main");
 const Store = require("electron-store");
 const fs = require("fs");
-const version = require("../package.json").version;
 const os = require("os");
 const logger = require("electron-log");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
-const { blueKnightRoot, profilespath, downloadFile } = require("./functions/util.js");
+const { blueKnightRoot, profilespath, downloadFile, checkForJava } = require("./functions/util.js");
 
 logger.transports.file.resolvePathFn = () => path.join(blueKnightRoot, "logs.log");
 logger.transports.file.level = "info";
@@ -61,45 +60,11 @@ if (!gotTheLock) {
             app.setAppUserModelId("BlueKnight Launcher");
         }
 
-        const setJavaPath = store.get("javaPath");
-        if (setJavaPath) {
-            if (!fs.existsSync(setJavaPath)) {
-                logger.info("[JAVA] Custom set path does not exist");
-                foundjava = false;
-                logger.info("[JAVA] Java not found. Opening modal after login.");
-            } else {
-                foundjava = true;
-                logger.info("[JAVA] Using custom set java path: " + setJavaPath);
-            }
-        } else {
-            require("find-java-home")(async (err, home) => {
-                logger.info("[JAVA] Looking for installed java path...");
-                if (err) return logger.error(err);
-
-                if (!home) {
-                    logger.info("[JAVA] Could not find java path");
-                    foundjava = false;
-                    logger.info("[JAVA] Java not found. Opening modal after login.");
-                    return;
-                }
-
-                let javaPath;
-                if (process.platform === "win32") javaPath = path.join(home, "bin", "javaw.exe");
-                else javaPath = path.join(home, "bin", "java");
-
-                if (!fs.existsSync(javaPath)) {
-                    logger.info("[JAVA] Could not find java path");
-                    foundjava = false;
-                    logger.info("[JAVA] Java not found. Opening modal after login.");
-                    return;
-                }
-
-                foundjava = true;
-                logger.info("[JAVA] Found installed java!");
-                store.set("javaPath", javaPath);
-                logger.info("[JAVA] Java path: " + javaPath);
-            });
+        if (process.platform === "darwin") {
+            app.dock.setIcon(nativeImage.createFromPath(path.join(__dirname, "public/img/logo256x256.png")));
         }
+
+        foundjava = checkForJava();
 
         if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot);
         if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath);
@@ -337,7 +302,7 @@ if (!gotTheLock) {
         });
 
         top.mainWindow.loadFile("src/public/login.html").then(() => {
-            top.mainWindow.webContents.send("sendVersion", version);
+            top.mainWindow.webContents.send("sendVersion", app.getVersion());
             logger.info(`[STARTUP] Loaded login window (${new Date() - startTimestamp}ms after start)`);
         });
 
@@ -363,7 +328,7 @@ function refreshSettings() {
 
 function proceedToMain() {
     top.mainWindow.loadFile("src/public/main.html").then(() => {
-        top.mainWindow.webContents.send("sendVersion", version);
+        top.mainWindow.webContents.send("sendVersion", app.getVersion());
         top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
         refreshSettings();
 
