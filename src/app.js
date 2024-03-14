@@ -6,27 +6,22 @@ const Store = require("electron-store");
 const fs = require("fs");
 const version = require("../package.json").version;
 const os = require("os");
-const { pipeline } = require("stream/promises");
 const logger = require("electron-log");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
-
-const blueKnightRoot = path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`);
-const profilespath = path.join(blueKnightRoot, `profiles`);
+const { blueKnightRoot, profilespath, downloadFile } = require("./functions/util.js");
 
 logger.transports.file.resolvePathFn = () => path.join(blueKnightRoot, "logs.log");
 logger.transports.file.level = "info";
 
-const { Client } = require("minecraft-launcher-core");
-const launcher = new Client();
-const { vanilla, fabric, forge, liner, quilt } = require("tomate-loaders");
-
 const { AccountManager } = require("./functions/AccountManager.js");
 let accountManager = new AccountManager();
 
+const MinecraftManager = require("./functions/MinecraftManager.js");
+let minecraftManager = new MinecraftManager();
+
 const devMode = process.env.NODE_ENV === 'development';
 
-let downlaodingJava = false;
 let foundjava = false;
 
 let startTimestamp = new Date();
@@ -44,13 +39,6 @@ const store = new Store();
 if (devMode) store.openInEditor();
 
 let top = {};
-
-const downloadFile = async (url, profile, filename) => {
-    let profileModsPath = path.join(profilespath, profile, "mods");
-    if (!fs.existsSync(profileModsPath)) fs.mkdirSync(profileModsPath);
-    const destination = path.resolve(profileModsPath, filename);
-    pipeline((await fetch(url)).body, fs.createWriteStream(destination));
-};
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -113,8 +101,6 @@ if (!gotTheLock) {
             });
         }
 
-        logger.info("[APP] Java functions executed!");
-
         if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot);
         if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath);
 
@@ -151,7 +137,7 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("initLogin", async (event, args) => {
-            await accountManager.init(top.mainWindow);
+            await accountManager.init();
             proceedToMain();
         });
 
@@ -190,7 +176,10 @@ if (!gotTheLock) {
 
         ipcMain.handle("launchMC", (event, arg) => {
             const selectedProfile = store.get("selectedProfile");
-            launchMinecraft(selectedProfile.name ?? "profile1", selectedProfile.loader ?? "fabric", selectedProfile.version ?? "1.20.2");
+            minecraftManager.launch(selectedProfile.name ?? "profile1", selectedProfile.loader ?? "fabric", selectedProfile.version ?? "1.20.4", accountManager.getActiveAccount())
+                .catch((err) => {
+                    logger.error("[LAUNCHER] ", err);
+                });
         });
 
         ipcMain.handle("getSelectedProfileMods", async (event, arg) => {
@@ -290,8 +279,6 @@ if (!gotTheLock) {
             });
         });
 
-        ipcMain.handle("installjava", (event, data) => { });
-
         ipcMain.handle("getLang", (event, data) => {
             logger.info("[LANG] Requested lang refresh");
             let selectedLang = store.get("lang") ?? "en_US";
@@ -325,8 +312,6 @@ if (!gotTheLock) {
 
         trayManager.init(top, app, __dirname);
 
-        let icon = process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png");
-
         const lastPos = store.get("windowPosition");
 
         top.mainWindow = new BrowserWindow({
@@ -343,7 +328,7 @@ if (!gotTheLock) {
             backgroundColor: "#1A1B1E",
             resizable: true,
             autoHideMenuBar: false,
-            icon,
+            icon: process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png"),
             webPreferences: {
                 preload: path.join(__dirname, "preload.js"),
                 nodeIntegration: false,
@@ -390,97 +375,3 @@ function proceedToMain() {
         }
     });
 }
-
-let launchMinecraft = async (profileName, loader, version) => {
-    const currentuser = accountManager.getActiveAccount().minecraft;
-    if (!currentuser) return;
-
-    if (downlaodingJava) {
-        top.mainWindow.webContents.send("showWarnbox", { boxid: "downloadingjava" });
-        top.mainWindow.webContents.send("sendMCstarted");
-        return;
-    }
-
-    let rootPath = path.join(profilespath, profileName);
-
-    logger.info("Root Path: ");
-    logger.info(rootPath);
-
-    let launchConfig;
-    if (loader === "fabric") {
-        logger.info("[LAUNCHER] Getting Fabric config...");
-        launchConfig = await fabric.getMCLCLaunchConfig({
-            gameVersion: version,
-            rootPath,
-        });
-        logger.info("[LAUNCHER] Finished getting Fabric config!");
-    } else if (loader === "forge") {
-        logger.info("[LAUNCHER] Starting Forge...");
-        launchConfig = await forge.getMCLCLaunchConfig({
-            gameVersion: version,
-            rootPath,
-        });
-        logger.info("[LAUNCHER] Finished getting Forge config!");
-    } else if (loader === "quilt") {
-        logger.info("[LAUNCHER] Starting Quilt...");
-        launchConfig = await quilt.getMCLCLaunchConfig({
-            gameVersion: version,
-            rootPath,
-        });
-        logger.info("[LAUNCHER] Finished getting Quilt config!");
-    } else {
-        logger.info("[LAUNCHER] Starting Vanilla...");
-        launchConfig = await vanilla.getMCLCLaunchConfig({
-            gameVersion: version,
-            rootPath,
-        });
-        logger.info("[LAUNCHER] Finished getting Vanilla config!");
-    }
-
-    let opts = {
-        ...launchConfig,
-        authorization: currentuser.mclc(),
-        overrides: {
-            detached: false,
-        },
-        memory: {
-            max: (store.get("maxMemMB") || "4000") + "M",
-            min: "2G",
-        },
-        javaPath: store.get("javaPath"),
-    };
-
-    logger.info("[LAUNCHER] Using javapath: " + store.get("javaPath"));
-
-    logger.info("[LAUNCHER] Launching game...");
-    launcher.launch(opts);
-    logger.info("[LAUNCHER] Launched game!");
-};
-
-if (devMode) launcher.on("debug", (e) => logger.info("[LAUNCHER-DEBUG] " + e));
-
-launcher.on(
-    "data",
-    liner((line) => {
-        if (line.match(/\[Render thread\/INFO\]: Setting user:/g) || line.match(/\[MCLC\]: Launching with arguments/)) {
-            top.mainWindow.webContents.send("sendMCstarted");
-            if (store.get("minimizeOnStart")) top.mainWindow.hide();
-        }
-
-        logger.info("[LAUNCHER-DATA] " + line);
-    })
-);
-
-launcher.on("progress", (e) => {
-    if (devMode) {
-        logger.info("[LAUNCHER-PROGRESS]:");
-        logger.info(e);
-    }
-    top.mainWindow.webContents.send("sendDownloadProgress", e);
-});
-
-launcher.on("close", (e) => {
-    logger.info("[LAUNCHER] Launcher closed!");
-    top.mainWindow.webContents.send("sendMCstarted");
-    top.mainWindow.show();
-});

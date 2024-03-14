@@ -2,8 +2,8 @@ const { Minecraft } = require("msmc");
 const { Auth } = require("msmc");
 const authManager = new Auth("select_account");
 const Store = require("electron-store");
-const { safeStorage } = require("electron");
-const Logger = require("electron-log");
+const { safeStorage, BrowserWindow } = require("electron");
+const logger = require("electron-log");
 const store = new Store();
 
 /**
@@ -16,30 +16,23 @@ const store = new Store();
 
 class AccountManager {
 
-    /**
-     * @param {Electron.BrowserWindow} mainWindow - The main window of the application
-     */
-    constructor(mainWindow) {
-        this.mainWindow = mainWindow;
+    constructor() {
         this.activeAccountID = store.get("activeAccount") || null;
         this.accounts = store.get("accounts") || [];
     }
 
     /**
      * Initializes the account manager
-     * @param {Electron.BrowserWindow} mainWindow - The main window of the application
      * @returns {Promise<void>}
      */
-    async init(mainWindow) {
-        this.mainWindow = mainWindow;
-    
+    async init() {
         if (this.activeAccountID === null || (this.activeAccountID && !this.findAccount(this.activeAccountID))) {
             try {
                 let newAccount = await this.openMicrosoftLogin();
                 this.addAccount(newAccount);
                 this.selectAccount(newAccount.id);
             } catch (err) {
-                Logger.error(err.message);
+                logger.error(err.message);
             }
         }
     
@@ -54,7 +47,7 @@ class AccountManager {
                 if (tokenString) tokenXbox = await authManager.refresh(tokenString);
                 if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
             } catch (err) {
-                Logger.error(err.message);
+                logger.error(err.message);
                 this.removeAccount(account.id);
             }
     
@@ -64,42 +57,47 @@ class AccountManager {
         }
     
         this.sendUpdatedAccounts();
-    }    
+    }
 
     loginWithNewAccount() {
         return new Promise(async (resolve, reject) => {
-            Logger.info("[AccountManager] Logging in with new account")
+            logger.info("[AccountManager] Logging in with new account")
             try {
                 this.openMicrosoftLogin()
                     .then(account => {
-                        Logger.info("[AccountManager] Account added (pre): ", account);
+                        // Logger.info("[AccountManager] Account added (pre): ", account);
                         this.addAccount(account);
                         this.selectAccount(account.id);
                         this.sendUpdatedAccounts();
                         resolve(account);
-                        Logger.info("[AccountManager] Account added: ", account);
+                        logger.info("[AccountManager] Account added: ", account.name);
                     })
                     .catch(err => {
-                        Logger.info("[AccountManager] Error: ", err);
+                        logger.info("[AccountManager] Error: ", err);
                         reject(err);
                     });
             } catch (err) {
-                Logger.info("[AccountManager] Error: ", err)
+                logger.info("[AccountManager] Error: ", err)
                 reject(err);
             }
         });
     }
 
-    sendUpdatedAccounts(mainWindow) {
-        // console.log(mainWindow.webContents)
-        // // console.log("Update accounts: ", {
-        // //     current: this.getActiveAccount(),
-        // //     accounts: this.getAccounts().filter(account => account.id !== this.activeAccountID)
-        // // })
-        // mainWindow.webContents.send("updateAccounts", {
+    loginFromToken(token) {
+
+    }
+
+    sendUpdatedAccounts() {
+        let mainWindow = BrowserWindow.getAllWindows()[0];
+        if (!mainWindow) return;
+        // console.log("Update accounts: ", {
         //     current: this.getActiveAccount(),
         //     accounts: this.getAccounts().filter(account => account.id !== this.activeAccountID)
-        // });
+        // })
+        mainWindow.webContents.send("updateAccounts", {
+            current: this.getActiveAccount(),
+            accounts: this.getAccounts().filter(account => account.id !== this.activeAccountID)
+        });
     }
 
     getUpdateData() {
