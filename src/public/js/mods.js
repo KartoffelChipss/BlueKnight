@@ -181,6 +181,7 @@ function downloadMod(modid) {
             targetProfile,
             modid,
             modversion,
+            modversionid: versiontoDownload.id,
             filetoDownload
         });
     });

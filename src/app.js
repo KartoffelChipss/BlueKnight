@@ -19,6 +19,9 @@ let accountManager = new AccountManager();
 const MinecraftManager = require("./functions/MinecraftManager.js");
 let minecraftManager = new MinecraftManager();
 
+const ProfileManager = require("./functions/ProfileManager.js");
+const profileManager = new ProfileManager();
+
 const devMode = process.env.NODE_ENV === 'development';
 
 let foundjava = false;
@@ -140,21 +143,21 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("launchMC", (event, arg) => {
-            const selectedProfile = store.get("selectedProfile");
+            const selectedProfile = profileManager.getSelectedProfile();
             minecraftManager.launch(selectedProfile.name ?? "profile1", selectedProfile.loader ?? "fabric", selectedProfile.version ?? "1.20.4", accountManager.getActiveAccount())
                 .catch((err) => {
                     logger.error("[LAUNCHER] ", err);
+                    top.mainWindow.webContents.send("sendMCstarted");
                 });
         });
 
         ipcMain.handle("getSelectedProfileMods", async (event, arg) => {
-            const selectedProfile = store.get("selectedProfile");
-            const profileModsPath = path.join(profilespath, selectedProfile.name, "mods");
+            const profileModsPath = profileManager.getSelectedModsPath();
             const mods = fs.readdirSync(path.resolve(profileModsPath));
             mods = mods.map(async (mod) => {
                 if (arg.idonly) return mod.split("_")[0];
 
-                const res = await fetch(`https://api.modrinth.com/api/v2/project/${mod.split("_")[0]}`);
+                const res = await fetch(`https://api.modrinth.com/v2/project/${mod.split("_")[0]}`);
                 const data = await res.json();
                 return {
                     id: mod.split("_")[0],
@@ -168,45 +171,21 @@ if (!gotTheLock) {
         ipcMain.handle("createProfile", async (event, data) => {
             if (!data.name || !data.loader || !data.version) return;
 
-            let profilePath = path.join(profilespath, data.name);
-            if (!fs.existsSync(profilePath)) {
-                fs.mkdirSync(profilePath);
-            }
-
-            let prevProfiles = store.get("profiles");
-            prevProfiles.push({
+            profileManager.addProfile({
                 name: data.name,
                 loader: data.loader,
                 version: data.version,
             });
-            store.set("profiles", prevProfiles);
-
-            top.mainWindow.webContents.send("sendProfiles", {
-                profiles: store.get("profiles"),
-                selectedProfile: store.get("selectedProfile"),
-            });
         });
 
         ipcMain.handle("getProfiles", (event, data) => {
-            top.mainWindow.webContents.send("sendProfiles", {
-                profiles: store.get("profiles"),
-                selectedProfile: store.get("selectedProfile"),
-            });
+            profileManager.sendProfilesUpdate();
         });
 
         ipcMain.handle("selectProfile", (event, data) => {
             if (!data.name || !data.loader || !data.version) return;
 
-            store.set("selectedProfile", {
-                name: data.name,
-                loader: data.loader,
-                version: data.version,
-            });
-
-            top.mainWindow.webContents.send("sendProfiles", {
-                profiles: store.get("profiles"),
-                selectedProfile: store.get("selectedProfile"),
-            });
+            profileManager.selectProfile(data.name);
 
             logger.info(`[PROFILES] Switched to ${data.name}`);
         });
@@ -219,13 +198,13 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("openRootFolder", (event, data) => {
-            logger.info("[PROFILES] Opened folder '" + blueKnightRoot + "'");
+            logger.info("[PROFILES] Opened folder '" + profilespath + "'");
             shell.openPath(profilespath);
         });
 
         ipcMain.handle("downloadMod", (event, data) => {
             logger.info("[DOWNLOADS] Recieved Mod download request for " + data.filetoDownload.filename);
-            downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.filetoDownload.filename}`);
+            downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.modversionid}_${data.filetoDownload.filename}`);
             logger.info("[DOWNLOADS] Finished downlaoding " + data.filetoDownload.filename);
             top.mainWindow.webContents.send("modDownloadResult", {
                 result: "success",
@@ -245,7 +224,6 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("getLang", (event, data) => {
-            logger.info("[LANG] Requested lang refresh");
             let selectedLang = store.get("lang") ?? "en_US";
 
             if (selectedLang === "auto" && (app.getLocale() === "de" || app.getLocale() === "de_DE")) selectedLang = "de_DE";
@@ -256,50 +234,15 @@ if (!gotTheLock) {
                 en_US: require("./lang/en_US.json"),
                 de_DE: require("./lang/de_DE.json"),
             });
+
+            logger.info("[LANG] Sent lang refresh");
         });
 
         logger.info("[STARTUP] Regitsered all ipc handler");
 
-        if (!store.get("profiles") || store.get("profiles").length <= 0) {
-            store.set("profiles", [
-                {
-                    name: "Fabric 1.20.2",
-                    loader: "fabric",
-                    version: "1.20.2",
-                },
-            ]);
-            store.set("selectedProfile", {
-                name: "Fabric 1.20.2",
-                loader: "fabric",
-                version: "1.20.2",
-            });
-        }
-
         trayManager.init(top, app, __dirname);
 
-        const lastPos = store.get("windowPosition");
-
-        top.mainWindow = new BrowserWindow({
-            title: "BlueKnight Launcher",
-            width: lastPos ? lastPos.width : 1200,
-            height: lastPos ? lastPos.height : 800,
-            minWidth: 750,
-            minHeight: 500,
-            x: lastPos ? lastPos.x : undefined,
-            y: lastPos ? lastPos.y : undefined,
-            center: true,
-            frame: false,
-            show: false,
-            backgroundColor: "#1A1B1E",
-            resizable: true,
-            autoHideMenuBar: false,
-            icon: process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png"),
-            webPreferences: {
-                preload: path.join(__dirname, "preload.js"),
-                nodeIntegration: false,
-                contextIsolation: true,
-            },
-        });
+        top.mainWindow = createMainWindow();
 
         top.mainWindow.loadFile("src/public/login.html").then(() => {
             top.mainWindow.webContents.send("sendVersion", app.getVersion());
@@ -338,5 +281,35 @@ function proceedToMain() {
             top.mainWindow.webContents.send("showJavaModal", {});
             logger.info("[JAVA] Sent JavaInstallModal!");
         }
+    });
+}
+
+/**
+ * Create the main window
+ * @returns {BrowserWindow} - The main window
+ */
+function createMainWindow() {
+    const lastPos = store.get("windowPosition");
+    
+    return new BrowserWindow({
+        title: "BlueKnight Launcher",
+        width: lastPos ? lastPos.width : 1200,
+        height: lastPos ? lastPos.height : 800,
+        minWidth: 750,
+        minHeight: 500,
+        x: lastPos ? lastPos.x : undefined,
+        y: lastPos ? lastPos.y : undefined,
+        center: true,
+        frame: false,
+        show: false,
+        backgroundColor: "#1A1B1E",
+        resizable: true,
+        autoHideMenuBar: false,
+        icon: process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png"),
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
     });
 }

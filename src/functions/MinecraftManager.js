@@ -35,14 +35,14 @@ class MinecraftManager {
                 logger.info("[LAUNCHER-PROGRESS]:");
                 logger.info(e);
             }
-            if (mainWindow) mainWindow.webContents.send("sendDownloadProgress", e);
+            if (getMainWindow()) getMainWindow().webContents.send("sendDownloadProgress", e);
         });
         
         this.launcher.on("close", (e) => {
             logger.info("[LAUNCHER] Launcher closed!");
-            if (mainWindow) {
-                mainWindow.webContents.send("sendMCstarted");
-                mainWindow.show();
+            if (getMainWindow()) {
+                getMainWindow().webContents.send("sendMCstarted");
+                getMainWindow().show();
             }
         });
 
