@@ -85,6 +85,14 @@ class ProfileManager {
         store.set("selectedProfile", this.selectedProfile);
         this.sendProfilesUpdate();
     }
+    
+    /**
+     * Find a profile by its name
+     * @param {String} name - The name of the profile to find
+     */
+    findProfile(name) {
+        return this.profiles.find(profile => profile.name === name);
+    }
 
     /**
      * Get the path to a profile
@@ -99,6 +107,14 @@ class ProfileManager {
      */
     getSelectedPath() {
         return this.getPath(this.selectedProfile);
+    }
+
+    /**
+     * Get the path to a profile
+     * @param {import('../types').Profile} profile 
+     */
+    getModsPath(profile) {
+        return path.join(this.getPath(profile), "mods");
     }
 
     /**

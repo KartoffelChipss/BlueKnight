@@ -37,7 +37,10 @@ contextBridge.exposeInMainWorld(
                 "addAccount",
                 "removeAccount",
                 "selectAccount",
-                "getProfiles"
+                "getProfiles",
+                "getProfileData",
+                "getProfileMods",
+                "deleteProfileMod",
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);

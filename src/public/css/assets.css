@@ -74,6 +74,7 @@ select:focus-visible {
 
 select {
   border-right: 16px solid transparent;
+  font-family: Montserrat, sans-serif;
 }
 
 button,
@@ -82,6 +83,7 @@ a.button {
   color: var(--text-color);
   text-decoration: none;
   font-size: 18px;
+  font-family: Montserrat, sans-serif;
   border: none;
   padding: 10px 13px;
   border-radius: 7px;
@@ -105,12 +107,12 @@ a.button.icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
 }
 button.icon svg,
 a.button.icon svg {
   height: 25px;
   width: 25px;
-  margin-right: 7px;
 }
 button.icon.icon-smol svg,
 a.button.icon.icon-smol svg {
@@ -145,6 +147,10 @@ a.button.clear {
   color: var(--text-color);
   border: none;
   outline: none;
+}
+button.redhover:hover,
+a.button.redhover:hover {
+  background-color: var(--danger);
 }
 
 input {

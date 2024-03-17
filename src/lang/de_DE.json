@@ -45,6 +45,13 @@
     "profiles_loader_name": "Loader",
     "profiles_version_name": "Version",
 
+    "profileview_play": "Spielen",
+    "profileview_openfolder": "Ordner öffnen",
+    "profileview_addmods": "Mods hinzufügen",
+    "profileview_updatemods": "Mods updaten",
+    "profileview_removeprofile": "Profil löschen",
+    "profileview_nomods": "Keine Mods installiert",
+
     "mods_title": "Mods durchsuchen",
     "mods_search": "Nach Mods suchen",
     "mod_download_title": "Mod herunterladen",

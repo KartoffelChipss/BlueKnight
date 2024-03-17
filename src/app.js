@@ -6,6 +6,9 @@ const Store = require("electron-store");
 const fs = require("fs");
 const os = require("os");
 const logger = require("electron-log");
+const NodeCace = require("node-cache");
+const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
+const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
 const { blueKnightRoot, profilespath, downloadFile, checkForJava } = require("./functions/util.js");
@@ -92,6 +95,15 @@ if (!gotTheLock) {
                 shell.openExternal(args.url);
                 return;
             }
+            if (args.path) {
+                shell.openPath(args.path);
+                return;
+            }
+            if (args.item) {
+                console.log("Opening mod in folder: " + args.item);  
+                shell.showItemInFolder(args.item);
+                return;
+            }
         });
 
         ipcMain.handle("setMaxMem", (event, value) => {
@@ -151,21 +163,59 @@ if (!gotTheLock) {
                 });
         });
 
-        ipcMain.handle("getSelectedProfileMods", async (event, arg) => {
-            const profileModsPath = profileManager.getSelectedModsPath();
-            const mods = fs.readdirSync(path.resolve(profileModsPath));
-            mods = mods.map(async (mod) => {
-                if (arg.idonly) return mod.split("_")[0];
+        ipcMain.handle("deleteProfileMod", (event, data) => {
+            if (!data.profileName || !data.modName) return;
 
-                const res = await fetch(`https://api.modrinth.com/v2/project/${mod.split("_")[0]}`);
-                const data = await res.json();
-                return {
-                    id: mod.split("_")[0],
-                    mod: data,
-                };
-            });
+            const profileModsPath = profileManager.getModsPath(profileManager.findProfile(data.profileName));
+            const modPath = path.join(profileModsPath, data.modName);
+            fs.unlinkSync(modPath);
+            logger.info("[PROFILES] Removed mod: " + data.profileName + "/" + data.modName);
+        });
 
-            top.mainWindow.webContents.send("sendSelectedProfileMods", mods);
+        ipcMain.handle("getProfileMods", async (event, args) => {
+            if (!args.name) return;
+            const profile = profileManager.findProfile(args.name);
+            const profileModsPath = profileManager.getModsPath(profile);
+
+            if (!fs.existsSync(profileModsPath)) return null;
+
+            let modnames = fs.readdirSync(profileModsPath);
+            let mods = [];
+
+            for (let i = 0; i < modnames.length; i++) {
+                const modname = modnames[i];
+                const modId = modname.split("_")[0];
+
+                if (modId.length !== 8) {
+                    mods.push({
+                        id: null,
+                        versionid: null,
+                        versionData: null,
+                        name: modname,
+                        path: path.join(profileModsPath, modname),
+                        data: null,
+                        foundOnMR: false,
+                    });
+                    continue;
+                }
+
+                const versionid = modname.split("_")[1] ?? null;
+
+                const data = await fetchModfromMR(modId);
+                const versionData = await fetchModVersionfromMR(modId, versionid);
+
+                mods.push({
+                    id: modId,
+                    versionid: versionid,
+                    versionData: versionData,
+                    name: modname,
+                    path: path.join(profileModsPath, modname),
+                    data: data,
+                    foundOnMR: true,
+                });
+
+                if (i === modnames.length - 1) return mods;
+            }
         });
 
         ipcMain.handle("createProfile", async (event, data) => {
@@ -176,6 +226,11 @@ if (!gotTheLock) {
                 loader: data.loader,
                 version: data.version,
             });
+        });
+
+        ipcMain.handle("getProfileData", (event, name) => {
+            if (!name) return;
+            return profileManager.findProfile(name);
         });
 
         ipcMain.handle("getProfiles", (event, data) => {
@@ -290,7 +345,7 @@ function proceedToMain() {
  */
 function createMainWindow() {
     const lastPos = store.get("windowPosition");
-    
+
     return new BrowserWindow({
         title: "BlueKnight Launcher",
         width: lastPos ? lastPos.width : 1200,
@@ -312,4 +367,25 @@ function createMainWindow() {
             contextIsolation: true,
         },
     });
+}
+
+async function fetchModfromMR(modid) {
+    if (modinfoCache.has(modid)) return modinfoCache.get(modid);
+
+    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}`);
+    // console.log("Fetching: " + `https://api.modrinth.com/v2/project/${modid}`)
+    const data = await res.json();
+    modinfoCache.set(modid, data);
+    return data;
+}
+
+async function fetchModVersionfromMR(modid, versionid) {
+    if (!versionid || versionid.length !== 8) return null;
+    const cacheKey = `${modid}_${versionid}`;
+    if (modVersionCache.has(cacheKey)) return modVersionCache.get(cacheKey);
+
+    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}/version/${versionid}`);
+    const data = await res.json();
+    modVersionCache.set(cacheKey, data);
+    return data;
 }
