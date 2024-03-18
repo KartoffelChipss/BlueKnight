@@ -1,4 +1,7 @@
 {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+
     "login_title": "Anmelden...",
     "login_desc": "Bitte warte einen Moment, du wirst gerade angemeldet.<br><br>Wenn länger nichts passiert, nutze den button hier:",
     "login_btn": "Anmelden",
@@ -51,6 +54,10 @@
     "profileview_updatemods": "Mods updaten",
     "profileview_removeprofile": "Profil löschen",
     "profileview_nomods": "Keine Mods installiert",
+    "profileview_showmodinfolder": "Mod im Ordner anzeigen",
+    "profileview_deletemod": "Mod löschen",
+    "profileview_deleteprofile": "Profil löschen",
+    "profileview_delete_areyousure": "Alle daten werden unwiderruflich gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!",
 
     "mods_title": "Mods durchsuchen",
     "mods_search": "Nach Mods suchen",

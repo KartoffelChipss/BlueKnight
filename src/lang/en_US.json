@@ -1,4 +1,7 @@
 {
+    "cancel": "Cancel",
+    "delete": "Delete",
+
     "login_title": "Logging in...",
     "login_desc": "Please wait a moment, we are logging you in.<br><br>If nothing happens, please use the button below.",
     "login_btn": "Login",
@@ -51,6 +54,10 @@
     "profileview_updatemods": "Update Mods",
     "profileview_removeprofile": "Delete Profile",
     "profileview_nomods": "No Mods installed",
+    "profileview_showmodinfolder": "Show in File-Explorer",
+    "profileview_deletemod": "Delete mod",
+    "profileview_deleteprofile": "Delete Profile",
+    "profileview_delete_areyousure": "All the data of this profile will be deleted. This action cannot be undone. Are you sure?",
 
     "mods_title": "Search Mods",
     "mods_search": "Search Mods",

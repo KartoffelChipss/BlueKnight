@@ -174,6 +174,12 @@ a.button {
     }
 }
 
+.buttonrow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 input {
     background-color: var(--grey-2);
     border: none;
@@ -299,6 +305,14 @@ input {
         h2 {
             margin: 0;
             margin-bottom: 20px;
+        }
+
+        p {
+            margin-top: 0;
+
+            &:last-of-type {
+                margin-bottom: 20px;
+            }
         }
 
         .closebtn {

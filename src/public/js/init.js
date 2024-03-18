@@ -15,8 +15,7 @@ window.bridge.sendSettings((event, settings) => {
     if (document.getElementById("javaPath").value === "undefined") document.getElementById("javaPath").value = "";
 });
 
-window.bridge.sendVersion((event, version) => {
-    console.log("Received version: ", version);
+window.api.invoke('getVersion').then((version) => {
     document.getElementById("versionnum").innerHTML = version;
 });
 

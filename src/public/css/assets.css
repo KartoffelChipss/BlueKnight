@@ -153,6 +153,12 @@ a.button.redhover:hover {
   background-color: var(--danger);
 }
 
+.buttonrow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 input {
   background-color: var(--grey-2);
   border: none;
@@ -261,6 +267,12 @@ input {
 }
 .modal .modalBox h2 {
   margin: 0;
+  margin-bottom: 20px;
+}
+.modal .modalBox p {
+  margin-top: 0;
+}
+.modal .modalBox p:last-of-type {
   margin-bottom: 20px;
 }
 .modal .modalBox .closebtn {

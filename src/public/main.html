@@ -355,15 +355,12 @@
                     </button>
                     <button data-langtitle="profileview_openfolder" title="Ordner öffnen" type="button" class="icon grey openfolderBtn" onclick="window.api.invoke('openRootFolder')">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2H8.43845C9.81505 2 11.015 2.93689 11.3489 4.27239L11.7808 6H13.5H20C21.6569 6 23 7.34315 23 9V19C23 20.6569 21.6569 22 20 22H4C2.34315 22 1 20.6569 1 19V10V9V5ZM3 9V10V19C3 19.5523 3.44772 20 4 20H20C20.5523 20 21 19.5523 21 19V9C21 8.44772 20.5523 8 20 8H13.5H11.7808H4C3.44772 8 3 8.44772 3 9ZM9.71922 6H4C3.64936 6 3.31278 6.06015 3 6.17071V5C3 4.44772 3.44772 4 4 4H8.43845C8.89732 4 9.2973 4.3123 9.40859 4.75746L9.71922 6Z" fill="#fefefe"></path> </g></svg>
-                        <!-- <span data-lang="profileview_openfolder">Ordner öffnen</span> -->
                     </button>
                     <button data-langtitle="profileview_updatemods" title="Update mods" type="button" class="icon grey openfolderBtn" onclick="window.api.invoke('openRootFolder')">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 21C16.9706 21 21 16.9706 21 12C21 9.69494 20.1334 7.59227 18.7083 6L16 3M12 3C7.02944 3 3 7.02944 3 12C3 14.3051 3.86656 16.4077 5.29168 18L8 21M21 3H16M16 3V8M3 21H8M8 21V16" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        <!-- <span data-lang="profileview_openfolder">Ordner öffnen</span> -->
                     </button>
-                    <button data-langtitle="profileview_removeprofile" title="Update mods" type="button" class="icon grey redhover openfolderBtn" onclick="window.api.invoke('openRootFolder')">
+                    <button data-langtitle="profileview_removeprofile" title="Delete profile" type="button" class="icon grey redhover openfolderBtn" onclick="openModal('deleteProfileModal')">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        <!-- <span data-lang="profileview_openfolder">Ordner öffnen</span> -->
                     </button>
                 </div>
 
@@ -517,16 +514,12 @@
     <div class="modal" id="downloadModModal">
         <div class="modalBox form">
             <button type="button" class="closebtn" onclick="closeDownloadModModal()">
-                <svg width="64px"
-                    height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
-                    stroke="#fefefe">
+                <svg width="64px" height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
-                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
-                            stroke-linejoin="round"></path>
-                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="3" stroke-linecap="round"
-                            stroke-linejoin="round"></path>
+                        <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
                     </g>
                 </svg>
             </button>
@@ -534,6 +527,25 @@
             <h2 data-lang="mod_download_title">Mod herunterladen</h2>
             <select id="modDownloadProfileSelect"></select>
             <button type="button" id="modDownloadButton" class="submit" onclick="downloadMod()" data-lang="mod_download_btn">Herunterladen</button>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteProfileModal">
+        <div class="modalBox form">
+            <button type="button" class="closebtn" onclick="closeModal('deleteProfileModal')">
+                <svg width="64px" height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier"> <path d="M3 21.32L21 3.32001" stroke="#fefefe" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3 3.32001L21 21.32" stroke="#fefefe" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path> </g>
+                </svg>
+            </button>
+
+            <h2 data-lang="profileview_deleteprofile">Profil löschen</h2>
+            <p data-lang="profileview_delete_areyousure">Alle daten werden unwiderruflich gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</p>
+            <div class="buttonrow">
+                <button type="button" class="submit" onclick="deleteProfile()" data-lang="delete">Löschen</button>
+                <button type="button" class="cancel" onclick="closeModal('deleteProfileModal')" data-lang="cancel">Abbrechen</button>
+            </div>
         </div>
     </div>
 

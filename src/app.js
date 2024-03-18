@@ -99,8 +99,7 @@ if (!gotTheLock) {
                 shell.openPath(args.path);
                 return;
             }
-            if (args.item) {
-                console.log("Opening mod in folder: " + args.item);  
+            if (args.item) {  
                 shell.showItemInFolder(args.item);
                 return;
             }
@@ -293,6 +292,10 @@ if (!gotTheLock) {
             logger.info("[LANG] Sent lang refresh");
         });
 
+        ipcMain.handle("getVersion", (event, data) => {
+            return app.getVersion();
+        });
+
         logger.info("[STARTUP] Regitsered all ipc handler");
 
         trayManager.init(top, app, __dirname);
@@ -300,7 +303,6 @@ if (!gotTheLock) {
         top.mainWindow = createMainWindow();
 
         top.mainWindow.loadFile("src/public/login.html").then(() => {
-            top.mainWindow.webContents.send("sendVersion", app.getVersion());
             logger.info(`[STARTUP] Loaded login window (${new Date() - startTimestamp}ms after start)`);
         });
 
@@ -326,7 +328,6 @@ function refreshSettings() {
 
 function proceedToMain() {
     top.mainWindow.loadFile("src/public/main.html").then(() => {
-        top.mainWindow.webContents.send("sendVersion", app.getVersion());
         top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
         refreshSettings();
 

@@ -208,11 +208,6 @@ window.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.keyCode === 13) && document.activeElement === searchInput) {
         searchMods(searchInput.value);
     }
-
-    if ((e.key === "Escape" || e.keyCode === 27)) {
-        if (document.getElementById("downloadModModal").classList.contains("_shown")) return closeDownloadModModal();
-        changeSection("main");
-    }
 });
 
 function capitalizeFirstLetter(str) {

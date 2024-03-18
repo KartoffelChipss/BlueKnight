@@ -41,6 +41,7 @@ contextBridge.exposeInMainWorld(
                 "getProfileData",
                 "getProfileMods",
                 "deleteProfileMod",
+                "getVersion",
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);
@@ -51,10 +52,6 @@ contextBridge.exposeInMainWorld(
 
 contextBridge.exposeInMainWorld(
     'bridge', {
-        // From main to render
-        sendVersion: (message) => {
-            ipcRenderer.on('sendVersion', message);
-        },
         sendProfile: (message) => {
             ipcRenderer.on("sendProfile", message);
         },
