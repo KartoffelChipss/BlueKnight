@@ -238,7 +238,12 @@ class AccountManager {
      * @returns {String} - The encrypted token
      */
     encryptToken(token) {
-        return safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(token).toString("base64") : token;
+        try {
+            return safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(token).toString("base64") : token;
+        } catch (err) {
+            logger.error(err);
+            return token;
+        }
     }
 
     /**
@@ -247,7 +252,12 @@ class AccountManager {
      * @returns {String} - The decrypted token
      */
     decryptToken(token) {
-        return safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(Buffer.from(token, "base64")) : token;
+        try {
+            return safeStorage.isEncryptionAvailable() ? safeStorage.decryptString(Buffer.from(token, "base64")) : token;
+        } catch (err) {
+            logger.error(err);
+            return token;
+        }
     }
 
     saveAccounts() {
