@@ -32,6 +32,8 @@ function init(top) {
             const accountManager = new AccountManager();
             const activeAccount = accountManager.findAccount(store.get("activeAccount"));
 
+            if (!activeAccount) return;
+
             client
                 .setActivity({
                     details: `${selectedProfile.name} (${capitalizeFirstLetter(selectedProfile.loader)} ${selectedProfile.version})`,
