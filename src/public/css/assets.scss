@@ -201,7 +201,7 @@ input {
     width: 100%;
     height: var(--dragheight);
     background-color: var(--grey-1);
-    z-index: 3;
+    z-index: 20;
 
     -webkit-app-region: drag;
 
@@ -283,6 +283,7 @@ input {
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 15;
 
     background-color: rgba($color: #000000, $alpha: 0.8);
 

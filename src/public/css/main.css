@@ -491,6 +491,10 @@ main.profiles table tr th.loader img {
   margin-right: 7px;
   border-radius: 3px;
 }
+main.profiles table tr td:first-of-type button {
+  margin: 0px;
+  padding: 0px;
+}
 main.profiles table tr th {
   font-size: 20px;
 }

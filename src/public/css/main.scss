@@ -621,6 +621,11 @@ main {
                     }
                 }
 
+                td:first-of-type button {
+                    margin: 0px;
+                    padding: 0px;
+                }
+
                 th {
                     font-size: 20px;
                 }

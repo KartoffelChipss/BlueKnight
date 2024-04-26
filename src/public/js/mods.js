@@ -55,7 +55,7 @@ function searchMods(query, offset, limit, goingBack) {
         data.hits.forEach((mod, index) => {
             modlist.innerHTML += `<div class="modbox">
                 <div style="display: flex; align-items: center;">
-                    <img src="${mod.icon_url}">
+                    <img src="${mod.icon_url}" onerror="this.src='./img/noicon.svg'">
                     <div class="desc">
                         <h3>
                             ${mod.title}

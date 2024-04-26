@@ -42,6 +42,9 @@ contextBridge.exposeInMainWorld(
                 "getProfileMods",
                 "deleteProfileMod",
                 "getVersion",
+                "getModData",
+                "getExtensiveModData",
+                "deleteProfile",
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);

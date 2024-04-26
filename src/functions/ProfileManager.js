@@ -71,7 +71,7 @@ class ProfileManager {
             store.set("selectedProfile", this.selectedProfile);
         }
         
-        fs.rmdirSync(path.join(profilespath, name), { recursive: true });
+        fs.rmSync(path.join(profilespath, name), { recursive: true });
         
         this.sendProfilesUpdate();
     }

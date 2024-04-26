@@ -9,9 +9,11 @@ const logger = require("electron-log");
 const NodeCace = require("node-cache");
 const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
 const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
+const modFileHashCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
 const { blueKnightRoot, profilespath, downloadFile, checkForJava } = require("./functions/util.js");
+const crypto = require('crypto');
 
 logger.transports.file.resolvePathFn = () => path.join(blueKnightRoot, "logs.log");
 logger.transports.file.level = "info";
@@ -99,7 +101,7 @@ if (!gotTheLock) {
                 shell.openPath(args.path);
                 return;
             }
-            if (args.item) {  
+            if (args.item) {
                 shell.showItemInFolder(args.item);
                 return;
             }
@@ -162,13 +164,12 @@ if (!gotTheLock) {
                 });
         });
 
-        ipcMain.handle("deleteProfileMod", (event, data) => {
-            if (!data.profileName || !data.modName) return;
+        ipcMain.handle("deleteProfileMod", (event, modPath) => {
+            if (!modPath) return null;
 
-            const profileModsPath = profileManager.getModsPath(profileManager.findProfile(data.profileName));
-            const modPath = path.join(profileModsPath, data.modName);
-            fs.unlinkSync(modPath);
-            logger.info("[PROFILES] Removed mod: " + data.profileName + "/" + data.modName);
+            fs.unlinkSync(path.join(modPath));
+            logger.info("[PROFILES] Removed mod: " + modPath);
+            return fs.existsSync(modPath) ? false : true;
         });
 
         ipcMain.handle("getProfileMods", async (event, args) => {
@@ -185,36 +186,45 @@ if (!gotTheLock) {
                 const modname = modnames[i];
                 const modId = modname.split("_")[0];
 
-                if (modId.length !== 8) {
-                    mods.push({
-                        id: null,
-                        versionid: null,
-                        versionData: null,
-                        name: modname,
-                        path: path.join(profileModsPath, modname),
-                        data: null,
-                        foundOnMR: false,
-                    });
-                    continue;
-                }
-
-                const versionid = modname.split("_")[1] ?? null;
-
-                const data = await fetchModfromMR(modId);
-                const versionData = await fetchModVersionfromMR(modId, versionid);
-
                 mods.push({
-                    id: modId,
-                    versionid: versionid,
-                    versionData: versionData,
+                    id: null,
+                    versionid: null,
+                    gameVersions: null,
+                    versionData: null,
                     name: modname,
                     path: path.join(profileModsPath, modname),
-                    data: data,
-                    foundOnMR: true,
+                    data: null,
+                    foundOnMR: false,
                 });
 
                 if (i === modnames.length - 1) return mods;
             }
+        });
+
+        ipcMain.handle("getModData", async (event, modPath) => {
+            if (!modPath) return null;
+            if (!fs.existsSync(modPath)) return null;
+
+            const data = await fetchModFilefromMR(modPath);
+
+            return {
+                id: data.project_id,
+                versionid: data.id,
+                gameVersions: data.game_versions,
+                versionData: data,
+                name: data.name,
+                path: modPath,
+                data: data,
+                foundOnMR: true,
+            };
+        });
+
+        ipcMain.handle("getExtensiveModData", async (event, modid) => {
+            if (!modid) return null;
+
+            const data = await fetchModfromMR(modid);
+
+            return data;
         });
 
         ipcMain.handle("createProfile", async (event, data) => {
@@ -227,8 +237,17 @@ if (!gotTheLock) {
             });
         });
 
+        ipcMain.handle("deleteProfile", async (event, name) => {
+            if (!name) return null;
+
+            console.log("[PROFILES] Deleting profile: " + name)
+
+            profileManager.removeProfile(name);
+            return true;
+        });
+
         ipcMain.handle("getProfileData", (event, name) => {
-            if (!name) return;
+            if (!name) return null;
             return profileManager.findProfile(name);
         });
 
@@ -266,6 +285,7 @@ if (!gotTheLock) {
 
             // Delete old versions of installed mod
             const modsDirPath = path.join(profilespath, data.targetProfile, "mods");
+            if (!fs.existsSync(modsDirPath)) fs.mkdirSync(modsDirPath, { recursive: true });
             fs.readdirSync(path.resolve(modsDirPath)).forEach((file) => {
                 let nameSplit = file.split("_");
                 if (!nameSplit || nameSplit[0].length !== 8) return;
@@ -388,5 +408,33 @@ async function fetchModVersionfromMR(modid, versionid) {
     const res = await fetch(`https://api.modrinth.com/v2/project/${modid}/version/${versionid}`);
     const data = await res.json();
     modVersionCache.set(cacheKey, data);
+    return data;
+}
+
+function getFileHash(filename, algorithm = 'sha512') {
+    return new Promise((resolve, reject) => {
+        let shasum = crypto.createHash(algorithm);
+        try {
+            let s = fs.ReadStream(filename)
+            s.on('data', function (data) {
+                shasum.update(data)
+            })
+            s.on('end', function () {
+                const hash = shasum.digest('hex')
+                return resolve(hash);
+            })
+        } catch (error) {
+            return reject('calc fail');
+        }
+    });
+}
+
+async function fetchModFilefromMR(modPath) {
+    if (modFileHashCache.has(modPath)) return modFileHashCache.get(modPath);
+    const algorithm = 'sha512';
+    const fileHash = await getFileHash(path.join(modPath), algorithm);
+    const res = await fetch(`https://api.modrinth.com/v2/version_file/${fileHash}?algorithm=${algorithm}`);
+    const data = await res.json();
+    modFileHashCache.set(modPath, data);
     return data;
 }
