@@ -329,19 +329,32 @@ if (!gotTheLock) {
 
             const fileName = selectedVersion.files[0].filename ?? addonId + fileExtension;
 
+            const dependencies = selectedVersion.dependencies ?? [];
+
             const addonFolder = addonType === "mods" ? "mods" : addonType === "resourcepacks" ? "resourcepacks" : addonType === "shaders" ? "shaderpacks" : null;
 
             if (addonType === "mods" || addonType === "resourcepacks" || addonType === "shaders") {
-                return downloadFile(downloadURL, path.join(profilespath, targetProfile.name, addonFolder), fileName)
+                const downloadMainAddon = downloadFile(downloadURL, path.join(profilespath, targetProfile.name, addonFolder), fileName);
+
+                const downloadDependencies = Promise.all(dependencies.map(async dependency => {
+                    const dependencyResolved = await fetchModVersionfromMR(dependency.project_id, dependency.version_id);
+                    if (!dependencyResolved || !dependencyResolved.files || !dependencyResolved.files[0] || !dependencyResolved.files[0].url) return false;
+                    const dependencyFileName = dependencyResolved.files[0].filename ?? dependency.project_id + fileExtension;
+                    const dependencyURL = dependencyResolved.files[0].url;
+                    if (!dependencyURL) return Promise.resolve();
+                    return downloadFile(dependencyURL, path.join(profilespath, targetProfile.name, addonFolder), dependencyFileName);
+                }));
+                
+                return Promise.all([downloadMainAddon, downloadDependencies])
                     .then(() => {
-                        logger.info(`[DOWNLOADS] Finished downlaoding ${addonType} ${addonId}`);
+                        logger.info(`[DOWNLOADS] Finished downloading ${addonType} ${addonId} and its dependencies`);
                         return true;
                     })
                     .catch((err) => {
-                        logger.error(`[DOWNLOADS] Error downloading ${addonType} ${addonId}`);
+                        logger.error(`[DOWNLOADS] Error downloading ${addonType} ${addonId} and its dependencies`);
                         logger.error(err);
                         return false;
-                    })
+                    });
             }
 
             if (addonType === "modpacks") {
