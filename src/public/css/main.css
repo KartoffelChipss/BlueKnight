@@ -29,6 +29,7 @@ main .topRow {
   --padding: 15px;
   padding: var(--padding);
   width: calc(100% - var(--padding) * 2);
+  max-height: 55px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -114,50 +115,87 @@ main .topRow .user .faceBox:hover img {
 main .topRow .user .faceBox:hover .actionbox {
   display: flex;
 }
-main .topRow .userlist {
-  position: absolute;
-  right: var(--padding);
-  top: calc(var(--padding) / 2);
+main .topRow .dropdowns {
+  display: flex;
+  max-height: 55px;
+  gap: 15px;
+}
+main .topRow .userlist, main .topRow .profileList {
+  position: relative;
   display: flex;
   flex-direction: column;
   z-index: 10;
   transition: max-height 0.3s ease-in-out;
   max-height: 55px;
+  height: -moz-max-content;
+  height: max-content;
   overflow: hidden;
 }
-main .topRow .userlist::-webkit-scrollbar {
+main .topRow .userlist::-webkit-scrollbar, main .topRow .profileList::-webkit-scrollbar {
   width: 0px;
 }
-main .topRow .userlist ::-webkit-scrollbar-thumb {
+main .topRow .userlist ::-webkit-scrollbar-thumb, main .topRow .profileList ::-webkit-scrollbar-thumb {
   background-color: var(--grey-2);
   border-radius: 6px;
 }
-main .topRow .userlist ::-webkit-scrollbar-track {
+main .topRow .userlist ::-webkit-scrollbar-track, main .topRow .profileList ::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 8px;
 }
-main .topRow .userlist .user {
+main .topRow .userlist .user, main .topRow .profileList .user {
   background-color: var(--grey-2);
   padding: 10px 12px;
   border-radius: 0px;
 }
-main .topRow .userlist .user:hover {
+main .topRow .userlist .user:hover, main .topRow .profileList .user:hover {
   filter: brightness(0.9);
   cursor: pointer;
 }
-main .topRow .userlist .user:first-of-type {
+main .topRow .userlist .user:first-of-type, main .topRow .profileList .user:first-of-type {
   border-radius: 7px;
 }
-main .topRow .userlist .user:last-of-type {
+main .topRow .userlist .user:last-of-type, main .topRow .profileList .user:last-of-type {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
 }
-main .topRow .userlist:hover {
-  max-height: 330px;
+main .topRow .userlist .profile, main .topRow .profileList .profile {
+  background-color: var(--grey-2);
+  padding: 10px 12px;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  font-size: 18px;
+  font-weight: 600;
 }
-main .topRow .userlist:hover .user:first-of-type {
+main .topRow .userlist .profile img, main .topRow .profileList .profile img {
+  height: 35px;
+  width: 35px;
+  border-radius: 3px;
+}
+main .topRow .userlist .profile:hover, main .topRow .profileList .profile:hover {
+  filter: brightness(0.9);
+  cursor: pointer;
+}
+main .topRow .userlist .profile:first-of-type, main .topRow .profileList .profile:first-of-type {
+  border-radius: 7px;
+}
+main .topRow .userlist .profile:last-of-type, main .topRow .profileList .profile:last-of-type {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+main .topRow .userlist:hover, main .topRow .profileList:hover {
+  max-height: 330px;
+  height: -moz-max-content;
+  height: max-content;
+}
+main .topRow .userlist:hover .user:first-of-type, main .topRow .userlist:hover .profile:first-of-type, main .topRow .profileList:hover .user:first-of-type, main .topRow .profileList:hover .profile:first-of-type {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+main .topRow .profileList {
+  position: relative;
 }
 main .topRow .user-out {
   z-index: 5;

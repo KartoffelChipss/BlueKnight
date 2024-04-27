@@ -147,7 +147,7 @@ async function loadProfileView(profilename) {
                 document.getElementById(`pmv-${profilename}-${mod.name}`).innerHTML = `
                     <img src="${modData.data.icon_url}" onerror="this.src='./img/noicon.svg'">
 
-                    <div class="descbox">
+                    <div class="descbox">1
                         <div class="titlebox">
                             <h3>${modData.name}</h3>
                             <span class="tag">${modData.data.version_number ?? "0.0.0"}</span>

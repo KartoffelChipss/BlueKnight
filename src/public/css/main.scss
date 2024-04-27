@@ -32,6 +32,7 @@ main {
         --padding: 15px;
         padding: var(--padding);
         width: calc(100% - var(--padding) * 2);
+        max-height: 55px;
 
         position: relative;
         display: flex;
@@ -139,16 +140,21 @@ main {
             }
         }
 
-        .userlist {
-            position: absolute;
-            right: var(--padding);
-            top: calc(var(--padding) / 2);
+        .dropdowns {
+            display: flex;
+            max-height: 55px;
+            gap: 15px;
+        }
+
+        .userlist, .profileList {
+            position: relative;
             display: flex;
             flex-direction: column;
             z-index: 10;
             transition: max-height .3s ease-in-out;
 
             max-height: 55px;
+            height: max-content;
             overflow: hidden;
 
             &::-webkit-scrollbar {
@@ -185,14 +191,53 @@ main {
                 }
             }
 
+            .profile {
+                background-color: var(--grey-2);
+                padding: 10px 12px;
+                border-radius: 0px;
+
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 15px;
+
+                font-size: 18px;
+                font-weight: 600;
+
+                img {
+                    height: 35px;
+                    width: 35px;
+                    border-radius: 3px;
+                }
+
+                &:hover {
+                    filter: brightness(0.9);
+                    cursor: pointer;
+                }
+
+                &:first-of-type {
+                    border-radius: 7px;
+                }
+
+                &:last-of-type {
+                    border-bottom-left-radius: 7px;
+                    border-bottom-right-radius: 7px;
+                }
+            }
+
             &:hover {
                 max-height: 330px;
+                height: max-content;
 
-                .user:first-of-type {
+                .user:first-of-type, .profile:first-of-type {
                     border-bottom-left-radius: 0px;
                     border-bottom-right-radius: 0px;
                 }
             }
+        }
+
+        .profileList {
+            position: relative;
         }
 
         .user-out {
