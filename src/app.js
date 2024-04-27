@@ -7,13 +7,15 @@ const fs = require("fs");
 const os = require("os");
 const logger = require("electron-log");
 const NodeCace = require("node-cache");
-const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
-const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
-const modFileHashCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
 const { blueKnightRoot, profilespath, downloadFile, checkForJava } = require("./functions/util.js");
 const crypto = require('crypto');
+
+const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
+const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
+const modFileHashCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
+const addonsSearchCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 
 logger.transports.file.resolvePathFn = () => path.join(blueKnightRoot, "logs.log");
 logger.transports.file.level = "info";
@@ -255,6 +257,10 @@ if (!gotTheLock) {
             profileManager.sendProfilesUpdate();
         });
 
+        ipcMain.handle("getSelectedProfile", (event, data) => {
+            return profileManager.getSelectedProfile();
+        });
+
         ipcMain.handle("selectProfile", (event, data) => {
             if (!data.name || !data.loader || !data.version) return;
 
@@ -273,6 +279,29 @@ if (!gotTheLock) {
         ipcMain.handle("openRootFolder", (event, data) => {
             logger.info("[PROFILES] Opened folder '" + profilespath + "'");
             shell.openPath(profilespath);
+        });
+
+        ipcMain.handle("searchMods", async (event, data) => {
+            if (!data || !data.options) return null;
+        
+            const options = data.options;
+            const url = `https://api.modrinth.com/v2/search?${options}`;
+        
+            if (addonsSearchCache.has(options)) {
+                //console.log(`Found in cache: ${options} (${addonsSearchCache.get(options).hits.length} results)`);
+                return Promise.resolve(addonsSearchCache.get(options));
+            }
+        
+            try {
+                const response = await fetch(url);
+                const searchData = await response.json();
+                
+                if (searchData && searchData.hits) addonsSearchCache.set(options, searchData);
+                
+                return searchData;
+            } catch (error) {
+                return Promise.reject(error);
+            }
         });
 
         ipcMain.handle("downloadMod", (event, data) => {

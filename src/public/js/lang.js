@@ -21,5 +21,5 @@ function refreshLang() {
 refreshLang();
 
 function getTranslation(key) {
-    return lang[lang.selected][key] ?? "Missing translation";
+    return lang[lang.selected] ? lang[lang.selected][key] ?? "Missing translation" : "Missing translation";
 }

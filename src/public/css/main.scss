@@ -146,7 +146,8 @@ main {
             gap: 15px;
         }
 
-        .userlist, .profileList {
+        .userlist,
+        .profileList {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -229,7 +230,8 @@ main {
                 max-height: 330px;
                 height: max-content;
 
-                .user:first-of-type, .profile:first-of-type {
+                .user:first-of-type,
+                .profile:first-of-type {
                     border-bottom-left-radius: 0px;
                     border-bottom-right-radius: 0px;
                 }
@@ -735,7 +737,6 @@ main {
         .modmain {
             --padding: 15px;
             padding: 0 var(--padding);
-            padding-top: var(--padding);
             width: calc(100% - var(--padding) * 2);
 
             display: flex;
@@ -743,6 +744,41 @@ main {
 
             height: calc(100% - var(--searchBarheight));
             max-height: calc(100% - var(--searchBarheight));
+        }
+
+        .addontypes {
+            display: flex;
+            flex-flow: row nowrap;
+            position: relative;
+            margin-bottom: 15px;
+            padding: 0 5px;
+            // border-bottom: 1px solid rgba(black, 0.1);
+            gap: 1.5rem;
+
+            &--tab {
+                display: block;
+                //margin: 0 1rem;
+                padding: 1rem 0;
+                color: var(--text-color);
+                text-decoration: none;
+                transition: 350ms;
+                font-weight: 600;
+                cursor: pointer;
+
+                &.-active {
+                    color: var(--text-color);
+                }
+            }
+
+            &--line {
+                display: block;
+                height: 5px;
+                position: absolute;
+                bottom: 5px;
+                border-radius: 3px;
+                background-color: var(--primary-2);
+                transition: 350ms;
+            }
         }
 
 
@@ -1018,7 +1054,7 @@ main {
             display: flex;
             align-items: center;
             justify-content: center;
-            
+
             span {
                 text-align: center;
             }

@@ -120,7 +120,8 @@ main .topRow .dropdowns {
   max-height: 55px;
   gap: 15px;
 }
-main .topRow .userlist, main .topRow .profileList {
+main .topRow .userlist,
+main .topRow .profileList {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -131,34 +132,42 @@ main .topRow .userlist, main .topRow .profileList {
   height: max-content;
   overflow: hidden;
 }
-main .topRow .userlist::-webkit-scrollbar, main .topRow .profileList::-webkit-scrollbar {
+main .topRow .userlist::-webkit-scrollbar,
+main .topRow .profileList::-webkit-scrollbar {
   width: 0px;
 }
-main .topRow .userlist ::-webkit-scrollbar-thumb, main .topRow .profileList ::-webkit-scrollbar-thumb {
+main .topRow .userlist ::-webkit-scrollbar-thumb,
+main .topRow .profileList ::-webkit-scrollbar-thumb {
   background-color: var(--grey-2);
   border-radius: 6px;
 }
-main .topRow .userlist ::-webkit-scrollbar-track, main .topRow .profileList ::-webkit-scrollbar-track {
+main .topRow .userlist ::-webkit-scrollbar-track,
+main .topRow .profileList ::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 8px;
 }
-main .topRow .userlist .user, main .topRow .profileList .user {
+main .topRow .userlist .user,
+main .topRow .profileList .user {
   background-color: var(--grey-2);
   padding: 10px 12px;
   border-radius: 0px;
 }
-main .topRow .userlist .user:hover, main .topRow .profileList .user:hover {
+main .topRow .userlist .user:hover,
+main .topRow .profileList .user:hover {
   filter: brightness(0.9);
   cursor: pointer;
 }
-main .topRow .userlist .user:first-of-type, main .topRow .profileList .user:first-of-type {
+main .topRow .userlist .user:first-of-type,
+main .topRow .profileList .user:first-of-type {
   border-radius: 7px;
 }
-main .topRow .userlist .user:last-of-type, main .topRow .profileList .user:last-of-type {
+main .topRow .userlist .user:last-of-type,
+main .topRow .profileList .user:last-of-type {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
 }
-main .topRow .userlist .profile, main .topRow .profileList .profile {
+main .topRow .userlist .profile,
+main .topRow .profileList .profile {
   background-color: var(--grey-2);
   padding: 10px 12px;
   border-radius: 0px;
@@ -169,28 +178,36 @@ main .topRow .userlist .profile, main .topRow .profileList .profile {
   font-size: 18px;
   font-weight: 600;
 }
-main .topRow .userlist .profile img, main .topRow .profileList .profile img {
+main .topRow .userlist .profile img,
+main .topRow .profileList .profile img {
   height: 35px;
   width: 35px;
   border-radius: 3px;
 }
-main .topRow .userlist .profile:hover, main .topRow .profileList .profile:hover {
+main .topRow .userlist .profile:hover,
+main .topRow .profileList .profile:hover {
   filter: brightness(0.9);
   cursor: pointer;
 }
-main .topRow .userlist .profile:first-of-type, main .topRow .profileList .profile:first-of-type {
+main .topRow .userlist .profile:first-of-type,
+main .topRow .profileList .profile:first-of-type {
   border-radius: 7px;
 }
-main .topRow .userlist .profile:last-of-type, main .topRow .profileList .profile:last-of-type {
+main .topRow .userlist .profile:last-of-type,
+main .topRow .profileList .profile:last-of-type {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
 }
-main .topRow .userlist:hover, main .topRow .profileList:hover {
+main .topRow .userlist:hover,
+main .topRow .profileList:hover {
   max-height: 330px;
   height: -moz-max-content;
   height: max-content;
 }
-main .topRow .userlist:hover .user:first-of-type, main .topRow .userlist:hover .profile:first-of-type, main .topRow .profileList:hover .user:first-of-type, main .topRow .profileList:hover .profile:first-of-type {
+main .topRow .userlist:hover .user:first-of-type,
+main .topRow .userlist:hover .profile:first-of-type,
+main .topRow .profileList:hover .user:first-of-type,
+main .topRow .profileList:hover .profile:first-of-type {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
@@ -580,12 +597,40 @@ main.mods ::-webkit-scrollbar-thumb {
 main.mods .modmain {
   --padding: 15px;
   padding: 0 var(--padding);
-  padding-top: var(--padding);
   width: calc(100% - var(--padding) * 2);
   display: flex;
   flex-direction: column;
   height: calc(100% - var(--searchBarheight));
   max-height: calc(100% - var(--searchBarheight));
+}
+main.mods .addontypes {
+  display: flex;
+  flex-flow: row nowrap;
+  position: relative;
+  margin-bottom: 15px;
+  padding: 0 5px;
+  gap: 1.5rem;
+}
+main.mods .addontypes--tab {
+  display: block;
+  padding: 1rem 0;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: 350ms;
+  font-weight: 600;
+  cursor: pointer;
+}
+main.mods .addontypes--tab.-active {
+  color: var(--text-color);
+}
+main.mods .addontypes--line {
+  display: block;
+  height: 5px;
+  position: absolute;
+  bottom: 5px;
+  border-radius: 3px;
+  background-color: var(--primary-2);
+  transition: 350ms;
 }
 main.mods .searchBar {
   --padding: 12px;

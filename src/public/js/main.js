@@ -6,6 +6,8 @@ let profileviewMain = document.querySelector("main.profileview");
 
 const playBtn = document.getElementById("playBtn");
 
+let clickedModBtn = false;
+
 async function fetchAsync(url) {
     let headers = new Headers({
         "Accept": "application/json",
@@ -57,6 +59,10 @@ async function changeSection(section, profilename) {
 
     if (section === "mods") {
         modsMain.classList.add("__shown");
+        if (!clickedModBtn) {
+            document.getElementById("addontypes_button_mods").click();
+            clickedModBtn = true;
+        }
         return;
     }
 
@@ -93,8 +99,7 @@ async function loadProfileView(profilename) {
     playBtn.setAttribute("onclick", `selectProfile("${profilename}", "${profileData.loader}", "${profileData.version}", true); launchMC();`);
 
     const addmodsbtn = profileviewMain.querySelector(".addmodsbtn");
-    addmodsbtn.style.display = "flex";
-    if (profileData.loader === "vanilla") addmodsbtn.style.display = "none";
+    addmodsbtn.setAttribute("onclick", `selectProfile("${profilename}", "${profileData.loader}", "${profileData.version}", false); changeSection("mods");`);
 
     const openfolderBtn = profileviewMain.querySelector(".openfolderBtn");
     openfolderBtn.setAttribute("onclick", `openProfileFolder("${profilename}")`);
@@ -281,7 +286,7 @@ function selectProfile(name, loader, version, switchToMain = false) {
 
     // console.log("Loaded profile: " + name + " " + loader + " " + version)
     document.getElementById("currentprofile_loader").value = loader;
-    searchMods();
+    document.getElementById("currentprofile_version").value = version;
 
     window.api.invoke('selectProfile', {
         name,

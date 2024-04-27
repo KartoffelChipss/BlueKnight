@@ -23,7 +23,7 @@
     "bottombox_play": "Spielen",
     "bottombox_profiles": "Profile",
     "bottombox_settings": "Einstellungen",
-    "bottombox_mods": "Mods",
+    "bottombox_mods": "Add-ons",
 
     "settings_title": "Einstellungen",
     "settings_minimize_title": "Launcher minimieren",
@@ -51,7 +51,7 @@
 
     "profileview_play": "Spielen",
     "profileview_openfolder": "Ordner öffnen",
-    "profileview_addmods": "Mods hinzufügen",
+    "profileview_addmods": "Mehr Add-ons",
     "profileview_updatemods": "Mods updaten",
     "profileview_removeprofile": "Profil löschen",
     "profileview_nomods": "Keine Mods installiert",
@@ -64,6 +64,16 @@
     "mods_search": "Nach Mods suchen",
     "mod_download_title": "Mod herunterladen",
     "mod_download_btn": "Herunterladen",
+
+    "addons_title": "Add-ons",
+    "addons_mods": "Mods",
+    "addons_modpacks": "Modpacks",
+    "addons_resourcepacks": "Resource Packs",
+    "addons_shaders": "Shader",
+    "addons_mods_search": "Nach Mods suchen",
+    "addons_modpacks_search": "Nach Modpacks suchen",
+    "addons_resourcepacks_search": "Nach Resource Packs suchen",
+    "addons_shaders_search": "Nach Shadern suchen",
 
     "tray_help_title": "Hilfe",
     "tray_home_title": "Startseite",

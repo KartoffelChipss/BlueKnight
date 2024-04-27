@@ -1,58 +1,82 @@
 const modlist = document.getElementById("modlist");
 const searchInput = document.getElementById("searchInput");
 
-function searchMods(query, offset, limit, goingBack) {
-    let profileSelectBtn = document.getElementById("profileSelectBtn");
+let retries = 0;
 
-    if (offset === undefined || offset < 0) offset = 0;
-    if (limit === undefined || limit < 10) limit = 10;
+const mrProjectTypes = {
+    mods: "mod",
+    modpacks: "modpack",
+    resourcepacks: "resourcepack",
+    shaders: "shader"
+}
 
-    let queryString = "";
-    if (query) queryString = `&query=${query}`;
+function getPaginationButtons(query, page) {
+    return `<div class="pagination">
+                <button type="button" id="prevButton" onclick="searchAddons('${query}', ${page - 1 < 0 ? 0 : page - 1})">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
+                </button>
+                <span id="modPageNum">${page + 1}</span>
+                <button type="button" id="nextButton" onclick="searchAddons('${query}', ${page + 1})">
+                    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l6-6-6-6"></path> </g></svg>
+                </button>
+            </div>`;
+}
 
-    let modPageNum = (Number(document.getElementById("modPageNum").innerHTML) ?? 0);
-
-    let newPageNum = modPageNum + 1;
-
-    if (offset === undefined || offset <= 0) newPageNum = 1;
-
-    if (goingBack && goingBack === true) newPageNum = modPageNum - 1;
-
-    if (newPageNum <= 0) return;
-
+function searchAddons(query, page) {
+    const resourceType = document.getElementById("selected_addontype").value ?? "mods";
+    const resourceTypeTranslated = getTranslation(`addons_${resourceType}`) ?? "Mods";
+    const mrResourceType = mrProjectTypes[resourceType];
     const currentprofile_loader = document.getElementById("currentprofile_loader").value || "fabric";
+    const currentprofile_version = document.getElementById("currentprofile_version").value;
 
-    if (currentprofile_loader === "vanilla") {
+    console.log(`Searching for query: "${query}", page: "${page}" and type: "${resourceType}"`)
+
+    modlist.innerHTML = "";
+
+    let searchOptions = {
+        query: "",
+        offset: "",
+        limit: "&limit=10",
+        loaderCategory: "",
+        version: "",
+        index: "&index=downloads"
+    }
+
+    if (query === undefined || query === null) query = "";
+    if (page === undefined || page < 0) page = 0;
+
+    searchOptions.offset = `&offset=${page * 10}`;
+
+    searchOptions.query = `&query=${query}`;
+
+    if (currentprofile_loader === "vanilla" && (resourceType === "mods" || resourceType === "modpacks" || resourceType === "shaders")) {
         modlist.innerHTML = `<div class="noMods">
-            <h2>Keine Mods für Vanilla</h2>
-            <p>Mods sind nur für Fabric, Quilt oder Forge verfügbar.</p>
+            <h2>Keine ${resourceTypeTranslated} für Vanilla</h2>
+            <p>${resourceTypeTranslated} sind nur für Fabric, Quilt oder Forge verfügbar.</p>
         </div>`;
-        modlist.innerHTML += `<div class="pagination">
-            <button type="button" id="prevButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset - 10}, ${limit}, true)">
-                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
-            </button>
-            <span id="modPageNum">${newPageNum}</span>
-            <button type="button" id="nextButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset + 10}, ${limit})">
-                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l6-6-6-6"></path> </g></svg>
-            </button>
-        </div>`;
+        modlist.innerHTML += getPaginationButtons(query, page);
         return;
     }
 
-    console.log("Loading mods page "+ modPageNum + ":")
-    console.log(`https://api.modrinth.com/v2/search?facets=[[%22categories:${currentprofile_loader}%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`)
+    if (currentprofile_version) searchOptions.version = `[%22versions:${currentprofile_version}%22],`;
 
-    fetchAsync(`https://api.modrinth.com/v2/search?facets=[[%22categories:${currentprofile_loader}%22],[%22project_type:mod%22]]&index=downloads&offset=${offset}&limit=${limit}${queryString}`).then((data) => {
-        if (currentprofile_loader !== document.getElementById("currentprofile_loader").value) return;
-    
-        modlist.innerHTML = "";
+    if (resourceType === "mods" || resourceType === "modpacks") searchOptions.loaderCategory = `[%22categories:${currentprofile_loader}%22],`;
 
+    const searchUrlOptions = `facets=[${searchOptions.loaderCategory}${searchOptions.version}[%22project_type:${mrResourceType}%22]]${searchOptions.index}${searchOptions.offset}${searchOptions.limit}${searchOptions.query}`;
+
+    console.log("Search URL: " + searchUrlOptions)
+
+    window.api.invoke("searchMods", { options: searchUrlOptions }).then((data) => {
         if (!data || !data.hits) {
-            searchMods(searchInput.value ?? "")
+            console.log(`No hits for query: "${query}", page: "${page}" and type: "${resourceType}"`);
+            modlist.innerHTML = getPaginationButtons(query, page);
             return;
         }
 
+        console.log(`Recieved ${data.hits.length} hits for query: "${query}", page: "${page}" and type: "${resourceType}"`)
+
         data.hits.forEach((mod, index) => {
+            if (!mod) return;
             modlist.innerHTML += `<div class="modbox">
                 <div style="display: flex; align-items: center;">
                     <img src="${mod.icon_url}" onerror="this.src='./img/noicon.svg'">
@@ -85,25 +109,17 @@ function searchMods(query, offset, limit, goingBack) {
             </div>`;
         });
 
-        modlist.innerHTML += `<div class="pagination">
-            <button type="button" id="prevButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset - 10}, ${limit}, true)">
-                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l-6 6 6 6"></path> </g></svg>
-            </button>
-            <span id="modPageNum">${newPageNum}</span>
-            <button type="button" id="nextButton" onclick="searchMods('${searchInput.value ?? ""}', ${offset + 10}, ${limit})">
-                <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l6-6-6-6"></path> </g></svg>
-            </button>
-        </div>`;
+        modlist.innerHTML += getPaginationButtons(query, page);
 
         modlist.scrollTop = 0;
     });
 }
 
-searchMods();
+searchAddons();
 
 function clearSearch() {
     searchInput.value = "";
-    searchMods();
+    searchAddons();
 }
 
 function resetModDownladBtn() {
@@ -206,11 +222,18 @@ window.bridge.modDownloadResult((event, data) => {
 
 window.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.keyCode === 13) && document.activeElement === searchInput) {
-        searchMods(searchInput.value);
+        console.log("Search for: " + searchInput.value)
+        searchAddons(searchInput.value);
     }
 });
 
 function capitalizeFirstLetter(str) {
     if (str.length === 0) return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function selectAddonType(type) {
+    document.getElementById("selected_addontype").value = type;
+    document.getElementById("searchInput").setAttribute("placeholder", getTranslation(`addons_${type}_search`))
+    searchAddons(searchInput.value);
 }
