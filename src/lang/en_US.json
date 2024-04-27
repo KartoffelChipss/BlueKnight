@@ -78,5 +78,7 @@
     "tray_help_title": "Help",
     "tray_home_title": "Home",
     "tray_settings_title": "Settings",
-    "tray_quit_title": "Quit"
+    "tray_quit_title": "Quit",
+
+    "err_download": "There was an error downloading the file!"
 }

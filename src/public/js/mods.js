@@ -102,7 +102,7 @@ function searchAddons(query, page) {
                     </div>
                 </div>
                 <div class="buttons">
-                    <button type="button" onclick="showDownloadMod('${mod.project_id}')">
+                    <button type="button" onclick="downloadAddon(this, '${mod.project_id}', '${resourceType}')">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.5 4V17M12.5 17L7 12.2105M12.5 17L18 12.2105" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 21H19" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                     </button>
                 </div>
@@ -142,6 +142,51 @@ function showDownloadMod(modid) {
 
     resetModDownladBtn();
     modDownloadButton.setAttribute("onclick", `downloadMod('${modid}')`);
+}
+
+function resetDownloadButton(btn) {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.5 4V17M12.5 17L7 12.2105M12.5 17L18 12.2105" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 21H19" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>`;
+    btn.removeAttribute("disabled");
+}
+
+function downloadAddon(button, addonId, addonType) {
+    console.log(`Downloading ${addonType} with id: ${addonId}`);
+
+    button.setAttribute("disabled", true);
+
+    button.innerHTML = `<svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+            <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                <animateTransform 
+                attributeName="transform" 
+                attributeType="XML" 
+                type="rotate"
+                dur="1s"
+                from="0 50 50"
+                to="360 50 50" 
+                repeatCount="indefinite" />
+            </path>
+        </svg>`;
+        
+    window.api.invoke("downloadAddon", { addonId, addonType })
+        .then((success) => {
+            console.log(success)
+            if (success) {
+                console.log("Successfull downlaod");
+                button.innerHTML = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path stroke="#fefefe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5L8 15l-5-4"></path> </g></svg>`;
+                setTimeout(() => {
+                    resetDownloadButton(button);
+                }, 500)
+            } else {
+                console.log("Error while downloading addon!");
+                loadWarning(getTranslation("err_download"));
+                resetDownloadButton(button);
+            }
+        })
+        .catch((error) => {
+            console.log("Error while downloading addon: ", error);
+            loadWarning(getTranslation("err_download"));
+            resetDownloadButton(button);
+        })
 }
 
 function downloadMod(modid) {

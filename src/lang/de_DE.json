@@ -78,5 +78,7 @@
     "tray_help_title": "Hilfe",
     "tray_home_title": "Startseite",
     "tray_settings_title": "Einstellungen",
-    "tray_quit_title": "Beenden"
+    "tray_quit_title": "Beenden",
+
+    "err_download": "Beim Herunterladen ist ein Fehler aufgetreten!"
 }

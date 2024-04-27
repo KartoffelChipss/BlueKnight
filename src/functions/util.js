@@ -17,7 +17,7 @@ const profilespath = path.join(blueKnightRoot, `profiles`);
  * @param {String} profile
  * @param {String} filename
  */
-const downloadFile = async (url, profile, filename) => {
+const downloadModFile = async (url, profile, filename) => {
     let profileModsPath = path.join(profilespath, profile, "mods");
     if (!fs.existsSync(profileModsPath)) fs.mkdirSync(profileModsPath);
     const destination = path.resolve(profileModsPath, filename);
@@ -27,6 +27,18 @@ const downloadFile = async (url, profile, filename) => {
 function getMainWindow() {
     return BrowserWindow.getAllWindows()[0];
 }
+
+/**
+ * Downloads a file from a given url and saves it to the profile folder
+ * @param {String} url
+ * @param {String} targetPath
+ * @param {String} filename
+ */
+const downloadFile = async (url, targetPath, fileName) => {
+    if (!fs.existsSync(targetPath)) fs.mkdirSync(targetPath);
+    const destination = path.resolve(targetPath, fileName);
+    pipeline((await fetch(url)).body, fs.createWriteStream(destination));
+};
 
 /**
  * Checks if Java is installed and sets the stores the path if it is found
@@ -76,6 +88,7 @@ module.exports = {
     getMainWindow,
     blueKnightRoot,
     profilespath,
-    downloadFile,
+    downloadModFile: downloadModFile,
     checkForJava,
+    downloadFile,
 };

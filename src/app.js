@@ -9,11 +9,12 @@ const logger = require("electron-log");
 const NodeCace = require("node-cache");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
-const { blueKnightRoot, profilespath, downloadFile, checkForJava } = require("./functions/util.js");
+const { blueKnightRoot, profilespath, downloadModFile, downloadFile, checkForJava } = require("./functions/util.js");
 const crypto = require('crypto');
 
 const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
 const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
+const modVersionsCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 const modFileHashCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 const addonsSearchCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
 
@@ -304,9 +305,54 @@ if (!gotTheLock) {
             }
         });
 
+        ipcMain.handle("downloadAddon", async (event, data) => {
+            if (!data.addonId || !data.addonType) return false;
+
+            const { addonId, addonType } = data;
+            const targetProfile = profileManager.getSelectedProfile();
+
+            logger.info(`[DOWNLOADS] Recieved ${addonType} download request for ${addonId}`);
+
+            const versions = await fetchVersionsFromMR(addonId);
+
+            if (!versions || versions.length === 0) return false;
+
+            const selectedVersion = versions.find((version) => version.game_versions.includes(targetProfile.version));
+
+            if (!selectedVersion || !selectedVersion.files || !selectedVersion.files[0] || !selectedVersion.files[0].url) return false;
+
+            const downloadURL = selectedVersion.files[0].url;
+
+            if (!downloadURL) return false;
+
+            const fileExtension = addonType === "mods" ? ".jar" : addonType === "resourcepacks" ? ".zip" : addonType === "shaders" ? ".zip" : addonType === "modpacks" ? ".mrpack" : null;
+
+            const fileName = selectedVersion.files[0].filename ?? addonId + fileExtension;
+
+            const addonFolder = addonType === "mods" ? "mods" : addonType === "resourcepacks" ? "resourcepacks" : addonType === "shaders" ? "shaderpacks" : null;
+
+            if (addonType === "mods" || addonType === "resourcepacks" || addonType === "shaders") {
+                return downloadFile(downloadURL, path.join(profilespath, targetProfile.name, addonFolder), fileName)
+                    .then(() => {
+                        logger.info(`[DOWNLOADS] Finished downlaoding ${addonType} ${addonId}`);
+                        return true;
+                    })
+                    .catch((err) => {
+                        logger.error(`[DOWNLOADS] Error downloading ${addonType} ${addonId}`);
+                        logger.error(err);
+                        return false;
+                    })
+            }
+
+            if (addonType === "modpacks") {
+                console.log("[!!!] Downloading modpack")
+                return false;
+            }
+        });
+
         ipcMain.handle("downloadMod", (event, data) => {
             logger.info("[DOWNLOADS] Recieved Mod download request for " + data.filetoDownload.filename);
-            downloadFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.modversionid}_${data.filetoDownload.filename}`);
+            downloadModFile(data.filetoDownload.url, data.targetProfile, `${data.modid}_${data.modversionid}_${data.filetoDownload.filename}`);
             logger.info("[DOWNLOADS] Finished downlaoding " + data.filetoDownload.filename);
             top.mainWindow.webContents.send("modDownloadResult", {
                 result: "success",
@@ -426,6 +472,15 @@ async function fetchModfromMR(modid) {
     // console.log("Fetching: " + `https://api.modrinth.com/v2/project/${modid}`)
     const data = await res.json();
     modinfoCache.set(modid, data);
+    return data;
+}
+
+async function fetchVersionsFromMR(modid) {
+    if (!modid) return null;
+    if (modVersionsCache.has(modid)) return modVersionsCache.get(modid);
+    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}/version`);
+    const data = await res.json();
+    modVersionsCache.set(modid, data);
     return data;
 }
 

@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld(
                 "openProfileFolder",
                 "openRootFolder",
                 "downloadMod",
+                "downloadAddon",
                 "searchMods",
                 "openExternal",
                 "installjava",
