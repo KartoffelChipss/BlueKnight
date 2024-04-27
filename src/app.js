@@ -3,14 +3,15 @@ const path = require("path");
 const fetch = require("cross-fetch");
 const { ipcMain } = require("electron/main");
 const Store = require("electron-store");
-const fs = require("fs");
+const fs = require("fs-extra");
 const os = require("os");
 const logger = require("electron-log");
 const NodeCace = require("node-cache");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
-const { blueKnightRoot, profilespath, downloadModFile, downloadFile, checkForJava } = require("./functions/util.js");
+const { blueKnightRoot, profilespath, downloadModFile, downloadFileToPath, downloadFile, checkForJava } = require("./functions/util.js");
 const crypto = require('crypto');
+const StreamZip = require('node-stream-zip');
 
 const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
 const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
@@ -344,7 +345,7 @@ if (!gotTheLock) {
                     if (!dependencyURL) return Promise.resolve();
                     return downloadFile(dependencyURL, path.join(profilespath, targetProfile.name, addonFolder), dependencyFileName);
                 }));
-                
+
                 return Promise.all([downloadMainAddon, downloadDependencies])
                     .then(() => {
                         logger.info(`[DOWNLOADS] Finished downloading ${addonType} ${addonId} and its dependencies`);
@@ -358,8 +359,74 @@ if (!gotTheLock) {
             }
 
             if (addonType === "modpacks") {
-                console.log("[!!!] Downloading modpack")
-                return false;
+                const tempDir = path.join(os.tmpdir(), addonId);
+                if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+                const addonDestination = path.join(profilespath, targetProfile.name);
+    
+                fs.rmSync(addonDestination, { recursive: true });
+                fs.mkdirSync(addonDestination);
+    
+                logger.info(`[DOWNLOADS] Downloading file ${fileName} to ${tempDir}...`);
+    
+                await downloadFile(downloadURL, tempDir, addonId + ".mrpack");
+    
+                const zip = new StreamZip({
+                    file: path.join(tempDir, addonId + ".mrpack"),
+                    storeEntries: true
+                });
+    
+                return new Promise((resolve, reject) => {
+                    zip.on('ready', () => {
+                        zip.extract(null, tempDir, async (err, count) => {
+                            if (err) {
+                                logger.error(`[DOWNLOADS] Error extracting modpack ${addonId}: ${err.message}`);
+                                fs.rmSync(tempDir, { recursive: true });
+                                reject(err);
+                            } else {
+                                logger.info(`[DOWNLOADS] Extracted ${count} entries from modpack ${addonId}`);
+    
+                                const modrinthIndexFile = path.join(tempDir, "modrinth.index.json");
+                                if (!fs.existsSync(modrinthIndexFile)) {
+                                    logger.error(`[DOWNLOADS] Modrinth index file not found in modpack ${addonId}`);
+                                    fs.rmSync(tempDir, { recursive: true });
+                                    reject(new Error("Modrinth index file not found"));
+                                } else {
+                                    const dependencies = require(modrinthIndexFile)?.files;
+                                    if (!dependencies) {
+                                        logger.error(`[DOWNLOADS] No dependencies found in modpack ${addonId}`);
+                                        fs.rmSync(tempDir, { recursive: true });
+                                        reject(new Error("No dependencies found"));
+                                    } else {
+                                        const dependencyDownloads = dependencies.map(async (dependency) => {
+                                            const dependencyURL = dependency.downloads[0];
+                                            const dependencyPath = dependency.path;
+                                            if (!dependencyURL || !dependencyPath) return;
+                                            logger.info(`[DOWNLOADS] Downloading dependency ${dependencyPath} to ${path.join(addonDestination, dependencyPath)}...`);
+                                            await downloadFileToPath(dependencyURL, path.join(addonDestination, dependencyPath));
+                                        });
+                                        await Promise.all(dependencyDownloads);
+    
+                                        const overridesFolder = path.join(tempDir, "overrides");
+                                        if (fs.existsSync(overridesFolder)) {
+                                            await fs.copy(overridesFolder, addonDestination, { overwrite: true });
+                                        }
+    
+                                        fs.rmSync(tempDir, { recursive: true });
+    
+                                        logger.info(`[DOWNLOADS] Finished downloading modpack ${addonId}`);
+                                        resolve(true);
+                                    }
+                                }
+                            }
+                        });
+                    });
+    
+                    zip.on('error', (err) => {
+                        logger.error(`[DOWNLOADS] Error reading modpack ${addonId}: ${err.message}`);
+                        fs.rmSync(tempDir, { recursive: true });
+                        reject(err);
+                    });
+                });
             }
         });
 

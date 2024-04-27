@@ -35,8 +35,24 @@ function getMainWindow() {
  * @param {String} filename
  */
 const downloadFile = async (url, targetPath, fileName) => {
-    if (!fs.existsSync(targetPath)) fs.mkdirSync(targetPath);
-    const destination = path.resolve(targetPath, fileName);
+    try {
+        if (!fs.existsSync(targetPath)) fs.mkdirSync(targetPath);
+        const destination = path.resolve(targetPath, fileName);
+        await pipeline((await fetch(url)).body, fs.createWriteStream(destination));
+    } catch (err) {
+        logger.error("Error downloading file (downloadFile):", err);
+    }
+};
+
+/**
+ * Downloads a file from a given url and saves it to the profile folder
+ * @param {String} url
+ * @param {String} targetPath
+ */
+const downloadFileToPath = async (url, targetPath) => {
+    const destination = path.resolve(targetPath);
+    const directory = path.dirname(destination);
+    await fs.promises.mkdir(directory, { recursive: true }).catch(console.error);
     pipeline((await fetch(url)).body, fs.createWriteStream(destination));
 };
 
@@ -91,4 +107,5 @@ module.exports = {
     downloadModFile: downloadModFile,
     checkForJava,
     downloadFile,
+    downloadFileToPath,
 };
