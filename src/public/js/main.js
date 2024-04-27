@@ -90,7 +90,7 @@ async function loadProfileView(profilename) {
     modlist.innerHTML = `<div class="loader"><img src="./img/spinner.svg"></div>`;
 
     const playBtn = profileviewMain.querySelector(".playBtn");
-    playBtn.setAttribute("onclick", `selectProfile("${profilename}", "${profileData.loader}", "${profileData.version}")`);
+    playBtn.setAttribute("onclick", `selectProfile("${profilename}", "${profileData.loader}", "${profileData.version}", true); launchMC();`);
 
     const addmodsbtn = profileviewMain.querySelector(".addmodsbtn");
     addmodsbtn.style.display = "flex";
@@ -276,7 +276,7 @@ function deleteProfile(profileName) {
     });
 }
 
-function selectProfile(name, loader, version) {
+function selectProfile(name, loader, version, switchToMain = false) {
     if (!name || !loader || !version) return;
 
     // console.log("Loaded profile: " + name + " " + loader + " " + version)
@@ -289,7 +289,9 @@ function selectProfile(name, loader, version) {
         version
     });
 
-    changeSection("main");
+    window.api.invoke('getProfiles')
+
+    if (switchToMain) changeSection("main");
 }
 
 function setJavaPath(value) {

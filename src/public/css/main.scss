@@ -199,7 +199,7 @@ main {
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
-                gap: 15px;
+                gap: 10px;
 
                 font-size: 18px;
                 font-weight: 600;
@@ -238,6 +238,10 @@ main {
 
         .profileList {
             position: relative;
+
+            &:hover {
+                max-height: 800px;
+            }
         }
 
         .user-out {

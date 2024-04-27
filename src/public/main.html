@@ -140,8 +140,8 @@
             </div>
             <div class="bottom">
                 <button type="button" id="profileSelectBtn" onclick="changeSection('profiles')" data-version="1.20.2" data-name="Fabric 1.20.2" data-loader="fabric" class="profileselect icon icon-smol">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    <span>None</span>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    <span data-lang="bottombox_profiles">Profile</span>
                 </button>
                 <button type="button" class="settingsBtn icon icon-smol" onclick="changeSection('settings')">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L15 8M15 8C15 9.65686 16.3431 11 18 11C19.6569 11 21 9.65685 21 8C21 6.34315 19.6569 5 18 5C16.3431 5 15 6.34315 15 8ZM9 16L21 16M9 16C9 17.6569 7.65685 19 6 19C4.34315 19 3 17.6569 3 16C3 14.3431 4.34315 13 6 13C7.65685 13 9 14.3431 9 16Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -164,21 +164,45 @@
                 <h1 data-lang="settings_title">Einstellungen</h1>
             </div>
 
-            <div class="userlist">
-                <div class="user main">
-                    <span class="username">Lee</span>
-                    <div class="faceBox">
-                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
-                        <div class="actionbox red" onclick="removeUser()">
-                            <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
-                        </div>
+            <div class="dropdowns">
+                <div class="profileList">
+                    <div class="profile main">
+                        <span class="username">Profile 1</span>
+                        <img src="./img/loader/quilt.png">
+                    </div>
+    
+                    <div class="profile" onclick="">
+                        <span class="username">Fabric 1.20.2</span>
+                        <img src="./img/loader/fabric.png">
                     </div>
                 </div>
 
-                <div class="user adduser" onclick="addUser()">
-                    <span class="username" data-lang="accounts_add">Add Account</span>
-                    <div class="actionbox green">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                <div class="userlist">
+                    <div class="user main">
+                        <span class="username">Lee</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">VeryVeryLongName</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user adduser" onclick="addUser()">
+                        <span class="username" data-lang="accounts_add">Add Account</span>
+                        <div class="actionbox green">
+                            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,21 +309,45 @@
                 <h1 data-lang="profiles_title">Meine Profile</h1>
             </div>
 
-            <div class="userlist">
-                <div class="user main">
-                    <span class="username">Lee</span>
-                    <div class="faceBox">
-                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
-                        <div class="actionbox red" onclick="removeUser()">
-                            <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
-                        </div>
+            <div class="dropdowns">
+                <div class="profileList">
+                    <div class="profile main">
+                        <span class="username">Profile 1</span>
+                        <img src="./img/loader/quilt.png">
+                    </div>
+    
+                    <div class="profile" onclick="">
+                        <span class="username">Fabric 1.20.2</span>
+                        <img src="./img/loader/fabric.png">
                     </div>
                 </div>
 
-                <div class="user adduser" onclick="addUser()">
-                    <span class="username" data-lang="accounts_add">Add Account</span>
-                    <div class="actionbox green">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                <div class="userlist">
+                    <div class="user main">
+                        <span class="username">Lee</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">VeryVeryLongName</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user adduser" onclick="addUser()">
+                        <span class="username" data-lang="accounts_add">Add Account</span>
+                        <div class="actionbox green">
+                            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -336,21 +384,45 @@
                 <h1>MyFabric Profile</h1>
             </div>
 
-            <div class="userlist">
-                <div class="user main">
-                    <span class="username">Lee</span>
-                    <div class="faceBox">
-                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
-                        <div class="actionbox red" onclick="removeUser()">
-                            <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
-                        </div>
+            <div class="dropdowns">
+                <div class="profileList">
+                    <div class="profile main">
+                        <span class="username">Profile 1</span>
+                        <img src="./img/loader/quilt.png">
+                    </div>
+    
+                    <div class="profile" onclick="">
+                        <span class="username">Fabric 1.20.2</span>
+                        <img src="./img/loader/fabric.png">
                     </div>
                 </div>
 
-                <div class="user adduser" onclick="addUser()">
-                    <span class="username" data-lang="accounts_add">Add Account</span>
-                    <div class="actionbox green">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                <div class="userlist">
+                    <div class="user main">
+                        <span class="username">Lee</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">VeryVeryLongName</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user adduser" onclick="addUser()">
+                        <span class="username" data-lang="accounts_add">Add Account</span>
+                        <div class="actionbox green">
+                            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -402,21 +474,45 @@
                 <h1 data-lang="mods_title">Mods durchsuchen</h1>
             </div>
 
-            <div class="userlist">
-                <div class="user main">
-                    <span class="username">Lee</span>
-                    <div class="faceBox">
-                        <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
-                        <div class="actionbox red" onclick="removeUser()">
-                            <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
-                        </div>
+            <div class="dropdowns">
+                <div class="profileList">
+                    <div class="profile main">
+                        <span class="username">Profile 1</span>
+                        <img src="./img/loader/quilt.png">
+                    </div>
+    
+                    <div class="profile" onclick="">
+                        <span class="username">Fabric 1.20.2</span>
+                        <img src="./img/loader/fabric.png">
                     </div>
                 </div>
 
-                <div class="user adduser" onclick="addUser()">
-                    <span class="username" data-lang="accounts_add">Add Account</span>
-                    <div class="actionbox green">
-                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                <div class="userlist">
+                    <div class="user main">
+                        <span class="username">Lee</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user" onclick="changeUser('offline')">
+                        <span class="username">VeryVeryLongName</span>
+                        <div class="faceBox">
+                            <img class="userface" src="https://visage.surgeplay.com/face/512/MHF_Exclamation">
+                            <div class="actionbox red" onclick="removeUser()">
+                                <svg style="rotate: 45deg;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="user adduser" onclick="addUser()">
+                        <span class="username" data-lang="accounts_add">Add Account</span>
+                        <div class="actionbox green">
+                            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fefefe" stroke-width="0.0002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#fefefe" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g></svg>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -165,7 +165,7 @@ main .topRow .userlist .profile, main .topRow .profileList .profile {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 15px;
+  gap: 10px;
   font-size: 18px;
   font-weight: 600;
 }
@@ -196,6 +196,9 @@ main .topRow .userlist:hover .user:first-of-type, main .topRow .userlist:hover .
 }
 main .topRow .profileList {
   position: relative;
+}
+main .topRow .profileList:hover {
+  max-height: 800px;
 }
 main .topRow .user-out {
   z-index: 5;

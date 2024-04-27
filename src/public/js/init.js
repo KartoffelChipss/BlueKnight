@@ -22,6 +22,7 @@ window.api.invoke('getVersion').then((version) => {
 window.api.invoke('getProfiles');
 
 window.bridge.sendProfiles((event, data) => {
+    const profileList = document.querySelectorAll(".profileList");
     if (data.selectedProfile) {
         let profileSelectBtn = document.getElementById("profileSelectBtn");
         profileSelectBtn.dataset.name = data.selectedProfile.name;
@@ -31,9 +32,17 @@ window.bridge.sendProfiles((event, data) => {
         document.getElementById("currentprofile_loader").value = data.selectedProfile.loader;
         searchMods();
 
-        profileSelectBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-            <span>${data.selectedProfile.name}</span>`;
+        // profileSelectBtn.innerHTML = `
+        // <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 8H17M7 12H17M11 16H17M4 4H20V20H4V4Z" stroke="#fefefe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        //     <span>${data.selectedProfile.name}</span>`;
+
+        profileList.forEach((profileListe) => {
+            profileListe.innerHTML = `
+                <div class="profile main" onclick="selectProfile('${data.selectedProfile.name}', '${data.selectedProfile.loader}', '${data.selectedProfile.version}')">
+                    <span class="username">${data.selectedProfile.name}</span>
+                    <img src="./img/loader/${data.selectedProfile.loader}.png">
+                </div>`;
+        });
     }
     if (data.profiles) {
         const profileTable = document.getElementById("profileTable");
@@ -66,7 +75,7 @@ window.bridge.sendProfiles((event, data) => {
                 <td>${profile.version}</td>
                 <td>
                     <div class="tablebtns">
-                        <button class="success" type="button" onclick="selectProfile('${profile.name}', '${profile.loader}', '${profile.version}')" title="Profil auswählen">
+                        <button class="success" type="button" onclick="selectProfile('${profile.name}', '${profile.loader}', '${profile.version}', true)" title="Profil auswählen">
                             <svg viewBox="-1 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-65.000000, -3803.000000)" fill="#fefefe"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M18.074,3650.7335 L12.308,3654.6315 C10.903,3655.5815 9,3654.5835 9,3652.8985 L9,3645.1015 C9,3643.4155 10.903,3642.4185 12.308,3643.3685 L18.074,3647.2665 C19.306,3648.0995 19.306,3649.9005 18.074,3650.7335" id="play-[#fefefe]"> </path> </g> </g> </g> </g></svg>
                         </button>
                         <button type="button" onclick="openProfileFolder('${profile.name}')" title="Speicherort öffnen">
@@ -76,6 +85,15 @@ window.bridge.sendProfiles((event, data) => {
                     </div>
                 </td>
             </tr>`
+
+            profileList.forEach((profileListe) => {
+                if (profile.name === data.selectedProfile.name && profile.loader === data.selectedProfile.loader && profile.version === data.selectedProfile.version) return;
+                profileListe.innerHTML += `
+                    <div class="profile" onclick="selectProfile('${profile.name}', '${profile.loader}', '${profile.version}')">
+                        <span class="username">${profile.name}</span>
+                        <img src="./img/loader/${profile.loader}.png">
+                    </div>`;
+            });
         });
     }
 
