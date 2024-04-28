@@ -75,6 +75,7 @@
         "electron-store": "^8.1.0",
         "find-java-home": "^2.0.0",
         "fs": "^0.0.1-security",
+        "fs-extra": "^11.2.0",
         "minecraft-launcher-core": "^3.17.3",
         "msmc": "^4.1.0",
         "node-cache": "^5.1.2",
