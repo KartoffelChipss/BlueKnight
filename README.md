@@ -2,7 +2,7 @@
 
 Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.
 
-![BlueKnight Launcher Screenshot](https://file.strassburger.dev/blueknight_screenshot.png)
+![BlueKnight Launcher Screenshot](https://file.strassburger.dev/blueknight.png)
 
 Please keep in mind, that this launcher is still in development and not very stable!
 
