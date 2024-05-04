@@ -2,6 +2,17 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.0 - 2024-05-1
+
+### Added
+- Added Ressource Packs, Shaders, and Modpacks as downloadables
+- Added a "Profile view" page, to manage a profile and view the installed mods
+- Added aprofie switcher to the top of the app
+
+### Changed
+- Changed the "Mods" button to "Add-ons"
+- The profile button on the main menu doesn't show the selected profile anymore
+
 ## 1.1.3 - 2024-03-12
 
 ### Added
