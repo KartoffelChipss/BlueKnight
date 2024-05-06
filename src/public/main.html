@@ -457,7 +457,13 @@
                 </div>
             </div>
 
-            <h2>Mods</h2>
+            <div class="addontypes">
+                <button class="clear addontypes--tab" type="button" data-lang="addons_mods" id="addontypes_button_mods" onclick="loadProfileAddons('mods')">Mods</button>
+                <button class="clear addontypes--tab" type="button" data-lang="addons_resourcepacks" onclick="loadProfileAddons('resourcepacks')">Resource Packs</button>
+                <button class="clear addontypes--tab" type="button" data-lang="addons_shaders" onclick="loadProfileAddons('shaders')">Shaders</button>
+                <span class="addontypes--line"></span>
+            </div>
+
             <div class="nomods" style="display: none;">
                 <span data-lang="profileview_nomods">Keine Mods installiert</span>
             </div>
@@ -520,7 +526,7 @@
 
         <div class="modmain">
             <div class="addontypes">
-                <button class="clear addontypes--tab -active" type="button" data-lang="addons_mods" id="addontypes_button_mods" onclick="selectAddonType('mods')">Mods</button>
+                <button class="clear addontypes--tab" type="button" data-lang="addons_mods" id="addontypes_button_mods" onclick="selectAddonType('mods')">Mods</button>
                 <button class="clear addontypes--tab" type="button" data-lang="addons_modpacks" onclick="selectAddonType('modpacks')">Modpacks</button>
                 <button class="clear addontypes--tab" type="button" data-lang="addons_resourcepacks" onclick="selectAddonType('resourcepacks')">Resource Packs</button>
                 <button class="clear addontypes--tab" type="button" data-lang="addons_shaders" onclick="selectAddonType('shaders')">Shaders</button>
@@ -677,6 +683,7 @@
     <script src="./js/init.js"></script>
     <script src="./js/lang.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/profileview.js"></script>
     <script src="./js/mods.js"></script>
     <script src="./js/accounts.js"></script>
     <script src="./js/tabs.js"></script>

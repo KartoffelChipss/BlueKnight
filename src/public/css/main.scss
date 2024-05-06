@@ -14,6 +14,41 @@
     border-radius: 8px;
 }
 
+.addontypes {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+    margin-bottom: 15px;
+    padding: 0 5px;
+    // border-bottom: 1px solid rgba(black, 0.1);
+    gap: 1.5rem;
+
+    &--tab {
+        display: block;
+        //margin: 0 1rem;
+        padding: 1rem 0;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: 350ms;
+        font-weight: 600;
+        cursor: pointer;
+
+        &.-active {
+            color: var(--text-color);
+        }
+    }
+
+    &--line {
+        display: block;
+        height: 5px;
+        position: absolute;
+        bottom: 5px;
+        border-radius: 3px;
+        background-color: var(--primary-2);
+        transition: 350ms;
+    }
+}
+
 main {
     display: none;
     flex-direction: column;
@@ -746,41 +781,6 @@ main {
             max-height: calc(100% - var(--searchBarheight));
         }
 
-        .addontypes {
-            display: flex;
-            flex-flow: row nowrap;
-            position: relative;
-            margin-bottom: 15px;
-            padding: 0 5px;
-            // border-bottom: 1px solid rgba(black, 0.1);
-            gap: 1.5rem;
-
-            &--tab {
-                display: block;
-                //margin: 0 1rem;
-                padding: 1rem 0;
-                color: var(--text-color);
-                text-decoration: none;
-                transition: 350ms;
-                font-weight: 600;
-                cursor: pointer;
-
-                &.-active {
-                    color: var(--text-color);
-                }
-            }
-
-            &--line {
-                display: block;
-                height: 5px;
-                position: absolute;
-                bottom: 5px;
-                border-radius: 3px;
-                background-color: var(--primary-2);
-                transition: 350ms;
-            }
-        }
-
 
         .searchBar {
             --padding: 12px;
@@ -1009,6 +1009,10 @@ main {
 
             height: var(--headheight);
             max-height: var(--headheight);
+        }
+
+        .addontypes {
+            padding: 0 10px;
         }
 
         .infoRow {

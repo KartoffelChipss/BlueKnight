@@ -13,6 +13,36 @@
   border-radius: 8px;
 }
 
+.addontypes {
+  display: flex;
+  flex-flow: row nowrap;
+  position: relative;
+  margin-bottom: 15px;
+  padding: 0 5px;
+  gap: 1.5rem;
+}
+.addontypes--tab {
+  display: block;
+  padding: 1rem 0;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: 350ms;
+  font-weight: 600;
+  cursor: pointer;
+}
+.addontypes--tab.-active {
+  color: var(--text-color);
+}
+.addontypes--line {
+  display: block;
+  height: 5px;
+  position: absolute;
+  bottom: 5px;
+  border-radius: 3px;
+  background-color: var(--primary-2);
+  transition: 350ms;
+}
+
 main {
   display: none;
   flex-direction: column;
@@ -603,35 +633,6 @@ main.mods .modmain {
   height: calc(100% - var(--searchBarheight));
   max-height: calc(100% - var(--searchBarheight));
 }
-main.mods .addontypes {
-  display: flex;
-  flex-flow: row nowrap;
-  position: relative;
-  margin-bottom: 15px;
-  padding: 0 5px;
-  gap: 1.5rem;
-}
-main.mods .addontypes--tab {
-  display: block;
-  padding: 1rem 0;
-  color: var(--text-color);
-  text-decoration: none;
-  transition: 350ms;
-  font-weight: 600;
-  cursor: pointer;
-}
-main.mods .addontypes--tab.-active {
-  color: var(--text-color);
-}
-main.mods .addontypes--line {
-  display: block;
-  height: 5px;
-  position: absolute;
-  bottom: 5px;
-  border-radius: 3px;
-  background-color: var(--primary-2);
-  transition: 350ms;
-}
 main.mods .searchBar {
   --padding: 12px;
   padding: 0 var(--padding);
@@ -806,6 +807,9 @@ main.profileview .head {
   gap: 15px;
   height: var(--headheight);
   max-height: var(--headheight);
+}
+main.profileview .addontypes {
+  padding: 0 10px;
 }
 main.profileview .infoRow {
   display: flex;

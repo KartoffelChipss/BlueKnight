@@ -176,19 +176,43 @@ if (!gotTheLock) {
             return fs.existsSync(modPath) ? false : true;
         });
 
-        ipcMain.handle("getProfileMods", async (event, args) => {
+        ipcMain.handle("getProfileAddons", async (event, args) => {
             if (!args.name) return;
+            if (!args.type) args.type = "mods";
+
             const profile = profileManager.findProfile(args.name);
-            const profileModsPath = profileManager.getModsPath(profile);
+            const profileAddonsPath =
+                args.type === "resourcepacks" ? profileManager.getRessourcePacksPath(profile) :
+                    args.type === "shaders" ? profileManager.getShadersPath(profile) :
+                        profileManager.getModsPath(profile);
 
-            if (!fs.existsSync(profileModsPath)) return null;
+            if (!fs.existsSync(profileAddonsPath)) return null;
 
-            let modnames = fs.readdirSync(profileModsPath);
+            let modnames = fs.readdirSync(profileAddonsPath);
             let mods = [];
 
             for (let i = 0; i < modnames.length; i++) {
                 const modname = modnames[i];
                 const modId = modname.split("_")[0];
+                const addonPath = path.join(profileAddonsPath, modname);
+
+                if (fs.lstatSync(addonPath).isDirectory() && args.type === "resourcepacks") {
+                    const packPngPath = path.join(addonPath, 'pack.png');
+                    let iconPath = fs.existsSync(packPngPath) ? packPngPath : null;
+    
+                    mods.push({
+                        id: null,
+                        versionid: null,
+                        gameVersions: null,
+                        versionData: null,
+                        name: modname,
+                        path: addonPath,
+                        data: null,
+                        icon_url: iconPath,
+                        foundOnMR: false,
+                    });
+                    continue;
+                }
 
                 mods.push({
                     id: null,
@@ -196,8 +220,9 @@ if (!gotTheLock) {
                     gameVersions: null,
                     versionData: null,
                     name: modname,
-                    path: path.join(profileModsPath, modname),
+                    path: addonPath,
                     data: null,
+                    icon_url: null,
                     foundOnMR: false,
                 });
 
@@ -208,18 +233,22 @@ if (!gotTheLock) {
         ipcMain.handle("getModData", async (event, modPath) => {
             if (!modPath) return null;
             if (!fs.existsSync(modPath)) return null;
+            if (fs.lstatSync(modPath).isDirectory()) return;
 
-            const data = await fetchModFilefromMR(modPath);
+            const data = await fetchModFilefromMR(modPath).catch(err => {
+                logger.warn("[MODRINTH] Failed to fetch file hash from modrinth: ", modPath);
+            })
 
             return {
-                id: data.project_id,
-                versionid: data.id,
-                gameVersions: data.game_versions,
+                id: data?.project_id,
+                versionid: data?.id,
+                gameVersions: data?.game_versions,
                 versionData: data,
-                name: data.name,
+                name: data?.name,
                 path: modPath,
                 data: data,
-                foundOnMR: true,
+                icon_url: data?.icon_url,
+                foundOnMR: data ? true : false,
             };
         });
 
@@ -285,21 +314,21 @@ if (!gotTheLock) {
 
         ipcMain.handle("searchMods", async (event, data) => {
             if (!data || !data.options) return null;
-        
+
             const options = data.options;
             const url = `https://api.modrinth.com/v2/search?${options}`;
-        
+
             if (addonsSearchCache.has(options)) {
                 //console.log(`Found in cache: ${options} (${addonsSearchCache.get(options).hits.length} results)`);
                 return Promise.resolve(addonsSearchCache.get(options));
             }
-        
+
             try {
                 const response = await fetch(url);
                 const searchData = await response.json();
-                
+
                 if (searchData && searchData.hits) addonsSearchCache.set(options, searchData);
-                
+
                 return searchData;
             } catch (error) {
                 return Promise.reject(error);
@@ -362,19 +391,19 @@ if (!gotTheLock) {
                 const tempDir = path.join(os.tmpdir(), addonId);
                 if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
                 const addonDestination = path.join(profilespath, targetProfile.name);
-    
+
                 fs.rmSync(addonDestination, { recursive: true });
                 fs.mkdirSync(addonDestination);
-    
+
                 logger.info(`[DOWNLOADS] Downloading file ${fileName} to ${tempDir}...`);
-    
+
                 await downloadFile(downloadURL, tempDir, addonId + ".mrpack");
-    
+
                 const zip = new StreamZip({
                     file: path.join(tempDir, addonId + ".mrpack"),
                     storeEntries: true
                 });
-    
+
                 return new Promise((resolve, reject) => {
                     zip.on('ready', () => {
                         zip.extract(null, tempDir, async (err, count) => {
@@ -384,7 +413,7 @@ if (!gotTheLock) {
                                 reject(err);
                             } else {
                                 logger.info(`[DOWNLOADS] Extracted ${count} entries from modpack ${addonId}`);
-    
+
                                 const modrinthIndexFile = path.join(tempDir, "modrinth.index.json");
                                 if (!fs.existsSync(modrinthIndexFile)) {
                                     logger.error(`[DOWNLOADS] Modrinth index file not found in modpack ${addonId}`);
@@ -405,14 +434,14 @@ if (!gotTheLock) {
                                             await downloadFileToPath(dependencyURL, path.join(addonDestination, dependencyPath));
                                         });
                                         await Promise.all(dependencyDownloads);
-    
+
                                         const overridesFolder = path.join(tempDir, "overrides");
                                         if (fs.existsSync(overridesFolder)) {
                                             await fs.copy(overridesFolder, addonDestination, { overwrite: true });
                                         }
-    
+
                                         fs.rmSync(tempDir, { recursive: true });
-    
+
                                         logger.info(`[DOWNLOADS] Finished downloading modpack ${addonId}`);
                                         resolve(true);
                                     }
@@ -420,7 +449,7 @@ if (!gotTheLock) {
                             }
                         });
                     });
-    
+
                     zip.on('error', (err) => {
                         logger.error(`[DOWNLOADS] Error reading modpack ${addonId}: ${err.message}`);
                         fs.rmSync(tempDir, { recursive: true });

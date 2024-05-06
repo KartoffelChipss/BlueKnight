@@ -32,7 +32,7 @@
             "artifactName": "blueknight-launcher-${ext}-${version}.${ext}",
             "maintainer": "Jan Straßburger",
             "vendor": "Jan Straßburger",
-            "synopsis": "Minecraft Fabric Launcher for Windows and Linux"
+            "synopsis": "Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible."
         },
         "win": {
             "target": [

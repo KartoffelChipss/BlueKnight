@@ -67,6 +67,8 @@ function searchAddons(query, page) {
     console.log("Search URL: " + searchUrlOptions)
 
     window.api.invoke("searchMods", { options: searchUrlOptions }).then((data) => {
+        modlist.innerHTML = "";
+        
         if (!data || !data.hits) {
             console.log(`No hits for query: "${query}", page: "${page}" and type: "${resourceType}"`);
             modlist.innerHTML = getPaginationButtons(query, page);

@@ -110,7 +110,7 @@ class ProfileManager {
     }
 
     /**
-     * Get the path to a profile
+     * Get the path to a profiles mods
      * @param {import('../types').Profile} profile 
      */
     getModsPath(profile) {
@@ -122,6 +122,36 @@ class ProfileManager {
      */
     getSelectedModsPath() {
         return path.join(this.getSelectedPath(), "mods");
+    }
+
+    /**
+     * Get the path to a profiles ressourcepacks
+     * @param {import('../types').Profile} profile 
+     */
+    getRessourcePacksPath(profile) {
+        return path.join(this.getPath(profile), "resourcepacks");
+    }
+
+    /**
+     * Get the path to the ressource packs folder of the selected profile
+     */
+    getSelectedRessourcePacksPath() {
+        return path.join(this.getSelectedPath(), "resourcepacks");
+    }
+
+    /**
+     * Get the path to a profiles shaderpacks
+     * @param {import('../types').Profile} profile 
+     */
+    getShadersPath(profile) {
+        return path.join(this.getPath(profile), "shaderpacks");
+    }
+
+    /**
+     * Get the path to the shaderpacks folder of the selected profile
+     */
+    getSelectedShadersPath() {
+        return path.join(this.getSelectedPath(), "shaderpacks");
     }
 
     /**

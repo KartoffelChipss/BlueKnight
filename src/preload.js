@@ -42,7 +42,7 @@ contextBridge.exposeInMainWorld(
                 "getSelectedProfile",
                 "getProfiles",
                 "getProfileData",
-                "getProfileMods",
+                "getProfileAddons",
                 "deleteProfileMod",
                 "getVersion",
                 "getModData",
