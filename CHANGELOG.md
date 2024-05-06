@@ -2,6 +2,11 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.1 - 2024-05-6
+
+### Added
+- Added Add-on type sections to Profileview page
+
 ## 1.2.0 - 2024-05-1
 
 ### Added
