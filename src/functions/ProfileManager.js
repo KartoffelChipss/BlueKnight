@@ -155,6 +155,16 @@ class ProfileManager {
     }
 
     /**
+     * Get the profile update data
+     */
+    getUpdateData() {
+        return {
+            profiles: store.get("profiles"),
+            selectedProfile: store.get("selectedProfile"),
+        };
+    }
+
+    /**
      * Send a profiles update to the main window
      */
     sendProfilesUpdate() {

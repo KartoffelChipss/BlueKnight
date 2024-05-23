@@ -55,6 +55,8 @@
     "profileview_updatemods": "Update Mods",
     "profileview_removeprofile": "Delete Profile",
     "profileview_nomods": "No Mods installed",
+    "profileview_noresourcepacks": "No Ressource Packs installed",
+    "profileview_noshaders": "No Shaders installed",
     "profileview_showmodinfolder": "Show in File-Explorer",
     "profileview_deletemod": "Delete mod",
     "profileview_deleteprofile": "Delete Profile",

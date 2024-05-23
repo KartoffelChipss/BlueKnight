@@ -112,8 +112,6 @@ window.bridge.sendDownloadProgress((event, progressevent) => {
     playBtn.innerHTML = `${lang[lang.selected].loading} (${percentage}%)`;
 });
 
-console.log(navigator.deviceMemory)
-
 function setSetting(setting, value) {
     window.api.invoke("setSetting", {
         setting,
@@ -163,7 +161,7 @@ function selectProfile(name, loader, version, switchToMain = false) {
         version
     });
 
-    window.api.invoke('getProfiles')
+    updateProfiles();
 
     if (switchToMain) changeSection("main");
 }

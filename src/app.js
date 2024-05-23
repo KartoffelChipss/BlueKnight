@@ -115,6 +115,10 @@ if (!gotTheLock) {
             store.set("maxMemMB", value);
         });
 
+        ipcMain.handle("getTotalMem", (event, data) => {
+            return os.totalmem();
+        });
+
         ipcMain.handle("setSetting", (event, arg) => {
             if (arg.setting === undefined || arg.value === undefined) return;
             store.set(arg.setting, arg.value);
@@ -273,7 +277,7 @@ if (!gotTheLock) {
         ipcMain.handle("deleteProfile", async (event, name) => {
             if (!name) return null;
 
-            console.log("[PROFILES] Deleting profile: " + name)
+            logger.info("[PROFILES] Deleting profile: " + name)
 
             profileManager.removeProfile(name);
             return true;
@@ -285,7 +289,8 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("getProfiles", (event, data) => {
-            profileManager.sendProfilesUpdate();
+            logger.info("[PROFILES] Sending profile update...");
+            return profileManager.getUpdateData();
         });
 
         ipcMain.handle("getSelectedProfile", (event, data) => {

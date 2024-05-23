@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld(
                 "launchMC",
                 "initLogin",
                 "setMaxMem",
+                "getTotalMem",
                 "setSetting",
                 "createProfile",
                 "selectProfile",

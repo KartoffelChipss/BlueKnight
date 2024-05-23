@@ -29,12 +29,17 @@ async function loadProfileView(profilename) {
 function loadProfileAddons(type) {
     const modlist = profileviewMain.querySelector(".modlist");
     const profilename = profileviewMain.querySelector("h1").innerText;
+    const noModsBox = profileviewMain.querySelector(".nomods");
+    noModsBox.style.display = "none";
 
     window.api.invoke("getProfileAddons", { name: profilename, type }).then(mods => {
         modlist.innerHTML = "";
 
-        if (mods === null || mods.length === 0) {
-            profileviewMain.querySelector(".nomods").style.display = "flex";
+        console.log("Mods: ", mods)
+
+        if (mods === null || mods === undefined || mods.length === 0) {
+            noModsBox.querySelector("span").innerHTML = getTranslation(`profileview_no${type}`);
+            noModsBox.style.display = "flex";
             return;
         }
 

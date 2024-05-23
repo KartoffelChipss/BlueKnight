@@ -55,6 +55,8 @@
     "profileview_updatemods": "Mods updaten",
     "profileview_removeprofile": "Profil löschen",
     "profileview_nomods": "Keine Mods installiert",
+    "profileview_noresourcepacks": "Keine Ressourcenpakete installiert",
+    "profileview_noshaders": "Keine Shader installiert",
     "profileview_showmodinfolder": "Mod im Ordner anzeigen",
     "profileview_deletemod": "Mod löschen",
     "profileview_deleteprofile": "Profil löschen",
