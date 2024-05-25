@@ -6,6 +6,8 @@ const { safeStorage, BrowserWindow } = require("electron");
 const logger = require("electron-log");
 const store = new Store();
 
+const devMode = process.env.NODE_ENV === 'development';
+
 /**
  * @typedef {Object} Account
  * @property {String} id - The UUID of the account
@@ -32,32 +34,37 @@ class AccountManager {
                 this.addAccount(newAccount);
                 this.selectAccount(newAccount.id);
             } catch (err) {
-                logger.error(err.message);
+                logger.error(err);
             }
         }
+    
+        const beforeTS = new Date().getTime();
+        if (devMode) logger.info("[AccountManager] Starting token refresh benchmark...");
     
         const accounts = this.getAccounts();
     
-        for (let account of accounts) {
+        await Promise.all(accounts.map(async account => {
             let tokenString = this.decryptToken(account.accessToken);
     
-            let token = null;
-            let tokenXbox = null;
             try {
-                if (tokenString) tokenXbox = await authManager.refresh(tokenString);
-                if (tokenString && tokenXbox) token = await tokenXbox.getMinecraft();
+                if (tokenString) {
+                    let tokenXbox = await authManager.refresh(tokenString);
+                    if (tokenXbox) {
+                        account.minecraft = await tokenXbox.getMinecraft();
+                    }
+                }
             } catch (err) {
-                logger.error(err.message);
+                logger.error(err);
                 this.removeAccount(account.id);
             }
+        }));
     
-            if (token) {
-                account.minecraft = token;
-            }
-        }
+        const afterTS = new Date().getTime();
+        const timeBetween = afterTS - beforeTS;
+        if (devMode) logger.info(`[AccountManager] Token refresh took ${timeBetween}ms for ${accounts.length} Accounts!`);
     
         this.sendUpdatedAccounts();
-    }
+    }    
 
     loginWithNewAccount() {
         return new Promise(async (resolve, reject) => {

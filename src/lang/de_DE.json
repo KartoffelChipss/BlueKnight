@@ -33,7 +33,7 @@
     "settings_ram_title": "Zugewiesener Arbeitsspeicher",
     "settings_ram_desc": "Wie viel Arbeitsspeicher (RAM) soll Minecraft benutzen dürfen?",
     "settings_java_title": "Benutzerdefinierter Java Installationsort",
-    "settings_java_desc": "Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 17 empfohlen)",
+    "settings_java_desc": "Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 21 empfohlen)",
     "settings_java_input": "Weg zu einer benutzerdefinierten javaw.exe Datei",
     "settings_lang_title": "Anzeigesprache",
     "settings_lang_desc": "Ändere die Anzeigesprache",

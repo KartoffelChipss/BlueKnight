@@ -1,4 +1,4 @@
-window.bridge.sendSettings((event, settings) => {
+window.api.invoke("getSettings").then(settings => {
     if (!settings) return;
 
     if (settings.maxMemMB) {
@@ -113,16 +113,18 @@ async function initMemSLiders() {
     totalMemMB = Math.floor(totalMem / 1000000);
 
     let memslider = document.getElementById("memslider");
-    memslider.setAttribute("max", maxmemMB);
+    memslider.setAttribute("max", totalMemMB);
 
     document.getElementById("memMarks").innerHTML = `
         <span>2GB</span>
-        <span>${maxmemGB}GB</span>
+        <span>${totalMemGB}GB</span>
     `
+
+    console.log(`Detected ${totalMemGB}GB (${totalMemMB}MB) of Ram!`);
 
     const meminput = document.getElementById("meminput");
     meminput.setAttribute("min", 2000);
-    meminput.setAttribute("max", maxmemMB);
+    meminput.setAttribute("max", totalMemMB);
 }
 
 function setMaxMem(value) {

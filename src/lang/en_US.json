@@ -33,7 +33,7 @@
     "settings_ram_title": "Allocated memory",
     "settings_ram_desc": "How much memory (RAM) should minecraft be allowed to use?",
     "settings_java_title": "Custom Java path",
-    "settings_java_desc": "Please only change this option, if you know what you are doing! (Java 17 or newer recommended)",
+    "settings_java_desc": "Please only change this option, if you know what you are doing! (Java 21 or newer recommended)",
     "settings_java_input": "Path to your javaw.exe file",
     "settings_lang_title": "Language",
     "settings_lang_desc": "Change the language",

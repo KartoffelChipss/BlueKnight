@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell, nativeImage } = require("electron");
+const { app, BrowserWindow, shell, nativeImage, safeStorage } = require("electron");
 const path = require("path");
 const fetch = require("cross-fetch");
 const { ipcMain } = require("electron/main");
@@ -76,10 +76,14 @@ if (!gotTheLock) {
             app.dock.setIcon(nativeImage.createFromPath(path.join(__dirname, "public/img/logo256x256.png")));
         }
 
+        if (!safeStorage.isEncryptionAvailable()) {
+            logger.warn("Safe storage not available!");
+        }
+
         foundjava = checkForJava();
 
-        if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot);
-        if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath);
+        if (!fs.existsSync(blueKnightRoot)) fs.mkdirSync(blueKnightRoot, { recursive: true });
+        if (!fs.existsSync(profilespath)) fs.mkdirSync(profilespath, { recursive: true });
 
         ipcMain.handle("minimize", (event, arg) => {
             top.mainWindow.isMinimized() ? top.mainWindow.restore() : top.mainWindow.minimize();
@@ -91,7 +95,7 @@ if (!gotTheLock) {
         });
 
         ipcMain.handle("closeWindow", (event, arg) => {
-            if (process.platform === "darwin") return app.quit();
+            if (process.platform === "") return app.quit();
 
             app.quit();
         });
@@ -501,6 +505,15 @@ if (!gotTheLock) {
             logger.info("[LANG] Sent lang refresh");
         });
 
+        ipcMain.handle("getSettings", (event, data) => {
+            return {
+                maxMemMB: store.get("maxMemMB") || Math.floor(os.totalmem() / 1000000 / 2),
+                minimizeOnStart: store.get("minimizeOnStart"),
+                hideDiscordRPC: store.get("hideDiscordRPC"),
+                javaPath: store.get("javaPath"),
+            };
+        });
+
         ipcMain.handle("getVersion", (event, data) => {
             return app.getVersion();
         });
@@ -526,20 +539,8 @@ if (!gotTheLock) {
     });
 }
 
-function refreshSettings() {
-    top.mainWindow.webContents.send("sendSettings", {
-        maxMemMB: store.get("maxMemMB") || Math.floor(os.totalmem() / 1000000 / 2),
-        minimizeOnStart: store.get("minimizeOnStart"),
-        hideDiscordRPC: store.get("hideDiscordRPC"),
-        javaPath: store.get("javaPath"),
-    });
-}
-
 function proceedToMain() {
     top.mainWindow.loadFile("src/public/main.html").then(() => {
-        top.mainWindow.webContents.send("sendMaxmemory", os.totalmem());
-        refreshSettings();
-
         logger.info(`[STARTUP] Loaded main window (${new Date() - startTimestamp}ms after start)`);
 
         if (!foundjava) {

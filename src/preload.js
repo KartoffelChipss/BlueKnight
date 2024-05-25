@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld(
                 "setMaxMem",
                 "getTotalMem",
                 "setSetting",
+                "getSettings",
                 "createProfile",
                 "selectProfile",
                 "openProfileFolder",
@@ -35,6 +36,7 @@ contextBridge.exposeInMainWorld(
                 "searchMods",
                 "openExternal",
                 "installjava",
+                "findJava",
                 "getLang",
                 "updateAccounts",
                 "addAccount",
@@ -70,12 +72,6 @@ contextBridge.exposeInMainWorld(
         },
         sendMCstarted: (message) => {
             ipcRenderer.on("sendMCstarted", message);
-        },
-        sendMaxmemory: (message) => {
-            ipcRenderer.on("sendMaxmemory", message);
-        },
-        sendSettings: (message) => {
-            ipcRenderer.on("sendSettings", message);
         },
         openSection: (message) => {
             ipcRenderer.on("openSection", message);
