@@ -509,7 +509,7 @@ if (!gotTheLock) {
             return {
                 maxMemMB: store.get("maxMemMB") || Math.floor(os.totalmem() / 1000000 / 2),
                 minimizeOnStart: store.get("minimizeOnStart"),
-                hideDiscordRPC: store.get("hideDiscordRPC"),
+                discordRCP: store.get("discordRCP"),
                 javaPath: store.get("javaPath"),
             };
         });

@@ -24,7 +24,7 @@ function init(top) {
 
     client.on("ready", () => {
         setInterval(() => {
-            if (!dcLoginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
+            if (!dcLoginSuccess || !store.get("discordRCP") || !top.mainWindow.isVisible()) return;
             logger.info("[DiscordRCP] Updated DiscordRCP");
 
             let selectedProfile = store.get("selectedProfile");
@@ -54,7 +54,7 @@ function init(top) {
 }
 
 function setActivity(state, details, largeImageKey) {
-    if (!dcLoginSuccess || store.get("hideDiscordRPC") || !top.mainWindow.isVisible()) return;
+    if (!dcLoginSuccess || !store.get("discordRCP") || !top.mainWindow.isVisible()) return;
 
     client
         .setActivity({

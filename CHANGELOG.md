@@ -2,6 +2,14 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.3 - 2024-05-26
+
+### Added
+- Added an about page, giving credit to all the libraries and icons used
+
+### Changed
+- Changed the Discord RPC setting to be positiv instead of negative
+
 ## 1.2.2 - 2024-05-26
 
 ### Added

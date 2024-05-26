@@ -7,7 +7,7 @@ window.api.invoke("getSettings").then(settings => {
     }
 
     document.getElementById("minimizeOnStartCheckbox").checked = settings.minimizeOnStart ?? false;
-    document.getElementById("hideDiscordRPCCheckbox").checked = settings.hideDiscordRPC ?? false;
+    document.getElementById("hideDiscordRPCCheckbox").checked = settings.discordRCP ?? false;
     document.getElementById("autoUpdatesCheckbox").checked = settings.autoUpdates ?? true;
 
     document.getElementById("javaPath").value = settings.javaPath;

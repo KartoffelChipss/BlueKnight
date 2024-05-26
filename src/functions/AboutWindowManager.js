@@ -18,13 +18,14 @@ class AboutWindowManager {
     createAboutWindow() {
         return new BrowserWindow({
             title: "BlueKnight Launcher",
-            minWidth: 750,
-            minHeight: 500,
+            minWidth: 300,
+            minHeight: 300,
             center: true,
             frame: true,
             show: false,
             backgroundColor: "#1A1B1E",
             resizable: true,
+            maximizable: false,
             autoHideMenuBar: false,
             icon: path.resolve(process.platform === "win32" ? path.join(__dirname, "..", "/public/img/logo.ico") : path.join(__dirname, "..", "/public/img/logo256x256.png")),
             webPreferences: {
