@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About BlueKnight Launcher</title>
+
+    <link rel="stylesheet" href="./css/assets.css">
+</head>
+<body>
+    <main class="about">
+        <h2>About</h2>
+
+        <p>Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.</p>
+
+        <h3>Links</h3>
+
+        <ul>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/KartoffelChipss/blueknight')" href="https://github.com/KartoffelChipss/blueknight">GitHub</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/strassburger.org/discord')" href="https://strassburger.org/discord">Discord</button></li>
+        </ul>
+
+        <h3>Icons</h3>
+
+        <ul>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/www.svgrepo.com/collection/dazzle-line-icons/')" href="https://www.svgrepo.com/collection/dazzle-line-icons/">Dazzle Line Icons</button></li>
+        </ul>
+
+        <h3>Libraries</h3>
+
+        <ul>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/electron/electron')" href="https://github.com/electron/electron">electron</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/megahertz/electron-log')" href="https://github.com/megahertz/electron-log">electron-log</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/sindresorhus/electron-store')" href="https://github.com/sindresorhus/electron-store">electron-store</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/jsdevel/node-find-java-home')" href="https://github.com/jsdevel/node-find-java-home">node-find-java-home</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/Pierce01/MinecraftLauncher-core')" href="https://github.com/Pierce01/MinecraftLauncher-core">MinecraftLauncher-core</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/Hanro50/MSMC')" href="https://github.com/Hanro50/MSMC">MSMC</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/doublekekse/tomate-loaders')" href="https://github.com/doublekekse/tomate-loaders">tomate-loaders</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/lquixada/cross-fetch')" href="https://github.com/lquixada/cross-fetch">cross-fetch</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/node-cache/node-cache')" href="https://github.com/node-cache/node-cache">node-cache</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/jprichardson/node-fs-extra')" href="https://github.com/jprichardson/node-fs-extra">node-fs-extra</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/github.com/antelle/node-stream-zip')" href="https://github.com/antelle/node-stream-zip">node-stream-zip</button></li>
+            <li><button class="clear bluetext" type="button" onclick="openExternalLink('https:\/\/www.npmjs.com/package/discord-rpc')" href="https:\/\/www.npmjs.com/package/discord-rpc">discord-rpc</button></li>
+        </ul>
+    </main>
+
+    <script>
+        function openExternalLink(url) {
+            window.api.invoke("openExternal", { url });
+        }
+    </script>
+</body>
+</html>

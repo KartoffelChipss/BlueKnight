@@ -20,6 +20,9 @@
     --text-color-2: #9e9e9e;
 
     --dragheight: 35px;
+
+    color-scheme: dark light;
+    background-color: #1A1B1E;
 }
 
 body {
@@ -165,8 +168,15 @@ a.button {
     &.clear {
         background-color: transparent;
         color: var(--text-color);
+        font-size: inherit;
+        font-weight: inherit;
         border: none;
         outline: none;
+        padding: 0;
+    }
+
+    &.bluetext {
+        color: var(--primary-2);
     }
 
     &.redhover:hover {
@@ -426,4 +436,15 @@ body:has(dialog._open)::after {
     z-index: 10;
 
     background-color: rgba(0, 0, 0, .7);
+}
+
+main.about {
+    --padding: 15px;
+    padding: var(--padding);
+    max-height: calc(100% - var(--padding) * 2);
+    overflow: auto;
+
+    h2 {
+        margin-top: 0px;
+    }
 }
