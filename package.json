@@ -10,8 +10,8 @@
         "dist": "electron-builder",
         "dist:win": "electron-builder --win",
         "dist:linux": "electron-builder --linux",
-        "dist:linux:deb": "electron-builder --linux --deb",
-        "dist:linux:snap": "electron-builder --linux --snap",
+        "dist:linux:deb": "electron-builder --linux deb",
+        "dist:linux:snap": "electron-builder --linux snap",
         "dist:mac": "electron-builder --mac"
     },
     "build": {
