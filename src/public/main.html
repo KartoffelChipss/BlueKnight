@@ -34,7 +34,7 @@
         <h3 data-lang="java_modal_title">Java konnte nicht gefunden werden!</h3>
         <p data-lang="java_modal_desc">Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.</p>
         <div class="buttonbox">
-            <button type="button" class="icon icon-smol blue button" onclick="openExternalLink('https\:\/\/www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html')">
+            <button type="button" class="icon icon-smol blue button" onclick="openExternalLink('https:\/\/www.oracle.com/de/java/technologies/downloads/')">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <line x1="10.8492" y1="13.0606" x2="19.435" y2="4.47485" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line> <path d="M19.7886 4.12134L20.1421 8.01042" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M19.7886 4.12134L15.8995 3.76778" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18 13.1465V17.6465C18 19.3033 16.6569 20.6465 15 20.6465H6C4.34315 20.6465 3 19.3033 3 17.6465V8.64648C3 6.98963 4.34315 5.64648 6 5.64648H10.5" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                 <span data-lang="java_modal_btn_1">Java Downloads</span>
             </button>
@@ -290,7 +290,12 @@
                     <span class="label" data-lang="settings_java_title">Benutzerdefinierter Java-Path</span>
                     <span class="desc" data-lang="settings_java_desc">Bitte ändere diese Option nur wenn du weißt was du tust! (Mindestens Java 21 empfohlen)</span>
                 </div>
-                <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" data-langplaceholder="settings_java_input" value="" class="widetextinput" oninput="setJavaPath(this.value)">
+                <div class="java-flex">
+                    <input type="text" id="javaPath" placeholder="Weg zu einer benutzerdefinierten javaw.exe Datei" data-langplaceholder="settings_java_input" value="" class="widetextinput" oninput="setJavaPath(this.value)">
+                    <button type="button" class="icon" onclick="findJava()">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fefefe"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#fefefe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                </div>
             </div>
         </div>
 

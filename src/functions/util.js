@@ -7,6 +7,7 @@ const { pipeline } = require("stream/promises");
 const logger = require("electron-log");
 const Store = require("electron-store");
 const store = new Store();
+const findJavaHome = require("find-java-home");
 
 const blueKnightRoot = path.join(`${app.getPath("appData") ?? "."}${path.sep}.blueknight`);
 const profilespath = path.join(blueKnightRoot, `profiles`);
@@ -62,6 +63,7 @@ const downloadFileToPath = async (url, targetPath) => {
  */
 function checkForJava() {
     const setJavaPath = store.get("javaPath");
+
     if (setJavaPath) {
         if (!fs.existsSync(setJavaPath)) {
             logger.info("[JAVA] Custom set path does not exist");
@@ -71,41 +73,73 @@ function checkForJava() {
             logger.info("[JAVA] Using custom set java path: " + setJavaPath);
             return true;
         }
-    } else {
-        require("find-java-home")(async (err, home) => {
+    }
+
+    findJavaHome((err, home) => {
+        logger.info("[JAVA] Looking for installed java path...");
+        if (err) return logger.error(err);
+
+        if (!home) {
+            logger.info("[JAVA] Could not find java path");
+            logger.info("[JAVA] Java not found. Opening modal after login.");
+            return false;
+        }
+
+        let javaPath;
+        if (process.platform === "win32") javaPath = path.join(home, "bin", "javaw.exe");
+        else javaPath = path.join(home, "bin", "java");
+
+        if (!fs.existsSync(javaPath)) {
+            logger.info("[JAVA] Could not find java path");
+            logger.info("[JAVA] Java not found. Opening modal after login.");
+            return false;
+        }
+
+        logger.info("[JAVA] Found installed java!");
+        store.set("javaPath", javaPath);
+        logger.info("[JAVA] Java path: " + javaPath);
+        return true;
+    });
+}
+
+/**
+ * Find a java on the machine. Returns null if no java installation is found
+ * @returns {String?}
+ */
+function findJavaPath() {
+    return new Promise((resolve, reject) => {
+        findJavaHome((err, home) => {
             logger.info("[JAVA] Looking for installed java path...");
-            if (err) return logger.error(err);
+            if (err) {
+                logger.error(err);
+                return reject(err);
+            }
 
             if (!home) {
                 logger.info("[JAVA] Could not find java path");
-                logger.info("[JAVA] Java not found. Opening modal after login.");
-                return false;
+                return resolve(null);
             }
 
             let javaPath;
             if (process.platform === "win32") javaPath = path.join(home, "bin", "javaw.exe");
             else javaPath = path.join(home, "bin", "java");
 
-            if (!fs.existsSync(javaPath)) {
-                logger.info("[JAVA] Could not find java path");
-                logger.info("[JAVA] Java not found. Opening modal after login.");
-                return false;
-            }
+            if (!fs.existsSync(javaPath)) return resolve(null);
 
             logger.info("[JAVA] Found installed java!");
-            store.set("javaPath", javaPath);
             logger.info("[JAVA] Java path: " + javaPath);
-            return true;
+            resolve(javaPath);
         });
-    }
+    });
 }
 
 module.exports = {
     getMainWindow,
     blueKnightRoot,
     profilespath,
-    downloadModFile: downloadModFile,
+    downloadModFile,
     checkForJava,
     downloadFile,
     downloadFileToPath,
+    findJavaPath,
 };

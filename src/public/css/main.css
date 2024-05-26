@@ -407,6 +407,20 @@ main .settingsBox .checkBoxInput select:disabled:hover {
 main .settingsBox .checkBoxInput select:focus-visible {
   outline: none;
 }
+main .settingsBox .checkBoxInput .java-flex {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-top: 15px;
+}
+main .settingsBox .checkBoxInput .java-flex input {
+  flex-grow: 1;
+  margin: 0;
+}
+main .settingsBox .checkBoxInput .java-flex button svg {
+  height: 20px;
+}
 main .settingsBox .checkBoxInput .switch {
   position: relative;
   display: inline-block;

@@ -1,6 +1,6 @@
 {
     "name": "blueknight",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.",
     "main": "./src/app.js",
     "scripts": {
@@ -64,7 +64,7 @@
     "homepage": "https://github.com/kartoffelchipss/blueknight#readme",
     "license": "GNU General Public License v3.0",
     "devDependencies": {
-        "electron": "^28.2.3",
+        "electron": "^30.0.8",
         "electron-builder": "^24.9.1"
     },
     "dependencies": {

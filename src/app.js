@@ -9,7 +9,7 @@ const logger = require("electron-log");
 const NodeCace = require("node-cache");
 const trayManager = require("./functions/trayManager.js");
 const discordRPCManager = require("./functions/discordRPCManager.js");
-const { blueKnightRoot, profilespath, downloadModFile, downloadFileToPath, downloadFile, checkForJava } = require("./functions/util.js");
+const { blueKnightRoot, profilespath, downloadModFile, downloadFileToPath, downloadFile, checkForJava, findJavaPath } = require("./functions/util.js");
 const crypto = require('crypto');
 const StreamZip = require('node-stream-zip');
 
@@ -516,6 +516,10 @@ if (!gotTheLock) {
 
         ipcMain.handle("getVersion", (event, data) => {
             return app.getVersion();
+        });
+
+        ipcMain.handle("findJava", async (event, data) => {
+            return findJavaPath();
         });
 
         logger.info("[STARTUP] Regitsered all ipc handler");

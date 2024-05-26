@@ -2,6 +2,16 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.2 - 2024-05-26
+
+### Added
+- Added "Find java" button to the settings to detect a java installation
+
+### Fixed
+- Fixed modals not showing up properly
+- Fixed modal background blur not covering up account and profile buttons
+- Fixed missing english javamodal translation
+
 ## 1.2.1 - 2024-05-6
 
 ### Added

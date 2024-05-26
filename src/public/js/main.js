@@ -3,6 +3,7 @@ let settingsMain = document.querySelector("main.settings");
 let profilesMain = document.querySelector("main.profiles");
 let modsMain = document.querySelector("main.mods");
 let profileviewMain = document.querySelector("main.profileview");
+const javaPathInput = document.getElementById("javaPath");
 
 const playBtn = document.getElementById("playBtn");
 
@@ -168,7 +169,7 @@ function selectProfile(name, loader, version, switchToMain = false) {
 
 function setJavaPath(value) {
     if (!value || value === "" || value === "undefined") return;
-    
+
     setSetting('javaPath', value)
 }
 
@@ -190,11 +191,11 @@ window.bridge.showWarnbox((event, data) => {
 })
 
 function openModal(modalid) {
-    document.getElementById(modalid).classList.add("_shown");
+    document.getElementById(modalid).classList.add("_open");
 }
 
 function closeModal(modalid) {
-    document.getElementById(modalid).classList.remove("_shown");
+    document.getElementById(modalid).classList.remove("_open");
 }
 
 window.onclick = (e) => {
@@ -206,4 +207,16 @@ window.onclick = (e) => {
     }
 }
 
-window.bridge.showJavaModal(data => { openModal("javamodal"); });
+async function findJava() {
+    const javaPath = await window.api.invoke("findJava");
+    
+    if (javaPath) {
+        javaPathInput.value = javaPath;
+        setJavaPath(javaPath);
+    }
+}
+
+window.bridge.showJavaModal(data => {
+    console.log("Showing Java modal...")
+    openModal("javamodal");
+});

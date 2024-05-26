@@ -8,7 +8,7 @@
     "retry_login": "Retry Login",
 
     "java_modal_title": "Java not found!",
-    "java_modal_desc": "Entweder hast du Java nicht installiert oder wir konnten es nicht finden. Wenn du java installiert hast, setze bitte den Installationsort in den Enstellungen. Wenn du java noch nicht installiert hast, musst du dies tun, damit Minecraft starten kann.",
+    "java_modal_desc": "You either don't have java installed or we could not find it! If you have java installed, please set the java path in the settings. If you haven't installed java yet, you won't be able to start Minecraft.",
     "java_modal_btn_1": "Java Downloads",
     "java_modal_btn_2": "Settings",
 
