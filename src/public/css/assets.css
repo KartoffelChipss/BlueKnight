@@ -192,6 +192,9 @@ input {
   z-index: 20;
   -webkit-app-region: drag;
 }
+.dragbar._hidden {
+  display: none;
+}
 .dragbar .title {
   display: flex;
   justify-content: left;

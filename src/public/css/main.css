@@ -21,16 +21,17 @@
   padding: 0 5px;
   gap: 1.5rem;
 }
-.addontypes--tab {
+.addontypes--tab.clear {
   display: block;
   padding: 1rem 0;
   color: var(--text-color);
   text-decoration: none;
   transition: 350ms;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
 }
-.addontypes--tab.-active {
+.addontypes--tab.clear.-active {
   color: var(--text-color);
 }
 .addontypes--line {
@@ -821,9 +822,6 @@ main.profileview .head {
   gap: 15px;
   height: var(--headheight);
   max-height: var(--headheight);
-}
-main.profileview .addontypes {
-  padding: 0 10px;
 }
 main.profileview .infoRow {
   display: flex;

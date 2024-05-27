@@ -40,6 +40,11 @@
     "settings_lang_auto": "Automatisch",
     "settings_autoUpdates_title": "Automatische Updates",
     "settings_autoUpdates_desc": "Benachrichtigt dich bei verfügbaren Updates",
+    "settings_customframe_title": "Custom Fensterrahmen",
+    "settings_customframe_desc": "Nutzt einen eigenen Fensterrahmen anstatt dem Standard",
+    "settings_customframe_modal_title": "Neustart erforderlich!",
+    "settings_customframe_modal_desc": "Um diese Einstellungen anzuwenden, musst du BlueKnight neustarten",
+    "settings_customframe_modal_restart": "Neustart",
 
     "profiles_title": "Meine Profile",
     "profiles_new": "Neues Profil",

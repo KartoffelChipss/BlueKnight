@@ -6,9 +6,13 @@ Here, you will find all notabled changes that have been made to this project.
 
 ### Added
 - Added an about page, giving credit to all the libraries and icons used
+- Added a setting to use the default window frame
 
 ### Changed
 - Changed the Discord RPC setting to be positiv instead of negative
+
+### Fixed
+- Fixed the addon type bars height
 
 ## 1.2.2 - 2024-05-26
 

@@ -129,6 +129,11 @@ if (!gotTheLock) {
             logger.info(`[SETTINGS] Set setting "${arg.setting}" to "${arg.value}"`);
         });
 
+        ipcMain.handle("getSetting", (event, settingKey) => {
+            if (settingKey == null || settingKey == undefined) return;
+            return store.get(settingKey);
+        });
+
         ipcMain.handle("initLogin", async (event, args) => {
             await accountManager.init();
             proceedToMain();
@@ -511,6 +516,7 @@ if (!gotTheLock) {
                 minimizeOnStart: store.get("minimizeOnStart"),
                 discordRCP: store.get("discordRCP"),
                 javaPath: store.get("javaPath"),
+                defaultFrame: store.get("defaultFrame"),
             };
         });
 
@@ -520,6 +526,11 @@ if (!gotTheLock) {
 
         ipcMain.handle("findJava", async (event, data) => {
             return findJavaPath();
+        });
+
+        ipcMain.handle("restartApp", (event, data) => {
+            app.relaunch();
+            app.quit();
         });
 
         logger.info("[STARTUP] Regitsered all ipc handler");
@@ -560,6 +571,7 @@ function proceedToMain() {
  */
 function createMainWindow() {
     const lastPos = store.get("windowPosition");
+    const useDefaultFrame = store.get("defaultFrame") ?? false;
 
     return new BrowserWindow({
         title: "BlueKnight Launcher",
@@ -570,7 +582,7 @@ function createMainWindow() {
         x: lastPos ? lastPos.x : undefined,
         y: lastPos ? lastPos.y : undefined,
         center: true,
-        frame: false,
+        frame: useDefaultFrame,
         show: false,
         backgroundColor: "#1A1B1E",
         resizable: true,

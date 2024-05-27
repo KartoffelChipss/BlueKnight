@@ -23,13 +23,14 @@
     // border-bottom: 1px solid rgba(black, 0.1);
     gap: 1.5rem;
 
-    &--tab {
+    &--tab.clear {
         display: block;
         //margin: 0 1rem;
         padding: 1rem 0;
         color: var(--text-color);
         text-decoration: none;
         transition: 350ms;
+        font-size: 18px;
         font-weight: 600;
         cursor: pointer;
 
@@ -1026,10 +1027,6 @@ main {
 
             height: var(--headheight);
             max-height: var(--headheight);
-        }
-
-        .addontypes {
-            padding: 0 10px;
         }
 
         .infoRow {

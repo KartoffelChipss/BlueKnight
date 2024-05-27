@@ -9,11 +9,27 @@ window.api.invoke("getSettings").then(settings => {
     document.getElementById("minimizeOnStartCheckbox").checked = settings.minimizeOnStart ?? false;
     document.getElementById("hideDiscordRPCCheckbox").checked = settings.discordRCP ?? false;
     document.getElementById("autoUpdatesCheckbox").checked = settings.autoUpdates ?? true;
+    document.getElementById("useCustomFrame").checked = !settings.defaultFrame ?? true;
+    updateFrame();
 
     document.getElementById("javaPath").value = settings.javaPath;
 
     if (document.getElementById("javaPath").value === "undefined") document.getElementById("javaPath").value = "";
 });
+
+async function updateFrame() {
+    const useDefaultFrame = await window.api.invoke("getSetting", "defaultFrame");
+    const dragBar = document.querySelector(".dragbar");
+
+    if (useDefaultFrame) {
+        dragBar.classList.add("_hidden");
+        document.documentElement.style.setProperty('--dragheight', '0px');
+    }
+    else {
+        dragBar.classList.remove("_hidden");
+        document.documentElement.style.setProperty('--dragheight', '35px');
+    }
+}
 
 window.api.invoke('getVersion').then((version) => {
     document.getElementById("versionnum").innerHTML = version;

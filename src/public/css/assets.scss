@@ -215,6 +215,10 @@ input {
 
     -webkit-app-region: drag;
 
+    &._hidden {
+        display: none;
+    }
+
     .title {
         display: flex;
         justify-content: left;

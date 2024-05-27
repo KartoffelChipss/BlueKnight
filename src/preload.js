@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld(
                 "setMaxMem",
                 "getTotalMem",
                 "setSetting",
+                "getSetting",
                 "getSettings",
                 "createProfile",
                 "selectProfile",
@@ -51,6 +52,7 @@ contextBridge.exposeInMainWorld(
                 "getModData",
                 "getExtensiveModData",
                 "deleteProfile",
+                "restartApp",
             ];
             if (validChannels.includes(channel)) {
                 return ipcRenderer.invoke(channel, data);

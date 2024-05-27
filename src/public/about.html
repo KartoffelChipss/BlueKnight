@@ -9,7 +9,7 @@
 </head>
 <body>
     <main class="about">
-        <h2>About</h2>
+        <h2>BluekKnight <span id="version"></span></h2>
 
         <p>Blueknight is a Minecraft Launcher made with electron, that uses the Modrinth api to make installing mods as easy as possible.</p>
 
@@ -48,6 +48,10 @@
         function openExternalLink(url) {
             window.api.invoke("openExternal", { url });
         }
+
+        (async () => {
+            document.getElementById("version").innerHTML = "v" + await window.api.invoke("getVersion");
+        })();
     </script>
 </body>
 </html>

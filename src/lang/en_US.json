@@ -40,6 +40,11 @@
     "settings_lang_auto": "Automatic",
     "settings_autoUpdates_title": "Automatic updates",
     "settings_autoUpdates_desc": "Should the launcher check for updates on startup?",
+    "settings_customframe_title": "Custom Frame",
+    "settings_customframe_desc": "Use a custom window frame instead of the OS default",
+    "settings_customframe_modal_title": "Restart required!",
+    "settings_customframe_modal_desc": "To apply this Setting, you need to restart BlueKnight",
+    "settings_customframe_modal_restart": "Restart",
 
     "profiles_title": "My Profiles",
     "profiles_new": "New Profile",
