@@ -8,6 +8,8 @@ const AboutWindow = require("./AboutWindowManager.js");
 function init(top, app, mainDir) {
     const aboutWindowManager = new AboutWindow();
 
+    const isMac = process.platform === 'darwin';
+
     let iconColor = "black";
     if (nativeTheme.shouldUseDarkColors) iconColor = "white";
 
@@ -66,9 +68,103 @@ function init(top, app, mainDir) {
     const builtmenu = Menu.buildFromTemplate(menu);
     top.tray.setContextMenu(builtmenu);
 
-    top.tray.setToolTip("Instantradio");
+    top.tray.setToolTip("BlueKnight");
 
-    // if (!devMode) Menu.setApplicationMenu(null);
+    const appMenuTemplate = [
+        {
+            label: "BlueKnight",
+            submenu: [
+                {
+                    label: getLang(app.getLocale(), "tray_settings_about") ?? "About",
+                    accelerator: 'CmdOrCtrl+I',
+                    click: (item, window, event) => {
+                        aboutWindowManager.show();
+                    },
+                },
+                {
+                    type: "separator",
+                },
+                {
+                    label: getLang(app.getLocale(), "tray_home_title") ?? "Home",
+                    accelerator: 'CmdOrCtrl+Shift+H',
+                    click: (item, window, event) => {
+                        top.mainWindow.show();
+                        top.mainWindow.webContents.send("openSection", "main");
+                    },
+                },
+                {
+                    label: getLang(app.getLocale(), "tray_settings_title") ?? "Settings",
+                    accelerator: 'CmdOrCtrl+Shift+S',
+                    click: (item, window, event) => {
+                        top.mainWindow.show();
+                        top.mainWindow.webContents.send("openSection", "settings");
+                    },
+                },
+                {
+                    label: getLang(app.getLocale(), "tray_addons_title") ?? "Addons",
+                    accelerator: 'CmdOrCtrl+Shift+A',
+                    click: (item, window, event) => {
+                        top.mainWindow.show();
+                        top.mainWindow.webContents.send("openSection", "mods");
+                    },
+                },
+                {
+                    type: "separator",
+                },
+                {
+                    label: getLang(app.getLocale(), "tray_hide_title") ?? "Hide",
+                    accelerator: "CmdOrCtrl+H",
+                    click: (item, window, event) => {
+                        top.mainWindow.hide();
+                    },
+                },
+                {
+                    type: "separator",
+                },
+                {
+                    label: getLang(app.getLocale(), "tray_quit_title") ?? "Quit",
+                    role: "quit",
+                },
+            ]
+        },
+        // { role: 'viewMenu' }
+        {
+            label: 'View',
+            submenu: [
+                { role: 'reload' },
+                { role: 'forcereload' },
+                { role: 'toggledevtools' },
+                { type: 'separator' },
+                { role: 'resetzoom' },
+                { role: 'zoomin' },
+                { role: 'zoomout' },
+                { type: 'separator' },
+                { role: 'togglefullscreen' }
+            ]
+        },
+        {
+            role: 'help',
+            submenu: [
+                {
+                    label: 'GitHub',
+                    click: async () => {
+                        shell.openExternal('https://github.com/KartoffelChipss/blueknight');
+                    }
+                },
+                {
+                    label: 'Discord',
+                    click: async () => {
+                        shell.openExternal('https://strassburger.org/discord');
+                    }
+                }
+            ]
+        }
+    ];
+
+    console.log("AppMenuTemplate", appMenuTemplate)
+
+    const appMenu = Menu.buildFromTemplate(appMenuTemplate);
+    Menu.setApplicationMenu(appMenu);
 
     top.tray.on("click", function (e) {
         if (top.mainWindow.isVisible()) {

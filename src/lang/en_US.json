@@ -43,7 +43,7 @@
     "settings_customframe_title": "Custom Frame",
     "settings_customframe_desc": "Use a custom window frame instead of the OS default",
     "settings_customframe_modal_title": "Restart required!",
-    "settings_customframe_modal_desc": "To apply this Setting, you need to restart BlueKnight",
+    "settings_customframe_modal_desc": "To apply this Setting, you need to restart BlueKnight.",
     "settings_customframe_modal_restart": "Restart",
 
     "profiles_title": "My Profiles",
@@ -85,6 +85,8 @@
     "tray_help_title": "Help",
     "tray_home_title": "Home",
     "tray_settings_title": "Settings",
+    "tray_addons_title": "Addons",
+    "tray_hide_title": "Hide",
     "tray_quit_title": "Quit",
 
     "err_download": "There was an error downloading the file!"

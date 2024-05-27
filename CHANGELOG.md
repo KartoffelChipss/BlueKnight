@@ -7,6 +7,7 @@ Here, you will find all notabled changes that have been made to this project.
 ### Added
 - Added an about page, giving credit to all the libraries and icons used
 - Added a setting to use the default window frame
+- Added custom App menu
 
 ### Changed
 - Changed the Discord RPC setting to be positiv instead of negative

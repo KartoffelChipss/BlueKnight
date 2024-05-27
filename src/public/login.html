@@ -78,7 +78,25 @@
         </div>
     </div>
 
-    <script>window.api.invoke('initLogin')</script>
+    <script>
+        window.api.invoke('initLogin');
+
+        async function updateFrame() {
+            const useDefaultFrame = await window.api.invoke("getSetting", "defaultFrame");
+            const dragBar = document.querySelector(".dragbar");
+
+            if (useDefaultFrame) {
+                dragBar.classList.add("_hidden");
+                document.documentElement.style.setProperty('--dragheight', '0px');
+            }
+            else {
+                dragBar.classList.remove("_hidden");
+                document.documentElement.style.setProperty('--dragheight', '35px');
+            }
+        }
+
+        updateFrame();
+    </script>
 
     <script src="./js/lang.js"></script>
 </body>

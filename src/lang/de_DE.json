@@ -43,7 +43,7 @@
     "settings_customframe_title": "Custom Fensterrahmen",
     "settings_customframe_desc": "Nutzt einen eigenen Fensterrahmen anstatt dem Standard",
     "settings_customframe_modal_title": "Neustart erforderlich!",
-    "settings_customframe_modal_desc": "Um diese Einstellungen anzuwenden, musst du BlueKnight neustarten",
+    "settings_customframe_modal_desc": "Um diese Einstellungen anzuwenden, musst du BlueKnight neustarten.",
     "settings_customframe_modal_restart": "Neustart",
 
     "profiles_title": "Meine Profile",
@@ -85,6 +85,8 @@
     "tray_help_title": "Hilfe",
     "tray_home_title": "Startseite",
     "tray_settings_title": "Einstellungen",
+    "tray_addons_title": "Addons",
+    "tray_hide_title": "Verstecken",
     "tray_quit_title": "Beenden",
 
     "err_download": "Beim Herunterladen ist ein Fehler aufgetreten!"
