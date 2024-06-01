@@ -51,7 +51,7 @@ class ProfileManager {
             store.set("selectedProfile", this.selectedProfile);
         }
 
-        if (!fs.existsSync(this.getPath(profile))) fs.mkdirSync(this.getPath(profile));
+        if (!fs.existsSync(this.getPath(profile))) fs.mkdirSync(this.getPath(profile), { recursive: true });
 
         this.sendProfilesUpdate();
     }
