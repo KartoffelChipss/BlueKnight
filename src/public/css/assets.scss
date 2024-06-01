@@ -305,7 +305,7 @@ input {
     align-items: center;
     justify-content: center;
 
-    &._shown {
+    &._shown, &._open {
         display: flex;
     }
 

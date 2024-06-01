@@ -33,6 +33,10 @@ const profileManager = new ProfileManager();
 
 const devMode = process.env.NODE_ENV === 'development';
 
+const appIcon = process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") :
+    process.platform === "darwin" ? path.join(__dirname + "/public/img/logo_macos.png") :
+        path.join(__dirname + "/public/img/logo256x256.png");
+
 let foundjava = false;
 
 let startTimestamp = new Date();
@@ -73,7 +77,7 @@ if (!gotTheLock) {
         }
 
         if (process.platform === "darwin") {
-            app.dock.setIcon(nativeImage.createFromPath(path.join(__dirname, "public/img/logo256x256.png")));
+            app.dock.setIcon(nativeImage.createFromPath(path.join(__dirname + "/public/img/logo_macos.png")));
         }
 
         if (!safeStorage.isEncryptionAvailable()) {
@@ -212,7 +216,7 @@ if (!gotTheLock) {
                 if (fs.lstatSync(addonPath).isDirectory() && args.type === "resourcepacks") {
                     const packPngPath = path.join(addonPath, 'pack.png');
                     let iconPath = fs.existsSync(packPngPath) ? packPngPath : null;
-    
+
                     mods.push({
                         id: null,
                         versionid: null,
@@ -573,6 +577,8 @@ function createMainWindow() {
     const lastPos = store.get("windowPosition");
     const useDefaultFrame = store.get("defaultFrame") ?? false;
 
+    console.log("Setting icon to: ", appIcon);
+
     return new BrowserWindow({
         title: "BlueKnight Launcher",
         width: lastPos ? lastPos.width : 1200,
@@ -587,7 +593,7 @@ function createMainWindow() {
         backgroundColor: "#1A1B1E",
         resizable: true,
         autoHideMenuBar: false,
-        icon: process.platform === "win32" ? path.join(__dirname + "/public/img/logo.ico") : path.join(__dirname + "/public/img/logo256x256.png"),
+        icon: appIcon,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: false,

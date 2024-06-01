@@ -268,7 +268,7 @@ input {
   align-items: center;
   justify-content: center;
 }
-.modal._shown {
+.modal._shown, .modal._open {
   display: flex;
 }
 .modal .modalBox {

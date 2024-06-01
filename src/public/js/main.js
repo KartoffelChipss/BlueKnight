@@ -54,6 +54,7 @@ async function changeSection(section, profilename) {
     }
 
     if (section === "profiles") {
+        updateProfiles();
         profilesMain.classList.add("__shown");
         return;
     }
@@ -138,6 +139,9 @@ function createNewProfile() {
         loader,
         version
     });
+
+    document.getElementById("newProfileModal").classList.remove("_shown");
+    changeSection("profiles");
 }
 
 function deleteProfile(profileName) {

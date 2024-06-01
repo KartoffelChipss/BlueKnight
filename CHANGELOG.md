@@ -2,6 +2,16 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.4 - 2024-06-01
+
+### Added
+- Added icon for MacOS
+- Added Application menu items for MacOS
+
+### Fixed
+- Fixed a bug, where the profile delete dialog would not show up
+- Fixed a bug, where the UI would not update after creating a profile
+
 ## 1.2.3 - 2024-05-26
 
 ### Added
