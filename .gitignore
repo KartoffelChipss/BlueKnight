@@ -2,3 +2,4 @@
 **/minecraft
 **/.minecraft
 **/dist
+.DS_Store
