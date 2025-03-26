@@ -12,6 +12,9 @@ const discordRPCManager = require("./functions/discordRPCManager.js");
 const { blueKnightRoot, profilespath, downloadModFile, downloadFileToPath, downloadFile, checkForJava, findJavaPath } = require("./functions/util.js");
 const crypto = require('crypto');
 const StreamZip = require('node-stream-zip');
+const { Modrinth } = require("typerinth");
+
+const modrinth = new Modrinth();
 
 const modinfoCache = new NodeCace({ stdTTL: 600, checkperiod: 120 });
 const modVersionCache = new NodeCace({ stdTTL: 1800, checkperiod: 120 });
@@ -365,7 +368,10 @@ if (!gotTheLock) {
 
             if (!versions || versions.length === 0) return false;
 
-            const selectedVersion = versions.find((version) => version.game_versions.includes(targetProfile.version));
+            const selectedVersion = versions.find((version) => {
+                return version.game_versions.includes(targetProfile.version)
+                    && version.loaders.includes(targetProfile.loader);
+            });
 
             if (!selectedVersion || !selectedVersion.files || !selectedVersion.files[0] || !selectedVersion.files[0].url) return false;
 
@@ -603,33 +609,17 @@ function createMainWindow() {
 }
 
 async function fetchModfromMR(modid) {
-    if (modinfoCache.has(modid)) return modinfoCache.get(modid);
-
-    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}`);
-    // console.log("Fetching: " + `https://api.modrinth.com/v2/project/${modid}`)
-    const data = await res.json();
-    modinfoCache.set(modid, data);
-    return data;
+    return modrinth.getProject(modid);
 }
 
 async function fetchVersionsFromMR(modid) {
     if (!modid) return null;
-    if (modVersionsCache.has(modid)) return modVersionsCache.get(modid);
-    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}/version`);
-    const data = await res.json();
-    modVersionsCache.set(modid, data);
-    return data;
+    return modrinth.getProjectVersions(modid);
 }
 
 async function fetchModVersionfromMR(modid, versionid) {
     if (!versionid || versionid.length !== 8) return null;
-    const cacheKey = `${modid}_${versionid}`;
-    if (modVersionCache.has(cacheKey)) return modVersionCache.get(cacheKey);
-
-    const res = await fetch(`https://api.modrinth.com/v2/project/${modid}/version/${versionid}`);
-    const data = await res.json();
-    modVersionCache.set(cacheKey, data);
-    return data;
+    return modrinth.getVersion(versionid);
 }
 
 function getFileHash(filename, algorithm = 'sha512') {
@@ -651,11 +641,6 @@ function getFileHash(filename, algorithm = 'sha512') {
 }
 
 async function fetchModFilefromMR(modPath) {
-    if (modFileHashCache.has(modPath)) return modFileHashCache.get(modPath);
-    const algorithm = 'sha512';
-    const fileHash = await getFileHash(path.join(modPath), algorithm);
-    const res = await fetch(`https://api.modrinth.com/v2/version_file/${fileHash}?algorithm=${algorithm}`);
-    const data = await res.json();
-    modFileHashCache.set(modPath, data);
-    return data;
+    const fileHash = await getFileHash(path.join(modPath), 'sha512');
+    return modrinth.getVersionFromFileHash(fileHash);
 }

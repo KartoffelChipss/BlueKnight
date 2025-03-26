@@ -2,6 +2,14 @@
 
 Here, you will find all notabled changes that have been made to this project.
 
+## 1.2.5 - 2024-10-07
+
+### Added
+- Switched to typerinth for interacting with the modrinth api
+
+### Fixed
+- Fixed a bug, where a wrong loader version of a mod would be downloaded
+
 ## 1.2.4 - 2024-06-01
 
 ### Added
